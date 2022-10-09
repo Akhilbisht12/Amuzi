@@ -1,0 +1,21 @@
+export const thin = 'Roboto-Thin'; // 100
+export const light = 'Roboto-Light'; //300
+export const regular = 'Roboto-Regular'; //400
+export const medium = 'Roboto-Medium'; //500
+export const bold = 'Roboto-Bold'; //700
+export const bolder = 'Roboto-Black'; //900
+
+export const xxs = 12;
+export const xs = 14;
+export const sm = 16;
+export const nm = 18;
+export const md = 20;
+export const lg = 22;
+export const xl = 24;
+export const xl2 = 28;
+export const xl3 = 32;
+export const xl4 = 36;
+export const xl5 = 40;
+export const xl6 = 44;
+export const xl7 = 48;
+export const xl8 = 52;
