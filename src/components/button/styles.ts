@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 16,
-    marginVertical: 0.02 * height,
+    marginVertical: 0.01 * height,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

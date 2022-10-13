@@ -30,6 +30,10 @@ buildscript {
 
 allprojects {
     repositories {
+        // jw player
+        maven{
+            url 'https://mvn.jwplayer.com/content/repositories/releases/'
+        }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")

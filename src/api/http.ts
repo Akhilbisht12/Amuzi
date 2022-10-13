@@ -1,6 +1,7 @@
 import Storage from '@react-native-async-storage/async-storage';
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
-const server = 'https://amuzi.backend.upgrate.in/v1';
+export const server = 'https://amuzi.backend.upgrate.in/v1';
+export const jw = 'https://cdn.jwplayer.com/v2/';
 
 enum StatusCode {
   Unauthorized = 401,
@@ -16,15 +17,17 @@ const headers: Readonly<Record<string, string | boolean>> = {
   'X-Requested-With': 'XMLHttpRequest',
 };
 
-const injectToken = async (config: AxiosRequestConfig): AxiosRequestConfig => {
+const injectToken = async (
+  config: AxiosRequestConfig,
+): Promise<AxiosRequestConfig> => {
   try {
     const token = await Storage.getItem('access');
 
     if (token != null) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers!.Authorization = `Bearer ${token}`;
     }
     return config;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error);
   }
 };
@@ -38,7 +41,7 @@ class Http {
   // initializing the instance  for the first time
   initHttp() {
     const http = axios.create({
-      baseURL: server,
+      // baseURL: server,
       headers,
       // withCredentials: true,
     });
@@ -93,7 +96,7 @@ class Http {
   }
 
   private handleError(error: any) {
-    const {status, data} = error;
+    const {status} = error;
     switch (status) {
       case StatusCode.InternalServerError: {
         // Handle InternalServerError
