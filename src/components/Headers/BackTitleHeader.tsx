@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './backHeader';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {nm, xl} from '../../constants/fonts';
+import {xl} from '../../constants/fonts';
 type Props = {
   title: string;
 };

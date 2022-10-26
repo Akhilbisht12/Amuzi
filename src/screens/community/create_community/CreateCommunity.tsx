@@ -20,7 +20,7 @@ import congrats from '../../../assets/images/congratulations.png';
 import DocumentPicker, {
   DocumentPickerResponse,
 } from 'react-native-document-picker';
-import {createCommunity} from "../../../api/community/community.api'";
+import {createCommunity} from "../../../api/community/community.api";
 import useStore from '../../../store/store';
 
 type Props = NativeStackScreenProps<CommunityStack, 'CreateCommunity'>;

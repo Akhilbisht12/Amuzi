@@ -1,0 +1,5 @@
+DISCOVER
+- members count
+- community description
+- community total posts (if possible)
+- get approved post

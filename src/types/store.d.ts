@@ -14,6 +14,8 @@ export interface theme {
 }
 
 export interface event {
+  postRefresh: boolean;
   communityCreate: boolean;
   setCommunityCreate: (value: boolean) => void;
+  setPostRefresh: () => void;
 }

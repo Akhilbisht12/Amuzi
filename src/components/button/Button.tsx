@@ -8,6 +8,7 @@ type button = {
   title: string;
   rounded?: boolean;
   colored?: boolean;
+  opacity?: number;
 };
 const Button = ({onPress, title, rounded, colored}: button) => {
   const {loading} = useStore();

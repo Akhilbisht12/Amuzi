@@ -2,7 +2,14 @@ import React from 'react';
 import Home from './Home';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {black, gray, green} from '../../constants/colors';
+import {
+  black,
+  blackLight,
+  gray,
+  grayLight,
+  green,
+  white,
+} from '../../constants/colors';
 import Community from './Community';
 import {StatusBar} from 'react-native';
 import Sports from '../../screens/sports/Sports';
@@ -14,7 +21,6 @@ const Authenticated = () => {
       <StatusBar translucent backgroundColor="transparent" />
       <Tab.Navigator
         initialRouteName="Community"
-        sceneContainerStyle={{backgroundColor: black}}
         screenOptions={({route}) => ({
           headerShown: false,
           tabBarIcon: ({focused, color, size}) => {
@@ -41,7 +47,9 @@ const Authenticated = () => {
             );
           },
           tabBarActiveTintColor: green,
-          tabBarInactiveTintColor: gray,
+          tabBarInactiveTintColor: white,
+          tabBarActiveBackgroundColor: blackLight,
+          tabBarInactiveBackgroundColor: blackLight,
         })}>
         <Tab.Screen name="Sports" component={Sports} />
         <Tab.Screen name="TV shows" component={Home} />
