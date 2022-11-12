@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import {gray, green, white} from '../../constants/colors';
-import {xl, xxs} from '../../constants/fonts';
+import {xl} from '../../constants/fonts';
 
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     height: 0.1 * height,
     backgroundColor: gray,
     width: 0.2 * width,
-    borderRadius: xxs,
+    borderRadius: 0.05 * width,
     fontSize: xl,
     textAlign: 'center',
     color: white,
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   inputBorder: {
     borderWidth: 1,
     borderColor: green,
+    borderRadius: 0.05 * width,
   },
 });
 

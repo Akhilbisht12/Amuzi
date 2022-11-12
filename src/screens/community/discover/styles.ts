@@ -6,7 +6,7 @@ import {
   green,
   white,
 } from '../../../constants/colors';
-import {width} from '../../../constants/dimensions';
+import {height, width} from '../../../constants/dimensions';
 import {medium, nm} from '../../../constants/fonts';
 import {px2, px4, py1, py2} from '../../../constants/spacing';
 
@@ -52,6 +52,22 @@ const styles = StyleSheet.create({
   joinButtonText: {
     textAlign: 'center',
     color: white,
+  },
+  emptyCommunityView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyCommunity: {
+    color: grayLight,
+    paddingHorizontal: px4,
+    marginVertical: py2,
+  },
+  emptyCommunityImage: {
+    height: 0.4 * height,
+    width: width,
+    resizeMode: 'contain',
+    textAlign: 'center',
   },
 });
 

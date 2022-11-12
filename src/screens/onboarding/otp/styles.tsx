@@ -28,14 +28,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: px1,
+    width: 0.9 * width,
   },
   input: {
     height: 0.1 * height,
+    width: 0.9 * width,
+    position: 'absolute',
+    opacity: 0,
+  },
+  optText: {
+    height: 0.1 * height,
     backgroundColor: gray,
     width: 0.2 * width,
-    borderRadius: xxs,
+    borderRadius: 0.02 * width,
     fontSize: xl,
     textAlign: 'center',
+    textAlignVertical: 'center',
     color: white,
   },
   inputBorder: {

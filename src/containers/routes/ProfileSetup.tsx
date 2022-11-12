@@ -7,11 +7,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 type name = {
   name: string;
 };
-export interface ProfileSetupStack {
+export type ProfileSetupStack = {
   Language: undefined;
   SportSelection: undefined;
   Profile: name;
-}
+};
 
 const ProfileSetup = () => {
   const Stack = createNativeStackNavigator<ProfileSetupStack>();

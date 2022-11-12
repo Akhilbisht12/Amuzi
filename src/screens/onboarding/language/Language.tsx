@@ -63,18 +63,19 @@ const Language = ({navigation}: Props) => {
       <View style={styles.parentLangContainer}>
         {Languages.map((language, i) => {
           return (
-            <View key={i} style={styles.langContainer}>
+            <TouchableOpacity
+              onPress={() => handleSelectLanguage(i)}
+              key={i}
+              style={styles.langContainer}>
               <Text style={styles.langTitle}>{language.name}</Text>
-              <TouchableOpacity
-                onPress={() => handleSelectLanguage(i)}
-                style={styles.heartIcon}>
+              <View style={styles.heartIcon}>
                 <Icon
                   color={i === selectedLanguage ? green : grayLight}
                   size={20}
                   name={i === selectedLanguage ? 'heart' : 'heart-outline'}
                 />
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           );
         })}
       </View>

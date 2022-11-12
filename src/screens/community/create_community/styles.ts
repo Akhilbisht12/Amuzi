@@ -7,7 +7,7 @@ import {
   white,
 } from '../../../constants/colors';
 import {height, width} from '../../../constants/dimensions';
-import {bold, md, medium, nm, sm} from '../../../constants/fonts';
+import {bold, md, medium, nm, sm, xs} from '../../../constants/fonts';
 import {
   px3,
   px4,
@@ -64,28 +64,44 @@ const styles = StyleSheet.create({
     fontSize: nm,
     fontFamily: medium,
   },
+  inputLabelDesc: {
+    color: grayLight,
+    fontSize: xs,
+  },
   input: {
     color: white,
     placeholderColor: white,
     fontSize: nm,
+    paddingHorizontal: px3,
+    height: height * 0.1,
+  },
+  textInputView: {
     borderWidth: 1,
     borderColor: white,
     borderRadius: 5,
-    paddingHorizontal: px3,
     marginVertical: py2,
     height: height * 0.1,
+  },
+  textareaView: {
+    borderWidth: 1,
+    borderColor: white,
+    borderRadius: 5,
+    marginVertical: py2,
+    height: height * 0.2,
   },
   textarea: {
     color: white,
     placeholderColor: white,
     fontSize: nm,
-    borderWidth: 1,
-    borderColor: white,
-    borderRadius: 5,
     paddingHorizontal: px3,
-    marginVertical: py2,
     height: height * 0.2,
     textAlignVertical: 'top',
+  },
+  wordLimit: {
+    color: white,
+    position: 'absolute',
+    bottom: 5,
+    right: 10,
   },
   dropdown: {
     borderWidth: 1,

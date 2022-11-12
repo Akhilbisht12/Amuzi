@@ -6,6 +6,7 @@ export interface POST {
   author: {
     name: string;
     image: string;
+    phoneNo: number;
   };
   date: string;
   upvoteCount: number;
@@ -26,8 +27,10 @@ export interface COMMENT {
   author: {
     name: string;
     image: string;
+    phoneNo: number;
   };
   upvoteCount: number;
+  voteStatus: boolean | null;
   downvoteCount: number;
   repliesCount: number;
   createdAt: Date;
@@ -43,8 +46,10 @@ export interface REPLY {
   author: {
     name: string;
     image: string;
+    phoneNo: number;
   };
   upvoteCount: number;
   downvoteCount: number;
   createdAt: string;
+  voteStatus: boolean | null;
 }

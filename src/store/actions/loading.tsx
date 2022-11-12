@@ -1,4 +1,4 @@
-import {user} from '../../types/store';
+import {user} from '../../types/store/store';
 import useStore from '../store';
 
 const userActions: user = {

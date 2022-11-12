@@ -5,27 +5,33 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Modal,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../containers/routes/Community';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {white} from '../../../constants/colors';
+import {grayLight, white} from '../../../constants/colors';
 import {xl} from '../../../constants/fonts';
 import DocumentPicker, {
   DocumentPickerResponse,
 } from 'react-native-document-picker';
 import {createPost} from '../../../api/community/community.api';
+import useStore from '../../../store/store';
+import Button from '../../../components/button/Button';
+import congrats from '../../../assets/images/congratulations.png';
 
 type PROPS = NativeStackScreenProps<CommunityStack, 'CreatePost'>;
 
 const CreatePost = ({route, navigation}: PROPS) => {
-  const {name, community, communityId} = route.params;
+  const {communityId} = route.params;
+  const [postSuccess, setPostSuccess] = useState(false);
 
   const [image, setImage] = useState<DocumentPickerResponse>();
   const [content, setContent] = useState('');
-
+  const {setLoading, setPostRefresh, community, userProfile} = useStore();
   const handleDoc = async () => {
     const doc = await DocumentPicker.pickSingle({
       presentationStyle: 'fullScreen',
@@ -37,9 +43,20 @@ const CreatePost = ({route, navigation}: PROPS) => {
 
   const createPostHandler = async () => {
     try {
+      setLoading(true);
+      console.log('here');
       await createPost(content, communityId, image);
-      navigation.goBack();
-    } catch (error) {}
+
+      setPostRefresh();
+      community.approvalRequired && setPostSuccess(true);
+
+      // navigation.goBack();
+      // navigation.navigate('CommunityPage', {});
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,7 +71,7 @@ const CreatePost = ({route, navigation}: PROPS) => {
                 size={xl}
               />
             </TouchableOpacity>
-            <Text style={styles.backHeaderTitle}>{community}</Text>
+            <Text style={styles.backHeaderTitle}>{community.name}</Text>
           </View>
           <TouchableOpacity
             onPress={() => createPostHandler()}
@@ -64,21 +81,27 @@ const CreatePost = ({route, navigation}: PROPS) => {
         </View>
         <View style={styles.paddedArea}>
           <View style={styles.profileHeader}>
-            <Image
-              style={styles.avatar}
-              source={{
-                uri: 'https://cdn.pixabay.com/photo/2022/09/02/07/31/alps-7426887_960_720.jpg',
-              }}
-            />
+            {userProfile.image ? (
+              <Image
+                style={styles.avatar}
+                source={{
+                  uri: userProfile.image,
+                }}
+              />
+            ) : (
+              <View style={styles.avatar}>
+                <Icon name="person" size={30} color={grayLight} />
+              </View>
+            )}
             <View>
-              <Text style={styles.userName}>User Name</Text>
+              <Text style={styles.userName}>{userProfile.name}</Text>
               <View style={styles.communityBadge}>
                 <Icon
                   style={styles.communityBadgeIcon}
                   name="people-outline"
                   size={25}
                 />
-                <Text style={styles.communityBadgeText}>{community}</Text>
+                <Text style={styles.communityBadgeText}>{community.name}</Text>
               </View>
             </View>
           </View>
@@ -109,6 +132,31 @@ const CreatePost = ({route, navigation}: PROPS) => {
           </View>
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={postSuccess}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}>
+        <View style={styles.modalView}>
+          <View style={styles.modalContainer}>
+            <Image source={congrats} style={styles.modalImage} />
+            <Text style={styles.modalHeading}>Congratulations!</Text>
+            <Text style={styles.modalDesc}>Post submitted for approval</Text>
+            <View style={styles.modalButtonView}>
+              <Button
+                rounded
+                onPress={() => {
+                  setPostSuccess(false);
+                  navigation.goBack();
+                }}
+                title="Go back to community"
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

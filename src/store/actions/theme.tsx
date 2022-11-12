@@ -1,4 +1,4 @@
-import {theme} from '../../types/store';
+import {theme} from '../../types/store/store';
 import useStore from '../store';
 
 const themeActions: theme = {

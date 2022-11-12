@@ -1,8 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {black, blackLight, white} from '../../../constants/colors';
+import {
+  black,
+  blackLight,
+  gray,
+  grayLight,
+  green,
+  white,
+} from '../../../constants/colors';
 import {height, width} from '../../../constants/dimensions';
-import {bold, nm, sm} from '../../../constants/fonts';
-import {px1, px2, px4, py1, py2} from '../../../constants/spacing';
+import {bold, md, medium, nm, sm} from '../../../constants/fonts';
+import {px1, px2, px4, px6, py1, py2, py4} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
@@ -13,9 +20,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 0.05 * width,
-    paddingTop: 0.06 * height,
-    paddingBottom: 0.02 * height,
+    paddingHorizontal: px4,
+    paddingVertical: py2,
     borderBottomColor: 'black',
     borderBottomWidth: 0.3,
   },
@@ -33,13 +39,13 @@ const styles = StyleSheet.create({
     fontFamily: bold,
   },
   postButton: {
-    backgroundColor: 'blue',
+    backgroundColor: green,
     borderRadius: px2,
-    paddingHorizontal: px4,
-    paddingVertical: px2,
+    paddingHorizontal: px6,
+    paddingVertical: py1,
   },
   postText: {
-    color: white,
+    color: gray,
   },
   paddedArea: {
     padding: px4,
@@ -53,6 +59,9 @@ const styles = StyleSheet.create({
     height: 0.15 * width,
     borderRadius: 0.75 * width,
     marginRight: px4,
+    backgroundColor: gray,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   userName: {
     color: white,
@@ -109,6 +118,39 @@ const styles = StyleSheet.create({
   },
   uploadText: {
     color: white,
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: `${blackLight}95`,
+  },
+  modalContainer: {
+    backgroundColor: blackLight,
+    paddingHorizontal: px4,
+    borderRadius: 10,
+    width: 0.9 * width,
+    alignItems: 'center',
+    paddingVertical: py4,
+  },
+  modalImage: {
+    width: 0.4 * width,
+    height: 0.4 * width,
+  },
+  modalHeading: {
+    fontSize: md,
+    color: white,
+    fontFamily: medium,
+    marginVertical: py1,
+  },
+  modalDesc: {
+    fontSize: sm,
+    color: grayLight,
+    textAlign: 'center',
+    marginVertical: py1,
+  },
+  modalButtonView: {
+    width: 0.8 * width,
   },
 });
 

@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  termsTextView: {
+    width: 0.8 * width,
+  },
   termsText: {
-    flex: 1,
-    flexWrap: 'wrap',
     color: white,
     fontSize: nm,
     fontFamily: regular,
     marginLeft: 10,
-    width: 'auto',
   },
   buttonView: {
     marginTop: 0.08 * height,

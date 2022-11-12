@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {black, grayLight, white} from '../../../constants/colors';
+import {black, gray, grayLight, green, white} from '../../../constants/colors';
 import {width} from '../../../constants/dimensions';
 import {bold, md, nm, sm, xs} from '../../../constants/fonts';
-import {px1, px2, px3, px4, px8, py1} from '../../../constants/spacing';
+import {px2, px3, px4, py1} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: px4,
+    paddingVertical: py1,
   },
   communityHeader: {
     flexDirection: 'row',
@@ -53,16 +54,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   createPost: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: px1,
-    borderWidth: 2,
-    borderColor: white,
-    borderRadius: px8,
+    backgroundColor: white,
+    padding: px3,
+    borderRadius: 100,
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
   },
   createPostIcon: {
-    color: white,
+    color: black,
     fontSize: 30,
+  },
+  adminManageView: {},
+  adminManageButton: {},
+  adminManageText: {
+    color: white,
   },
 });
 

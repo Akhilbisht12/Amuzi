@@ -8,23 +8,20 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {width} from '../../../constants/dimensions';
-import {white} from '../../../constants/colors';
-import {px4, py2} from '../../../constants/spacing';
+import {black, gray, grayLight, white} from '../../../constants/colors';
+import {px1, px2, px3, px4, py1, py2} from '../../../constants/spacing';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {bold, md} from '../../../constants/fonts';
+import {bold, md, sm, xs} from '../../../constants/fonts';
 import {getJoinedCommunities} from '../../../api/community/community.api';
 import {useNavigation} from '@react-navigation/native';
-
-type communityBadge = {
-  _id: string;
-  name: string;
-  image: string;
-};
+import useStore from '../../../store/store';
+import {COMMUNITY} from '../../../types/community/community';
 
 const JoinedCommunitiesSlider = () => {
   const navigation = useNavigation();
-  const [joinedCommunities, setJoinedCommunities] =
-    useState<communityBadge[]>();
+  const [joinedCommunities, setJoinedCommunities] = useState<COMMUNITY[]>();
+
+  const {setCommunity} = useStore();
   const getJoinedCommunitiesHandler = async () => {
     try {
       const communities = await getJoinedCommunities();
@@ -36,39 +33,54 @@ const JoinedCommunitiesSlider = () => {
     getJoinedCommunitiesHandler();
   }, []);
 
-  const renderCommunityView = ({item}: {item: communityBadge}) => {
+  const renderCommunityView = ({item}: {item: COMMUNITY}) => {
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('CommunityPage', {name: item.name, item})
-        }
+        onPress={() => {
+          setCommunity(item);
+          navigation.navigate('CommunityPage', {name: item.name, item});
+        }}
         style={styles.communityViewMain}>
         <Image style={styles.communityViewImage} source={{uri: item.image}} />
-        <Text style={styles.communityViewText}>
-          {item.name.length > 12
-            ? item.name.substring(0, 12) + '...'
-            : item.name}
-        </Text>
+        <View style={styles.communityDetails}>
+          <Text style={styles.communityViewText}>{item.name}</Text>
+          <Text style={styles.communityViewDesc}>{item.description}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
   return (
-    <View>
-      <View style={styles.communityHeader}>
-        <Text style={styles.communityHeaderTitle}>Joined Communities</Text>
-        <Icon name="chevron-forward" style={styles.communityHeaderIcon} />
-      </View>
+    <View style={styles.main}>
+      {joinedCommunities?.length === 0 && (
+        <View style={styles.emptyCommunityView}>
+          <Icon name="people" color={grayLight} size={100} />
+          <Text style={styles.emptyCommunity}>
+            Communities joined by you will appear here.
+          </Text>
+        </View>
+      )}
       <FlatList
         data={joinedCommunities}
-        horizontal
         keyExtractor={item => item._id}
         renderItem={renderCommunityView}
       />
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('CreateCommunity', {name: 'Create Community'})
+        }
+        style={styles.fab}>
+        <Icon name="add" color={black} size={30} />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: black,
+    paddingHorizontal: px4,
+  },
   communityHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -86,17 +98,48 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   communityViewMain: {
-    paddingLeft: px4,
-    alignItems: 'center',
+    flexDirection: 'row',
+    marginVertical: py1,
+    backgroundColor: gray,
+    borderRadius: px2,
+    padding: px1,
   },
   communityViewImage: {
     width: width * 0.2,
     height: 0.2 * width,
     borderRadius: 8,
-    marginVertical: 4,
+    marginRight: px2,
+    resizeMode: 'contain',
+  },
+  communityDetails: {
+    flex: 1,
   },
   communityViewText: {
     color: white,
+    fontSize: sm,
+    fontFamily: bold,
+  },
+  communityViewDesc: {
+    color: grayLight,
+    fontSize: xs,
+  },
+  emptyCommunityView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyCommunity: {
+    color: grayLight,
+    paddingHorizontal: px4,
+    marginVertical: py2,
+  },
+  fab: {
+    backgroundColor: white,
+    padding: px3,
+    borderRadius: 100,
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
   },
 });
 

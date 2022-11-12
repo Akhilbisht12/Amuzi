@@ -2,7 +2,7 @@ import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import styles from './styles';
-import {white} from '../../constants/colors';
+import {black, white} from '../../constants/colors';
 
 type Props = {
   checked?: boolean;
@@ -14,7 +14,7 @@ const Checkbox = ({checked, onPress}: Props) => {
     <TouchableOpacity
       style={[styles.main, checked ? styles.checked : styles.unchecked]}
       onPress={onPress}>
-      {checked && <Icon size={20} color={white} name={'checkmark-outline'} />}
+      {checked && <Icon size={20} color={black} name={'checkmark'} />}
     </TouchableOpacity>
   );
 };

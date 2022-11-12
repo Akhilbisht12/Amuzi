@@ -7,41 +7,27 @@ import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getCommunityPosts} from '../../../api/community/community.api';
 import Post from '../widgets/PostCard';
+import {white} from '../../../constants/colors';
+import useStore from '../../../store/store';
+import AdminSettings from './AdminSettings';
 
 type Props = NativeStackScreenProps<CommunityStack, 'CommunityPage'>;
-type post = {
-  _id: string;
-  communityId: string;
-  image: string;
-  content: string;
-  author: {
-    name: string;
-    image: string;
-  };
-  date: Date;
-  upvoteCount: number;
-  downvoteCount: number;
-  commentCount: number;
-  approved: boolean;
-};
 
 const CommunityPage = ({route, navigation}: Props) => {
   const community = route.params.item;
 
-  const [posts, setPosts] = useState<post[]>([]);
+  const {userProfile, posts, setPosts} = useStore();
   const [skip, setSkip] = useState(0);
 
   useEffect(() => {
     const getCommunityPostsHandler = async () => {
       try {
         const response = await getCommunityPosts(community._id, skip);
-        setPosts(state => {
-          return [...state, ...response];
-        });
+        setPosts([...posts, ...response]);
       } catch (error) {}
     };
     getCommunityPostsHandler();
-  }, [skip, community._id]);
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -61,18 +47,16 @@ const CommunityPage = ({route, navigation}: Props) => {
               <Text style={styles.communityCount}>{community.memberCount}</Text>
               <Text style={styles.communityCountName}>Members</Text>
             </View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('CreatePost', {
-                  name: 'Create Community Post',
-                  community: community.name,
-                  communityId: community._id,
-                })
-              }
-              style={styles.createPost}>
-              <Icon style={styles.createPostIcon} name="add-outline" />
-            </TouchableOpacity>
+            {community.admin === userProfile?.phoneNo && (
+              // <View style={styles.adminManageView}>
+              //   <TouchableOpacity style={styles.adminManageButton}>
+              //     <Icon name="settings-outline" color={white} size={30} />
+              //   </TouchableOpacity>
+              // </View>
+              <AdminSettings />
+            )}
           </View>
+
           <View style={styles.communityDetails}>
             <Text style={styles.communityDetailsTitle}>{community.name}</Text>
             <Text style={styles.communityDetailsCategory}>
@@ -88,6 +72,7 @@ const CommunityPage = ({route, navigation}: Props) => {
           return (
             <Post
               key={post._id}
+              isAdmin={community.admin === userProfile?.phoneNo}
               post={{
                 ...post,
                 name: community.name,
@@ -98,6 +83,17 @@ const CommunityPage = ({route, navigation}: Props) => {
           );
         })}
       </ScrollView>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('CreatePost', {
+            name: 'Create Community Post',
+            community: community?.name,
+            communityId: community?._id,
+          })
+        }
+        style={styles.createPost}>
+        <Icon style={styles.createPostIcon} name="add-outline" />
+      </TouchableOpacity>
     </View>
   );
 };

@@ -8,27 +8,25 @@ import Post from '../../screens/community/post/Post';
 import {COMMENT} from '../../types/community/post';
 import Reply from '../../screens/community/post/widgets/Replies';
 import CreatePost from '../../screens/community/create_post/CreatePost';
+import CommunityTabs from './CommunityTabs';
+import EditPost from '../../screens/community/post/EditPost';
+import ProfileSettings from '../../screens/community/community_page/ProfileSettings';
+import EditComment from '../../screens/community/post/widgets/EditComment';
+import Approvals from '../../screens/community/community_page/Approvals';
+import {COMMUNITY} from '../../types/community/community';
 
 type name = {
   name: string;
 };
 
-export interface CommunityStack {
+export type CommunityStack = {
   CommunityHome: undefined;
   CreateCommunity: name;
   Discover: name;
   CommunityPage: {
     name: string;
-    item: {
-      name: string;
-      _id: string;
-      image: string;
-      description: string;
-      members: number;
-      category: string;
-      memberCount: number;
-      postCount: number;
-    };
+    item: COMMUNITY;
+    isAdmin?: boolean;
   };
   Post: {
     _id: string;
@@ -42,18 +40,31 @@ export interface CommunityStack {
     community: string;
     communityId: string;
   };
-}
+  EditPost: undefined;
+  ProfileSettings: undefined;
+  EditComment: {
+    commentId: string;
+    postId: string;
+    communityId: string;
+    comment: string;
+  };
+  Approvals: undefined;
+};
 
 const Community = () => {
   const Stack = createNativeStackNavigator<CommunityStack>();
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="CommunityHome" component={CommunityHome} />
+      <Stack.Screen name="CommunityHome" component={CommunityTabs} />
       <Stack.Screen name="CreateCommunity" component={CreateCommunity} />
       <Stack.Screen name="Discover" component={Discover} />
       <Stack.Screen name="CommunityPage" component={CommunityPage} />
+      <Stack.Screen name="ProfileSettings" component={ProfileSettings} />
+      <Stack.Screen name="Approvals" component={Approvals} />
       <Stack.Screen name="Post" component={Post} />
+      <Stack.Screen name="EditPost" component={EditPost} />
       <Stack.Screen name="Reply" component={Reply} />
+      <Stack.Screen name="EditComment" component={EditComment} />
       <Stack.Screen name="CreatePost" component={CreatePost} />
     </Stack.Navigator>
   );

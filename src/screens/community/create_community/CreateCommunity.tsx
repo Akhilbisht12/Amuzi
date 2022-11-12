@@ -13,29 +13,32 @@ import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import {CommunityStack} from '../../../containers/routes/Community';
 import {NativeStackScreenProps} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {white} from '../../../constants/colors';
+import {grayLight, white} from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button/Button';
 import congrats from '../../../assets/images/congratulations.png';
 import DocumentPicker, {
   DocumentPickerResponse,
 } from 'react-native-document-picker';
-import {createCommunity} from "../../../api/community/community.api";
+import {createCommunity} from '../../../api/community/community.api';
 import useStore from '../../../store/store';
+import {ToastAndroid} from 'react-native';
 
 type Props = NativeStackScreenProps<CommunityStack, 'CreateCommunity'>;
 type community = {
   name: string;
   category: string;
   reason: string;
+  description: string;
   image: DocumentPickerResponse;
 };
 
-const CreateCommunity = ({route}: Props) => {
+const CreateCommunity = ({route, navigation}: Props) => {
   const [community, setCommunity] = useState<community>({
     name: '',
     category: '',
     reason: '',
+    description: '',
     image: {
       fileCopyUri: '',
       uri: '',
@@ -48,8 +51,9 @@ const CreateCommunity = ({route}: Props) => {
   const [errors, setErrors] = useState({
     name: '',
     reason: '',
+    description: '',
   });
-  const {setLoading} = useStore();
+  const {setLoading, setCreatedRefresh} = useStore();
   const check =
     community.name &&
     community.category &&
@@ -73,21 +77,28 @@ const CreateCommunity = ({route}: Props) => {
 
   const handleCreateCommunity = async () => {
     setErrors(_ => {
-      return {name: '', reason: ''};
+      return {name: '', reason: '', description: ''};
     });
-    if (community.name.length > 3 || community.name.length < 50) {
+    if (community.name.length < 3 || community.name.length > 50) {
       setErrors(state => {
         state.name = 'Name should be between 3 to 50 characters';
         return {...state};
       });
       return;
     }
-    if (community.reason.length <= 150) {
+    if (community.reason.length < 150) {
       setErrors(state => {
         state.reason = 'Reason should be of 150 characters minimum';
         return {...state};
       });
       return;
+    }
+
+    if (community.description.length <= 150) {
+      setErrors(state => {
+        state.description = 'Description should be of 500 characters maximum';
+        return {...state};
+      });
     }
 
     setLoading(true);
@@ -101,10 +112,15 @@ const CreateCommunity = ({route}: Props) => {
       communityData.append('name', community.name);
       communityData.append('category', community.category);
       communityData.append('reason', community.reason);
+      communityData.append('description', community.description);
       await createCommunity(communityData);
+      setCreatedRefresh();
       setCommunitySuccess(true);
     } catch (error: any) {
-      console.log(error.data.error);
+      ToastAndroid.show(
+        error.data.error ? error.data.error : 'Something went wrong!',
+        ToastAndroid.SHORT,
+      );
       setCommunitySuccess(false);
     } finally {
       setLoading(false);
@@ -130,18 +146,26 @@ const CreateCommunity = ({route}: Props) => {
             </View>
             <View style={styles.inputView}>
               <Text style={styles.inputLabel}>Name</Text>
-              <TextInput
-                value={community.name}
-                onChangeText={text =>
-                  setCommunity(state => {
-                    state.name = text;
-                    return {...state};
-                  })
-                }
-                placeholderTextColor={white}
-                style={styles.input}
-                placeholder="Name your community"
-              />
+              <Text style={styles.inputLabelDesc}>
+                Name should at least 3 characters long.
+              </Text>
+              <View style={styles.textInputView}>
+                <TextInput
+                  value={community.name}
+                  onChangeText={text =>
+                    setCommunity(state => {
+                      state.name = text;
+                      return {...state};
+                    })
+                  }
+                  placeholderTextColor={grayLight}
+                  style={styles.input}
+                  maxLength={50}
+                  placeholder="Name your community"
+                />
+                <Text style={styles.wordLimit}>{community.name.length}/50</Text>
+              </View>
+
               {errors.name && <Text style={styles.error}>{errors.name}</Text>}
             </View>
             <View style={styles.inputView}>
@@ -153,7 +177,7 @@ const CreateCommunity = ({route}: Props) => {
                   <Text style={styles.dropdownSelectedText}>
                     {community.category
                       ? community.category
-                      : 'Select Community'}
+                      : 'Select Category'}
                   </Text>
                   <Icon name="chevron-down" size={30} color={white} />
                 </TouchableOpacity>
@@ -188,21 +212,59 @@ const CreateCommunity = ({route}: Props) => {
             </View>
             <View style={styles.inputView}>
               <Text style={styles.inputLabel}>Reason</Text>
-              <TextInput
-                value={community.reason}
-                onChangeText={text =>
-                  setCommunity(state => {
-                    state.reason = text;
-                    return {...state};
-                  })
-                }
-                maxLength={500}
-                multiline
-                placeholderTextColor={white}
-                style={styles.textarea}
-                placeholder="Reason to create this community"
-              />
+              <Text style={styles.inputLabelDesc}>
+                Reason should at least 150 characters long.
+              </Text>
+              <View style={styles.textareaView}>
+                <TextInput
+                  value={community.reason}
+                  onChangeText={text =>
+                    setCommunity(state => {
+                      state.reason = text;
+                      return {...state};
+                    })
+                  }
+                  maxLength={500}
+                  multiline
+                  placeholderTextColor={grayLight}
+                  style={styles.textarea}
+                  placeholder="Reason to create this community"
+                />
+                <Text style={styles.wordLimit}>
+                  {community.reason.length}/500
+                </Text>
+              </View>
+
               {errors.reason && (
+                <Text style={styles.error}>{errors.reason}</Text>
+              )}
+            </View>
+            <View style={styles.inputView}>
+              <Text style={styles.inputLabel}>Description</Text>
+              <Text style={styles.inputLabelDesc}>
+                Description is optional.
+              </Text>
+              <View style={styles.textareaView}>
+                <TextInput
+                  value={community.description}
+                  onChangeText={text =>
+                    setCommunity(state => {
+                      state.description = text;
+                      return {...state};
+                    })
+                  }
+                  maxLength={500}
+                  multiline
+                  placeholderTextColor={grayLight}
+                  style={styles.textarea}
+                  placeholder="Description of the community"
+                />
+                <Text style={styles.wordLimit}>
+                  {community.description.length}/500
+                </Text>
+              </View>
+
+              {errors.description && (
                 <Text style={styles.error}>{errors.reason}</Text>
               )}
             </View>
@@ -251,7 +313,7 @@ const CreateCommunity = ({route}: Props) => {
               />
               <Button
                 rounded
-                onPress={() => console.log('got ot ')}
+                onPress={() => navigation.navigate('CommunityHome')}
                 title="Go to community"
               />
             </View>

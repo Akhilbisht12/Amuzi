@@ -8,8 +8,8 @@ import {
 import React, {useState} from 'react';
 import {USER} from '../../../../types/user/user';
 import {width} from '../../../../constants/dimensions';
-import {grayLight, white} from '../../../../constants/colors';
-import {px2, px4} from '../../../../constants/spacing';
+import {black, gray, grayLight, white} from '../../../../constants/colors';
+import {px2, px4, px8, py1} from '../../../../constants/spacing';
 import {sm} from '../../../../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {commentOnPost} from '../../../../api/community/community.api';
@@ -22,21 +22,31 @@ type Props = {
   parentId?: string;
 };
 
-const PostComment = ({author, communityId, postId, parentId}: Props) => {
+const PostComment = ({communityId, postId, parentId}: Props) => {
   const [content, setContent] = useState('');
-
-  const {setPostRefresh} = useStore();
+  const {userProfile} = useStore();
+  const {setPostRefresh, setLoading} = useStore();
 
   const commentOnPostHandler = async () => {
     try {
+      setLoading(true);
       await commentOnPost(communityId, postId, content, parentId);
       setContent('');
       setPostRefresh();
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <View style={styles.main}>
-      <Image source={{uri: author.image}} style={styles.profileImage} />
+      {userProfile?.image ? (
+        <Image source={{uri: userProfile?.image}} style={styles.profileImage} />
+      ) : (
+        <View style={{backgroundColor: gray, borderRadius: px8, padding: px2}}>
+          <Icon color={grayLight} name="person" size={30} />
+        </View>
+      )}
       <View style={styles.inputView}>
         <TextInput
           multiline
@@ -61,14 +71,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingHorizontal: px4,
+    marginVertical: py1,
+    // borderBottomWidth: 1,
+    // borderColor: gray,
   },
   inputView: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
   },
   profileImage: {
-    width: 0.12 * width,
-    height: 0.12 * width,
+    width: 0.1 * width,
+    height: 0.1 * width,
     borderRadius: 0.12 * width,
     marginRight: px2,
   },
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: sm,
   },
   inputSend: {
-    color: 'blue',
+    color: white,
     fontSize: 25,
   },
 });

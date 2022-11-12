@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
   main: {
     padding: px2,
     backgroundColor: blackLight,
-    borderRadius: px4,
-    flex: 1,
+    borderTopRightRadius: px4,
+    borderTopLeftRadius: px4,
     width: width,
   },
   createView: {

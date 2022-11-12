@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: black,
+    position: 'relative',
   },
   container: {
     paddingHorizontal: px4,

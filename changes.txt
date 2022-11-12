@@ -1,5 +1,33 @@
-DISCOVER
-- members count
-- community description
-- community total posts (if possible)
-- get approved post
+########FRONTEND########
+AUTH
+ # 0 on phone input
+ - terms and policy icon center
+ - link to terms and policy
+ # focus indication on otp input
+ - hidden text input cursor
+ - remove loading on continue on resend
+ - image picker bug 
+
+COMMUNITY
+ - add button fix
+ - time convert in week / month / year
+ # create community categories on name
+ # min and max words on reason to create community & name
+ - community name fix
+ - text wrap on terms
+
+
+
+
+
+ IMAGE CROP ON UPLOAD
+
+
+
+
+
+
+
+
+
+

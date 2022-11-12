@@ -8,6 +8,41 @@ export const createCommunity = async (community: any) => {
   return data;
 };
 
+export const switchApprovalRequired = async (
+  communityId: string,
+  approvalRequired: boolean,
+) => {
+  const {data} = await http.post(
+    `${server}/community/switch-approval-requirement`,
+    {
+      communityId,
+      approvalRequired,
+    },
+  );
+  return data;
+};
+
+export const getPostsForApproval = async (communityId: string) => {
+  const {data} = await http.get(`${server}/${communityId}/approval-posts`);
+  return data;
+};
+
+export const castApprovalStatus = async (
+  communityId: string,
+  postId: string,
+  action: boolean,
+) => {
+  const {data} = await http.post(
+    `${server}/community/post/approval-permission`,
+    {
+      communityId,
+      postId,
+      action,
+    },
+  );
+  return data;
+};
+
 export const getCreatedCommunities = async () => {
   const {data} = await http.get(`${server}/community/request`);
   return data;
@@ -33,6 +68,20 @@ export const getCommunityPosts = async (community: string, skip: number) => {
   return data;
 };
 
+export const updateCommunityImage = async (
+  community: string,
+  imageData: any,
+) => {
+  const {data} = await http.put(
+    `${server}/community/${community}/image`,
+    imageData,
+    {
+      headers: {'Content-Type': 'multipart/form-data'},
+    },
+  );
+  return data;
+};
+
 export const createPost = async (
   content: string,
   communityId: string,
@@ -40,11 +89,16 @@ export const createPost = async (
 ) => {
   const postData = new FormData();
   postData.append('content', content);
-  postData.append('image', {
-    uri: image?.fileCopyUri,
-    name: image?.name,
-    type: image?.type,
-  });
+  postData.append(
+    'image',
+    image
+      ? {
+          uri: image?.fileCopyUri,
+          name: image?.name,
+          type: image?.type,
+        }
+      : null,
+  );
   const {data} = await http.post(
     `${server}/community/${communityId}/create-post`,
     postData,
@@ -52,6 +106,7 @@ export const createPost = async (
       headers: {'Content-Type': 'multipart/form-data'},
     },
   );
+  console.log(data);
   return data;
 };
 
@@ -79,15 +134,14 @@ export const voteOnComment = async (
   postId: string,
   vote: boolean | null,
   commentId: string,
-) => {
-  console.log('reacher here');
-  const {data} = await http.post(`${server}/community/post/comment/vote`, {
-    communityId,
-    postId,
-    vote,
-    commentId,
-  });
-  console.log(data);
+): Promise<{upvoteCount: number; downvoteCount: number}> => {
+  const {data}: {data: {upvoteCount: number; downvoteCount: number}} =
+    await http.post(`${server}/community/post/comment/vote`, {
+      communityId,
+      postId,
+      vote,
+      commentId,
+    });
   return data;
 };
 
@@ -102,6 +156,63 @@ export const commentOnPost = async (
     communityId,
     content,
     parentId,
+  });
+  return data;
+};
+
+export const updatePostContent = async (
+  communityId: string,
+  postId: string,
+  content: string,
+) => {
+  const {data} = await http.put(`${server}/community/post/update-content`, {
+    postId,
+    communityId,
+    content,
+  });
+  return data;
+};
+
+export const updateCommunityDescription = async (
+  communityId: string,
+  description: string,
+) => {
+  const {data} = await http.put(`${server}/community/description`, {
+    communityId,
+    description,
+  });
+  return data;
+};
+
+export const deletePost = async (communityId: string, postId: string) => {
+  const {data} = await http.delete(
+    `${server}/delete-post/${communityId}/${postId}`,
+  );
+  return data;
+};
+
+export const deleteComment = async (
+  communityId: string,
+  postId: string,
+  commentId: string,
+) => {
+  const {data} = await http.delete(
+    `${server}/delete-comment/${communityId}/${postId}/${commentId}`,
+  );
+  return data;
+};
+
+export const updateComment = async (
+  commentId: string,
+  postId: string,
+  communityId: string,
+  content: string,
+) => {
+  const {data} = await http.put(`${server}/community/post/comment`, {
+    commentId,
+    postId,
+    communityId,
+    content,
   });
   return data;
 };

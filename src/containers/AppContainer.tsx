@@ -5,34 +5,35 @@ import Authenticated from './routes/Authenticated';
 import ProfileSetup from './routes/ProfileSetup';
 import Unauthenticated from './routes/Unauthenticated';
 import useStore from '../store/store';
+import {getProfile} from '../api/profile/profile.api';
 
 const AppContainer = () => {
   // Storage.clear();
-
-  const {userState, setUser} = useStore();
+  const {userState, setUserState, setUser, setAccess} = useStore();
 
   useEffect(() => {
     const getUser = async () => {
-      try {
-        const access = await Storage.getItem('access');
-        const onBoardedValue = await Storage.getItem('onBoarded');
-        let onBoarded;
-        if (onBoardedValue) {
-          onBoarded = JSON.parse(onBoardedValue);
-        }
-        if (access && onBoarded) {
-          setUser('onBoarded');
-        } else if (access && !onBoarded) {
-          setUser('loggedIn');
+      const access = await Storage.getItem('access');
+      if (!access) {
+        setUserState('loggedOut');
+        return;
+      }
+      if (access) {
+        setAccess(access);
+        const user = await getProfile();
+        if (user.onboarded) {
+          setUser(user);
+          setUserState('onBoarded');
         } else {
-          setUser('loggedOut');
+          setUser(user);
+          setUserState('loggedIn');
         }
-      } catch (error) {
-        console.log(error);
       }
     };
     getUser();
-  }, [setUser]);
+  }, [setUser, setUserState, setAccess]);
+
+  console.log(userState);
 
   if (userState === 'loggedIn') {
     return <ProfileSetup />;

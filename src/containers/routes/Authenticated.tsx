@@ -1,62 +1,56 @@
 import React from 'react';
-import Home from './Home';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  black,
-  blackLight,
-  gray,
-  grayLight,
-  green,
-  white,
-} from '../../constants/colors';
-import Community from './Community';
+import {black, blackLight, green, white} from '../../constants/colors';
+import CommunityIcon from '../../assets/icons/Community';
 import {StatusBar} from 'react-native';
-import Sports from '../../screens/sports/Sports';
+import Loader from '../../components/loader/Loader';
+import XclusiveIcon from '../../assets/icons/Xclusive';
+import RewardsIcon from '../../assets/icons/Rewards';
+import Community from './Community';
+import Basketball from '../../assets/icons/Basketball';
+import Xclusive from '../../screens/xclusive/Xclusive';
+import Rewards from '../../screens/rewards/Rewards';
+import SportsHome from '../../screens/sports/SportsHome';
 
 const Authenticated = () => {
   const Tab = createBottomTabNavigator();
   return (
     <>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar backgroundColor={black} />
       <Tab.Navigator
-        initialRouteName="Community"
+        initialRouteName="Sports"
         screenOptions={({route}) => ({
           headerShown: false,
           tabBarIcon: ({focused, color, size}) => {
-            let iconName;
+            let Icon;
             if (route.name === 'Sports') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
+              Icon = <Basketball size={size} focused={focused} color={color} />;
             } else if (route.name === 'TV shows') {
-              iconName = focused ? 'ios-list' : 'ios-list';
+              Icon = <XclusiveIcon focused={focused} color={color} />;
             } else if (route.name === 'Xclusive') {
-              iconName = focused ? 'ios-list' : 'ios-list';
+              Icon = <XclusiveIcon focused={focused} color={color} />;
             } else if (route.name === 'Community') {
-              iconName = focused ? 'people' : 'people-outline';
+              Icon = <CommunityIcon focused={focused} color={color} />;
             } else if (route.name === 'Rewards') {
-              iconName = focused ? 'ios-list' : 'ios-list';
+              Icon = <RewardsIcon focused={focused} color={color} />;
             }
-            return (
-              <Icon
-                name={iconName ? iconName : 'ios-list'}
-                size={size}
-                color={color}
-              />
-            );
+            return Icon;
+          },
+          tabBarStyle: {
+            borderTopColor: black,
           },
           tabBarActiveTintColor: green,
           tabBarInactiveTintColor: white,
           tabBarActiveBackgroundColor: blackLight,
           tabBarInactiveBackgroundColor: blackLight,
         })}>
-        <Tab.Screen name="Sports" component={Sports} />
-        <Tab.Screen name="TV shows" component={Home} />
-        <Tab.Screen name="Xclusive" component={Home} />
+        <Tab.Screen name="Sports" component={SportsHome} />
+        {/* <Tab.Screen name="TV shows" component={Home} /> */}
+        <Tab.Screen name="Xclusive" component={Xclusive} />
         <Tab.Screen name="Community" component={Community} />
-        <Tab.Screen name="Rewards" component={Home} />
+        <Tab.Screen name="Rewards" component={Rewards} />
       </Tab.Navigator>
+      <Loader />
     </>
   );
 };

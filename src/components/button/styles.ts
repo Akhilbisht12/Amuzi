@@ -1,6 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {black, gray, grayLight, green} from '../../constants/colors';
-import {bold} from '../../constants/fonts';
+import {gray, grayLight, green} from '../../constants/colors';
+import {bold, nm, sm} from '../../constants/fonts';
 import {px2} from '../../constants/spacing';
 
 const {height} = Dimensions.get('window');
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: sm,
     fontFamily: bold,
     marginRight: px2,
   },

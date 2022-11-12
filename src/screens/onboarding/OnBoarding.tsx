@@ -30,7 +30,6 @@ const OnBoarding = () => {
           </Text>
           <Button
             colored
-            rounded={true}
             onPress={() =>
               navigation.navigate('Login', {name: 'Sign In With Mobile'})
             }

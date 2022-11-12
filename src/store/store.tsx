@@ -1,8 +1,9 @@
 import create from 'zustand';
-import {state} from '../types/store';
+import {state} from '../types/store/store';
 import eventActions from './actions/events';
 import themeActions from './actions/theme';
 import userActions from './actions/user';
+import authActions from './states/auth.state';
 
 const useStore = create<state>(set => ({
   loading: false,
@@ -12,6 +13,7 @@ const useStore = create<state>(set => ({
   ...userActions,
   ...eventActions,
   ...themeActions,
+  ...authActions,
 }));
 
 export default useStore;

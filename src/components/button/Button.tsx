@@ -1,8 +1,7 @@
-import {ActivityIndicator, Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import styles from './styles';
 import useStore from '../../store/store';
-import {white} from '../../constants/colors';
 type button = {
   onPress: (...args: any) => any;
   title: string;
@@ -27,7 +26,6 @@ const Button = ({onPress, title, rounded, colored}: button) => {
         ]}>
         {title}
       </Text>
-      {loading && <ActivityIndicator color={white} />}
     </TouchableOpacity>
   );
 };

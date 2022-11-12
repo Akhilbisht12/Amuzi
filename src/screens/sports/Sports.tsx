@@ -1,5 +1,5 @@
 import {View, StyleSheet, Platform, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import JWPlayer from 'react-native-jw-media-player';
 import {height} from '../../constants/dimensions';
 import {getPlaylist} from '../../api/playlist/playlist';
@@ -130,7 +130,7 @@ const Sports = () => {
   return (
     <View style={styles.container}>
       {playlist && (
-        <JWPlayer style={styles.player} config={{...config, playlist}} />
+        <JWPlayers style={styles.player} config={{...config, playlist}} />
       )}
       {playlist && (
         <View style={{flexGrow: 1}}>

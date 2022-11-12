@@ -52,18 +52,21 @@ const SportSelection = ({navigation}: Props) => {
         <ScrollView>
           {sports.map((sport, i) => {
             return (
-              <View style={styles.sportView} key={i}>
+              <TouchableOpacity
+                onPress={() => handleSportsSelection(i)}
+                style={styles.sportView}
+                key={i}>
                 <View style={styles.imageTextView}>
                   <Image style={styles.sportLogo} source={sport.logo} />
                   <Text style={styles.sportName}>{sport.name}</Text>
                 </View>
-                <TouchableOpacity onPress={() => handleSportsSelection(i)}>
+                <View>
                   <Icon
                     style={styles.sportSelected}
                     name={sport.selected ? 'star' : 'star-outline'}
                   />
-                </TouchableOpacity>
-              </View>
+                </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>

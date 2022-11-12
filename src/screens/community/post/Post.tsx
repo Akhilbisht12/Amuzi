@@ -14,7 +14,7 @@ import useStore from '../../../store/store';
 type Props = NativeStackScreenProps<CommunityStack, 'Post'>;
 
 const Post = ({route}: Props) => {
-  const [post, setPost] = useState<POST>();
+  const {post, setPost} = useStore();
   const {postRefresh} = useStore();
   useEffect(() => {
     const getCommunityPostHandler = async () => {
@@ -33,7 +33,7 @@ const Post = ({route}: Props) => {
     <View style={styles.main}>
       <ScrollView>
         <BackTitleHeader title="Community" />
-        {post && <PostCard post={{...post, name: 'Post Author'}} />}
+        {post && <PostCard post={post} />}
         {post && (
           <PostComment
             {...{

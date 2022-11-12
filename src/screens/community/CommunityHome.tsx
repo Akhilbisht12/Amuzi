@@ -6,7 +6,6 @@ import Create from './widgets/Create';
 import JoinedCommunitiesSlider from './widgets/JoinedCommunitiesSlider';
 import {NativeStackScreenProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {CommunityStack} from '../../containers/routes/Community';
-import Post from './widgets/PostCard';
 import CreatedCommunities from './widgets/CreatedCommunities';
 
 type Props = NativeStackScreenProps<CommunityStack, 'CommunityHome'>;
@@ -15,26 +14,22 @@ const CommunityHome = ({navigation}: Props) => {
   return (
     <View style={styles.main}>
       <ScrollView style={{flexGrow: 1}}>
-        <View style={{flex: 1}}>
-          <CommunityHeader title="Community" />
-          <View style={styles.container}>
-            <View style={styles.discoverContainer}>
-              <TouchableOpacity
-                style={styles.discoverButton}
-                onPress={() =>
-                  navigation.navigate('Discover', {name: 'Discover'})
-                }>
-                <Text style={styles.discoverText}>Discover</Text>
-              </TouchableOpacity>
-            </View>
+        <CommunityHeader title="Community" />
+        <View style={styles.container}>
+          <View style={styles.discoverContainer}>
+            <TouchableOpacity
+              style={styles.discoverButton}
+              onPress={() =>
+                navigation.navigate('Discover', {name: 'Discover'})
+              }>
+              <Text style={styles.discoverText}>Discover</Text>
+            </TouchableOpacity>
           </View>
-
-          <JoinedCommunitiesSlider />
-          <CreatedCommunities />
-          {/* <Post /> */}
-          <Create />
         </View>
+        <JoinedCommunitiesSlider />
+        <CreatedCommunities />
       </ScrollView>
+      <Create />
     </View>
   );
 };
