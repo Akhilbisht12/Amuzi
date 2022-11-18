@@ -34,6 +34,9 @@ export interface theme {
 export interface event {
   posts: POST[];
   community: COMMUNITY;
+  sportScrollYOffset: number;
+  setSportScrollYOffset: (value: number) => void;
+  scrollUp: boolean;
   setCommunity: (community: COMMUNITY) => void;
   setPosts: (posts: POST[]) => void;
   deleteStoragePost: (id: string) => void;

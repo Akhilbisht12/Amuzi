@@ -6,13 +6,13 @@ import {black, grayLight, white} from '../../../../constants/colors';
 import {px1, px2, px4, py1} from '../../../../constants/spacing';
 import Button from '../../../../components/button/Button';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../../containers/routes/Community';
+import {CommunityStack} from '../../../../containers/routes/authenticated/community/Community';
 import {updateComment} from '../../../../api/community/community.api';
 import useStore from '../../../../store/store';
 
 type Props = NativeStackScreenProps<CommunityStack, 'EditComment'>;
 
-const EditComment = ({route}: Props) => {
+const EditComment = ({route, navigation}: Props) => {
   const {postId, comment, commentId, communityId} = route.params;
   const [content, setContent] = useState(comment);
   const {setLoading} = useStore();
@@ -21,6 +21,7 @@ const EditComment = ({route}: Props) => {
     try {
       setLoading(true);
       await updateComment(commentId, postId, communityId, content);
+      navigation.navigate('Post', {_id: postId, community_id: commentId});
     } catch (error) {
     } finally {
       setLoading(false);

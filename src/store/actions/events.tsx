@@ -4,6 +4,14 @@ import {event} from '../../types/store/store';
 import useStore from '../store';
 
 const eventActions: event = {
+  sportScrollYOffset: 0,
+  scrollUp: false,
+  setSportScrollYOffset: value => {
+    useStore.setState({
+      sportScrollYOffset: value,
+      scrollUp: useStore.getState().sportScrollYOffset > value ? false : true,
+    });
+  },
   communityCreate: false,
   community: null,
   setCommunity: (community: COMMUNITY) => {
@@ -43,7 +51,7 @@ const eventActions: event = {
   editStoreComment: (id: string, content: string) => {
     const post = useStore.getState().post;
     const index = post!.comments.findIndex((item: COMMENT) => item._id === id);
-    post.comments[index].content = content;
+    post!.comments[index].content = content;
     useStore.setState({post});
   },
   setCommunityImage: (url: string) => {
@@ -51,7 +59,7 @@ const eventActions: event = {
     community.image = url;
     useStore.setState({community});
   },
-  approvalPosts: null,
+  approvalPosts: [],
   setApprovalPosts: posts => {
     useStore.setState({approvalPosts: posts});
   },

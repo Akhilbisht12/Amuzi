@@ -19,7 +19,6 @@ const Sports = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="PreferredSports" component={PreferredSports} />
       <Stack.Screen name="OnDemand" component={OnDemand} />
-      <Stack.Screen name="profileSettings" component={ProfileRoutes} />
     </Stack.Navigator>
   );
 };

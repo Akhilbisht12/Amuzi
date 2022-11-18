@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
   },
   uploadedImage: {
     width: width * 0.9,
-    height: height,
-    resizeMode: 'contain',
+    height: width * 0.9,
+    resizeMode: 'cover',
     borderRadius: px4,
   },
   uploadIcon: {

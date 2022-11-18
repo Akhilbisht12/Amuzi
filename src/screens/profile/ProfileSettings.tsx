@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = NativeStackScreenProps<ProfileRoutesStack, 'profile'>;
 
 const ProfileSettings = ({navigation}: Props) => {
-  const {userProfile, setUserState} = useStore();
+  const {userProfile, setUserState, setUser} = useStore();
   return (
     <ViewWrapper>
       {/* header */}
@@ -147,6 +147,7 @@ const ProfileSettings = ({navigation}: Props) => {
       <View>
         <TouchableOpacity
           onPress={() => {
+            setUser(null);
             setUserState('loggedOut');
             AsyncStorage.clear();
           }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import ProfileSettings from '../../screens/profile/ProfileSettings';
-import EditProfile from '../../screens/profile/EditProfile';
+import ProfileSettings from '../../../../screens/profile/ProfileSettings';
+import EditProfile from '../../../../screens/profile/EditProfile';
 
 export type ProfileRoutesStack = {
   profile: undefined;

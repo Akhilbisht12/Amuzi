@@ -1,13 +1,18 @@
 import {StyleSheet} from 'react-native';
-import {black, gray, grayLight, green, white} from '../../../constants/colors';
+import {black, gray, grayLight, white} from '../../../constants/colors';
 import {width} from '../../../constants/dimensions';
 import {bold, md, nm, sm, xs} from '../../../constants/fonts';
-import {px2, px3, px4, py1} from '../../../constants/spacing';
+import {px3, px4, py1} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: black,
+  },
+  divider: {
+    paddingVertical: 0.2,
+    backgroundColor: gray,
+    marginHorizontal: px4,
   },
   container: {
     paddingHorizontal: px4,

@@ -17,7 +17,8 @@ const newsHead = [
     creatorImage:
       'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
     time: '1 hour ago',
-    image: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c',
+    image:
+      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
   },
   {
     badgeText: '#Top News',
@@ -27,7 +28,8 @@ const newsHead = [
     creatorImage:
       'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
     time: '1 hour',
-    image: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c',
+    image:
+      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
   },
   {
     badgeText: '#Top News',
@@ -37,7 +39,8 @@ const newsHead = [
     creatorImage:
       'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
     time: '1 hour ago',
-    image: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c',
+    image:
+      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
   },
   {
     badgeText: '#Top News',
@@ -47,7 +50,8 @@ const newsHead = [
     creatorImage:
       'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
     time: '1 hour',
-    image: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c',
+    image:
+      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
   },
 ];
 

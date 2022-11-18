@@ -12,24 +12,27 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import BackTitleHeader from '../../components/Headers/BackTitleHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from '../../components/button/Button';
-import {createProfile, updateProfileImage} from '../../api/profile/profile.api';
+import {updateProfile, updateProfileImage} from '../../api/profile/profile.api';
 import useStore from '../../store/store';
 import Loader from '../../components/loader/Loader';
-import {ProfileRoutesStack} from '../../containers/routes/ProfileRoutes';
 import {StyleSheet} from 'react-native';
 import {black, blackLight, white} from '../../constants/colors';
 import {px1, px2, px3, px4, px5, px6, py2} from '../../constants/spacing';
 import {nm, xs} from '../../constants/fonts';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import {ProfileRoutesStack} from '../../containers/routes/authenticated/profile/ProfileRoutes';
 
 type Props = NativeStackScreenProps<ProfileRoutesStack, 'editProfile'>;
 
-const EditProfile = ({}: Props) => {
-  const {userProfile, setLoading, loading, changeUserProfileImage} = useStore();
+const EditProfile = ({navigation}: Props) => {
+  const {userProfile, setLoading, loading, changeUserProfileImage, setUser} =
+    useStore();
 
   const [name, setName] = useState(userProfile?.name);
-  const [dob, setDob] = useState([...userProfile?.dob.split('-').reverse()]);
-  const [gender, setGender] = useState(userProfile.gender);
+  const [dob, setDob] = useState([
+    ...userProfile?.dob.split('T')[0].split('-').reverse(),
+  ]);
+  const [gender, setGender] = useState(userProfile?.gender);
   const [showDrop, setShowDrop] = useState(false);
   const [image, setImage] = useState<{path: string; mime: string}>({
     path: userProfile?.image,
@@ -53,11 +56,13 @@ const EditProfile = ({}: Props) => {
       const imageData = new FormData();
       imageData.append('image', {
         uri: croppedImage.path,
-        name: userProfile.name,
+        name: userProfile?.name,
         type: croppedImage.mime,
       });
       const response = await updateProfileImage(imageData);
       changeUserProfileImage(response.image);
+      ToastAndroid.show('Profile Picture Changed', ToastAndroid.SHORT);
+      navigation.navigate('profile');
     } catch (error) {
       console.log(error);
     } finally {
@@ -87,8 +92,8 @@ const EditProfile = ({}: Props) => {
 
     // Parse the date parts to integers
     var parts = dateString.split('/');
-    var day = parseInt(parts[0], 10);
-    var month = parseInt(parts[1], 10);
+    var day = parseInt(parts[1], 10);
+    var month = parseInt(parts[0], 10);
     var year = parseInt(parts[2], 10);
 
     // Check the ranges of month and year
@@ -105,27 +110,14 @@ const EditProfile = ({}: Props) => {
   };
 
   // api call to setup profile
-  const handleProfileSetup = async () => {
+  const updateProfileHandler = async () => {
     if (loading || !check) return;
     try {
       setLoading(true);
-      const profile = new FormData();
-      profile.append(
-        'image',
-        image?.path
-          ? {
-              uri: image?.path,
-              name: userProfile.name,
-              type: image?.mime,
-            }
-          : null,
-      );
-      profile.append('name', name);
-      profile.append('dob', `${dob[1]}-${dob[0]}-${dob[2]}`); // mm-dd-yyyy
-      profile.append('gender', gender);
-      await createProfile(profile);
+      const user = await updateProfile(name, dob, gender);
+      setUser(user);
+      navigation.navigate('profile');
     } catch (error: any) {
-      console.log(error);
       ToastAndroid.show('Something went wrong!', ToastAndroid.SHORT);
     } finally {
       setLoading(false);
@@ -298,7 +290,7 @@ const EditProfile = ({}: Props) => {
             <View>
               <Button
                 title="Continue"
-                onPress={handleProfileSetup}
+                onPress={updateProfileHandler}
                 colored={check}
               />
             </View>

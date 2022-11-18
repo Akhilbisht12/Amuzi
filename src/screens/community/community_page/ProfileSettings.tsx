@@ -19,9 +19,10 @@ import {
   updateCommunityImage,
 } from '../../../api/community/community.api';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
 import DocumentPicker from 'react-native-document-picker';
 import http from '../../../api/http';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 type Props = NativeStackScreenProps<CommunityStack, 'ProfileSettings'>;
 
@@ -46,16 +47,17 @@ const ProfileSettings = ({navigation}: Props) => {
 
   const handleDoc = async () => {
     try {
-      const doc = await DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen',
-        copyTo: 'cachesDirectory',
-        type: 'image/*',
+      const doc = await ImageCropPicker.openPicker({
+        width: 1080,
+        height: 1080,
+        cropping: true,
       });
+
       const imageData = new FormData();
       imageData.append('image', {
-        uri: doc?.fileCopyUri,
-        name: doc?.name,
-        type: doc?.type,
+        uri: doc?.path,
+        name: community.name,
+        type: doc?.mime,
       });
       setLoading(true);
       const {image} = await updateCommunityImage(community._id, imageData);

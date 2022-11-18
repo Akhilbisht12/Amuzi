@@ -5,6 +5,8 @@ import styles from './styles';
 import {NativeStackScreenProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {SportsStack} from '../../../containers/routes/Sports';
 import {PLAYLIST_MEDIA} from '../../../types/content/playlist';
+import Player from '../../../components/Players/Player';
+import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 
 type Props = NativeStackScreenProps<SportsStack, 'onDemand'>;
 
@@ -61,15 +63,36 @@ const OnDemand = ({route}: Props) => {
   };
 
   const player = useRef(null);
-
+  const ref = useRef(null);
   return (
     <View style={styles.main}>
       <View>
+        {/* <Player
+          ref={ref}
+          config={{
+            autostart: true,
+            playlist: [
+              {
+                file: 'https://upgrately-live.cdn.vustreams.com/live/cb3b0b20-926b-4982-b643-f8427ae50574/live.isml/.m3u8',
+                image: 'https://d3el35u4qe4frz.cloudfront.net/bkaovAYt-480.jpg',
+              },
+            ],
+            styling: {
+              colors: {},
+              menuStyle: {},
+            },
+            viewOnly: true,
+            pipEnabled: false,
+            enableLockScreenControls: false,
+          }}
+        /> */}
+        <BackTitleHeader title="" />
         <OnDemandPlayer
           changePlaylistItem={changePlaylistItem}
           ref={player}
           playlist={feed.playlist.map(item => {
             return {
+              image: item.images[0].src,
               sources: item.sources?.map(source => {
                 return {
                   file: source.file,

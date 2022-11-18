@@ -6,7 +6,6 @@
 
     /* Completeness */
     "skipLibCheck": true,
-    "strictNullChecks": false
                              /* Skip type checking all .d.ts files. */
   }
 }

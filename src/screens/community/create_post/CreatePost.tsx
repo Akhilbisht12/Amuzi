@@ -10,18 +10,16 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {grayLight, white} from '../../../constants/colors';
 import {xl} from '../../../constants/fonts';
-import DocumentPicker, {
-  DocumentPickerResponse,
-} from 'react-native-document-picker';
 import {createPost} from '../../../api/community/community.api';
 import useStore from '../../../store/store';
 import Button from '../../../components/button/Button';
 import congrats from '../../../assets/images/congratulations.png';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 type PROPS = NativeStackScreenProps<CommunityStack, 'CreatePost'>;
 
@@ -29,14 +27,16 @@ const CreatePost = ({route, navigation}: PROPS) => {
   const {communityId} = route.params;
   const [postSuccess, setPostSuccess] = useState(false);
 
-  const [image, setImage] = useState<DocumentPickerResponse>();
+  const [image, setImage] = useState<
+    {path: string; mime: string} | undefined
+  >();
   const [content, setContent] = useState('');
   const {setLoading, setPostRefresh, community, userProfile} = useStore();
   const handleDoc = async () => {
-    const doc = await DocumentPicker.pickSingle({
-      presentationStyle: 'fullScreen',
-      copyTo: 'cachesDirectory',
-      type: 'image/*',
+    const doc = await ImageCropPicker.openPicker({
+      height: 1080,
+      width: 1080,
+      cropping: true,
     });
     setImage(doc);
   };
@@ -44,14 +44,27 @@ const CreatePost = ({route, navigation}: PROPS) => {
   const createPostHandler = async () => {
     try {
       setLoading(true);
-      console.log('here');
-      await createPost(content, communityId, image);
+      const postData = new FormData();
+      postData.append('content', content);
+      postData.append(
+        'image',
+        image
+          ? {
+              uri: image?.path,
+              name: userProfile.name + Date.now(),
+              type: image?.mime,
+            }
+          : null,
+      );
+      await createPost(communityId, postData);
 
       setPostRefresh();
       community.approvalRequired && setPostSuccess(true);
-
-      // navigation.goBack();
-      // navigation.navigate('CommunityPage', {});
+      navigation.navigate('CommunityPage', {
+        item: community,
+        name: community.name,
+        isAdmin: community.admin === userProfile.phoneNo,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -115,11 +128,11 @@ const CreatePost = ({route, navigation}: PROPS) => {
               style={styles.postContent}
             />
             <TouchableOpacity onPress={handleDoc}>
-              {image?.fileCopyUri ? (
+              {image?.path ? (
                 <View style={styles.uploadedImageView}>
                   <Image
                     style={styles.uploadedImage}
-                    source={{uri: image.fileCopyUri}}
+                    source={{uri: image.path}}
                   />
                 </View>
               ) : (

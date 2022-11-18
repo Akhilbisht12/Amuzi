@@ -11,7 +11,7 @@ import {
 import React, {useState} from 'react';
 import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
-import {CommunityStack} from '../../../containers/routes/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
 import {NativeStackScreenProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {grayLight, white} from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';

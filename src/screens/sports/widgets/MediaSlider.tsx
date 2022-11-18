@@ -66,7 +66,7 @@ const MediaSlider = ({playlistId}: {playlistId: string}) => {
 
 const styles = StyleSheet.create({
   main: {
-    marginVertical: py2,
+    marginVertical: py1,
     paddingLeft: px4,
   },
   title: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginVertical: py2,
   },
   card: {
-    height: 0.18 * height,
+    height: (0.55 * width * 9) / 16,
     width: 0.55 * width,
     resizeMode: 'cover',
     marginRight: px3,

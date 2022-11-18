@@ -6,11 +6,12 @@ import {StatusBar} from 'react-native';
 import Loader from '../../components/loader/Loader';
 import XclusiveIcon from '../../assets/icons/Xclusive';
 import RewardsIcon from '../../assets/icons/Rewards';
-import Community from './Community';
-import Basketball from '../../assets/icons/Basketball';
+import Community from './authenticated/community/Community';
+// import Basketball from '../../assets/icons/Basketball';
 import Xclusive from '../../screens/xclusive/Xclusive';
 import Rewards from '../../screens/rewards/Rewards';
-import SportsHome from '../../screens/sports/SportsHome';
+import SportsHome from './authenticated/sports/SportTabs';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const Home = () => {
   const Tab = createBottomTabNavigator();
@@ -24,7 +25,14 @@ const Home = () => {
           tabBarIcon: ({focused, color, size}) => {
             let Icon;
             if (route.name === 'Sports') {
-              Icon = <Basketball size={size} focused={focused} color={color} />;
+              // Icon = <Basketball size={size} focused={focused} color={color} />;
+              Icon = (
+                <Ionicon
+                  name={focused ? 'football' : 'football-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
             } else if (route.name === 'TV shows') {
               Icon = <XclusiveIcon focused={focused} color={color} />;
             } else if (route.name === 'Xclusive') {

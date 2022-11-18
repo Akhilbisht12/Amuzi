@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
 import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import useStore from '../../../store/store';

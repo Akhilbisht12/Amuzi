@@ -3,9 +3,9 @@ import React from 'react';
 import CommunityHeader from '../../components/Headers/CommunityHeader';
 import styles from './styles';
 import Create from './widgets/Create';
-import JoinedCommunitiesSlider from './widgets/JoinedCommunitiesSlider';
+import JoinedCommunitiesSlider from './widgets/JoinedCommunities';
 import {NativeStackScreenProps} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {CommunityStack} from '../../containers/routes/Community';
+import {CommunityStack} from '../../containers/routes/authenticated/community/Community';
 import CreatedCommunities from './widgets/CreatedCommunities';
 
 type Props = NativeStackScreenProps<CommunityStack, 'CommunityHome'>;

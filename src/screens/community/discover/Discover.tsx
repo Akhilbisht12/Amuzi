@@ -1,7 +1,14 @@
-import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 import {
@@ -9,21 +16,14 @@ import {
   joinCommunity,
 } from '../../../api/community/community.api';
 import {grayLight} from '../../../constants/colors';
+import useStore from '../../../store/store';
+import {COMMUNITY} from '../../../types/community/community';
 
 type Props = NativeStackScreenProps<CommunityStack, 'Discover'>;
 
-type community = {
-  _id: string;
-  name: string;
-  category: string;
-  image: string;
-  admin: number;
-  approvalRequired: boolean;
-  isBanned: boolean;
-};
-
-const Discover = ({route}: Props) => {
-  const [communities, setCommunities] = useState<community[]>([]);
+const Discover = ({route, navigation}: Props) => {
+  const [communities, setCommunities] = useState<COMMUNITY[]>([]);
+  const {setLoading} = useStore();
   const discoverCommunitiesHandler = async () => {
     const data = await discoverCommunities();
     setCommunities(data);
@@ -35,13 +35,23 @@ const Discover = ({route}: Props) => {
   useEffect(() => {
     discoverCommunitiesHandler();
   }, []);
-  const joinCommunityHandler = async (community: string) => {
-    try {
-      await joinCommunity(community);
-    } catch (error) {}
-  };
 
-  const renderItem = ({item}: {item: community}) => {
+  const renderItem = ({item}: {item: COMMUNITY}) => {
+    const joinCommunityHandler = async (community: string) => {
+      try {
+        setLoading(true);
+        await joinCommunity(community);
+        navigation.navigate('CommunityPage', {
+          item: item,
+          name: item.name,
+          isAdmin: false,
+        });
+      } catch (error) {
+        ToastAndroid.show('Try Again!', ToastAndroid.SHORT);
+      } finally {
+        setLoading(false);
+      }
+    };
     return (
       <View style={styles.communityMain}>
         <Image style={styles.communityImage} source={{uri: item.image}} />
@@ -67,7 +77,7 @@ const Discover = ({route}: Props) => {
         <View style={styles.emptyCommunityView}>
           <Icon name="search-outline" color={grayLight} size={100} />
           <Text style={styles.emptyCommunity}>
-            Communities joined by you will appear here.
+            Communities suggested to you will appear here.
           </Text>
         </View>
       )}

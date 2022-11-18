@@ -8,7 +8,7 @@ import {px4} from '../../../../constants/spacing';
 const PreferenceSlider = () => {
   const [playlist, setPlaylist] = useState<FEED>();
   const getPlaylistHandler = async () => {
-    const response = await getPlaylist('FXvgstJP');
+    const response = await getPlaylist('fGt4FY4s');
     setPlaylist(response);
     try {
     } catch (error) {}

@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../../containers/routes/Community';
+import {CommunityStack} from '../../../../containers/routes/authenticated/community/Community';
 import {black} from '../../../../constants/colors';
 import BackTitleHeader from '../../../../components/Headers/BackTitleHeader';
 import Comment from './Comment';

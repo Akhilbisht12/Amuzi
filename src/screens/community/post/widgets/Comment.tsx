@@ -25,7 +25,7 @@ const Comment = ({comment}: Props) => {
     comment.downvoteCount,
   );
   const vertSheet = useRef<RBSheet | null>(null);
-  const {userProfile, deleteStoreComment} = useStore();
+  const {userProfile, deleteStoreComment, community} = useStore();
   const navigation = useNavigation();
   const voteOnCommentHandler = async (vote: boolean) => {
     try {
@@ -173,7 +173,7 @@ const Comment = ({comment}: Props) => {
             />
             <Text style={styles.voteCount}>{downVoteCount}</Text>
           </TouchableOpacity>
-          {!oncomment.parentId && (
+          {!comment.parentId && (
             <TouchableOpacity
               onPress={() => navigation.navigate('Reply', {comment: comment})}
               style={styles.voteButton}>

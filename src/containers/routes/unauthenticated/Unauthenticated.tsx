@@ -1,14 +1,14 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import OnBoarding from '../../screens/onboarding/OnBoarding';
+import OnBoarding from '../../../screens/onboarding/OnBoarding';
 import React from 'react';
-import Login from '../../screens/onboarding/login/Login';
-import Otp from '../../screens/onboarding/otp/Otp';
-import Loader from '../../components/loader/Loader';
+import Login from '../../../screens/onboarding/login/Login';
+import Otp from '../../../screens/onboarding/otp/Otp';
+import Loader from '../../../components/loader/Loader';
 import {StatusBar} from 'react-native';
 type name = {
   name: string;
 };
-export interface UnauthenticatedStack {
+export type UnauthenticatedStack = {
   Login: name;
   OnBoarding: undefined;
   Otp: {
@@ -18,7 +18,7 @@ export interface UnauthenticatedStack {
   Language: undefined;
   SportSelection: undefined;
   Profile: name;
-}
+};
 const Unauthenticated = () => {
   const Stack = createNativeStackNavigator<UnauthenticatedStack>();
 

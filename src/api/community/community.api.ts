@@ -82,23 +82,7 @@ export const updateCommunityImage = async (
   return data;
 };
 
-export const createPost = async (
-  content: string,
-  communityId: string,
-  image?: DocumentPickerResponse,
-) => {
-  const postData = new FormData();
-  postData.append('content', content);
-  postData.append(
-    'image',
-    image
-      ? {
-          uri: image?.fileCopyUri,
-          name: image?.name,
-          type: image?.type,
-        }
-      : null,
-  );
+export const createPost = async (communityId: string, postData: any) => {
   const {data} = await http.post(
     `${server}/community/${communityId}/create-post`,
     postData,

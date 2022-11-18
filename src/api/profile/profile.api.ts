@@ -1,3 +1,4 @@
+import {userProfile} from '../../types/store/store';
 import http, {server} from '../http';
 
 export const createProfile = async (profile: any) => {
@@ -16,5 +17,19 @@ export const updateProfileImage = async (imageData: any) => {
   const {data} = await http.put(`${server}/profile/image`, imageData, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
+  return data;
+};
+
+export const updateProfile = async (
+  name: string,
+  dob: string,
+  gender: string,
+): Promise<userProfile> => {
+  const {data} = await http.put(`${server}/profile`, {
+    name,
+    dob,
+    gender,
+  });
+  console.log(data);
   return data;
 };

@@ -34,7 +34,7 @@ const PostCard = ({post, isAdmin}: Props) => {
       setDownVoteCount(response.downvoteCount);
     } catch (error) {}
   };
-  const {deleteStoragePost, userProfile, setPost} = useStore();
+  const {deleteStoragePost, userProfile, setPost, community} = useStore();
 
   const deletePostHandler = async () => {
     try {
@@ -124,7 +124,7 @@ const PostCard = ({post, isAdmin}: Props) => {
           <View>
             <Text style={styles.headerCommunityName}>{post.author.name}</Text>
             <Text style={styles.headerPostDetails}>
-              {post.name} &#183;
+              {community.name} &#183;
               {Math.round(
                 (Date.now() - new Date(post.date)) / (1000 * 60 * 60 * 24),
               )}
@@ -133,7 +133,7 @@ const PostCard = ({post, isAdmin}: Props) => {
           </View>
         </View>
 
-        <EditCard />
+        {isAdmin && <EditCard />}
       </View>
       <TouchableOpacity
         onPress={() =>
@@ -188,6 +188,7 @@ const PostCard = ({post, isAdmin}: Props) => {
           <Text style={styles.engagementActionText}>Share</Text>
         </TouchableOpacity> */}
       </View>
+      <View style={styles.divider} />
     </View>
   );
 };
@@ -195,10 +196,12 @@ const PostCard = ({post, isAdmin}: Props) => {
 const styles = StyleSheet.create({
   main: {
     paddingHorizontal: px4,
-    marginVertical: py2,
-    borderBottomWidth: 2,
+    marginVertical: py1,
+  },
+  divider: {
+    borderBottomWidth: 0.2,
     borderBottomColor: gray,
-    paddingBottom: py4,
+    marginTop: py1,
   },
   postHeader: {
     flexDirection: 'row',
@@ -206,8 +209,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerImage: {
-    width: 0.15 * width,
-    height: 0.15 * width,
+    width: 0.12 * width,
+    height: 0.12 * width,
     marginRight: px2,
     borderRadius: 0.15 * width,
     resizeMode: 'contain',

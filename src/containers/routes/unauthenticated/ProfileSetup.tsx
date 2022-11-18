@@ -1,7 +1,7 @@
 import React from 'react';
-import Language from '../../screens/onboarding/language/Language';
-import SportSelection from '../../screens/onboarding/sport_selection/SportSelection';
-import Profile from '../../screens/onboarding/profile/Profile';
+import Language from '../../../screens/onboarding/language/Language';
+import SportSelection from '../../../screens/onboarding/sport_selection/SportSelection';
+import Profile from '../../../screens/onboarding/profile/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 type name = {

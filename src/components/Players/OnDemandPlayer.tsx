@@ -1,7 +1,8 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet, Platform, StatusBar} from 'react-native';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import JWPlayer, {Config} from 'react-native-jw-media-player';
+import JWPlayer, {Config, JWPlayerState} from 'react-native-jw-media-player';
 import {width} from '../../constants/dimensions';
+import Orientation from 'react-native-orientation-locker';
 
 type Props = {
   playlist: {
@@ -19,17 +20,19 @@ const OnDemandPlayer = forwardRef(
     const config: Config = {
       license:
         Platform.OS === 'ios'
-          ? 'aMgByQuUOewafjvm3mpLUTECOfl/Qs5m25hRJ0sadFj6MybWgNcre870Msw='
-          : 'iApV2ZR/i2Vhw/LKuRN1OkhIDgPROccV6trHN++EPqs37usNohicEd+ZWlk=',
+          ? 'y0DeWSyjixhmZ/tBu/bidi9rqn3jqjiVo1ZP7SJHzGfjyJM48Ru/kHQOD34='
+          : 'qgDAENLeDwYY3/N8TqcAIWdfJbXWnToTz9yPRWeWxiIrHQETupvMPpYecBg=',
       autostart: true,
       backgroundAudioEnabled: true,
       styling: {
         menuStyle: {},
       },
       viewOnly: false,
-      pipEnabled: true,
+      pipEnabled: false,
       enableLockScreenControls: true,
       hideUIGroup: 'playlist',
+      landscapeOnFullScreen: true,
+      preload: 'auto',
       playlist: playlist,
     };
 
@@ -39,15 +42,40 @@ const OnDemandPlayer = forwardRef(
       },
     }));
 
+    const isPlaying = async () => {
+      const playerState = await player.current?.playerState();
+      return playerState === JWPlayerState.JWPlayerStatePlaying;
+    };
+
+    const onPlaylistItem = async () => {
+      // console.log(await player.current?.playerState());
+      console.log(await isPlaying());
+      (await isPlaying()) === false && initBuffering();
+      // console.log(await player.current?.playerState());
+    };
+
+    const initBuffering = () => {
+      player.current?.setState(_ => (Platform.OS === 'ios' ? 2 : 1));
+    };
+
+    const landscapeOnFullScreen = () => {
+      Orientation.lockToLandscape();
+      StatusBar.setHidden(true);
+    };
+
+    const exitLandscape = () => {
+      Orientation.lockToPortrait();
+      StatusBar.setHidden(false);
+    };
+
     return (
       <JWPlayer
         ref={player}
-        onSeek={event => console.log(event.position)}
-        onPlaylistItem={event => console.log(event.mediaId)}
-        onSetupPlayerError={event => console.log(event.error)}
-        onPlayerError={event => console.log(event)}
         style={styles.player}
         config={config}
+        onPlaylistItem={onPlaylistItem}
+        onFullScreenRequested={landscapeOnFullScreen}
+        onFullScreenExit={exitLandscape}
       />
     );
   },

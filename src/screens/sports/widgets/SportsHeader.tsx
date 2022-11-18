@@ -1,86 +1,16 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  StatusBar,
-  ScrollView,
-} from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {height, width} from '../../../constants/dimensions';
 import {logo} from '../../../constants/files';
-import {
-  black,
-  blackLight,
-  gray,
-  grayLight,
-  white,
-} from '../../../constants/colors';
-import {px1, px2, px3, px4, py2} from '../../../constants/spacing';
+import {gray, grayLight, white} from '../../../constants/colors';
+import {px2, px4, py2} from '../../../constants/spacing';
 import {sm} from '../../../constants/fonts';
-import Cricket from '../../../assets/icons/Cricket';
-import Football from '../../../assets/icons/Football';
-import Volleyball from '../../../assets/icons/Volleyball';
-import Marathon from '../../../assets/icons/Marathon';
-import AllSports from '../../../assets/icons/AllSports';
-import Basketball from '../../../assets/icons/Basketball';
-import Athletics from '../../../assets/icons/Athletics';
+
 import useStore from '../../../store/store';
 import {useNavigation} from '@react-navigation/native';
 
-type Props = {
-  selected: number;
-};
-
-const categories = [
-  {
-    name: 'All Sports',
-    logo: <AllSports />,
-    navigation: '',
-    key: 0,
-    color: blackLight,
-  },
-  {
-    name: 'Football',
-    logo: <Football />,
-    navigation: '',
-    key: 1,
-    color: '#23AD7C',
-  },
-  {
-    name: 'Basketball',
-    logo: <Basketball />,
-    navigation: '',
-    key: 2,
-    color: '#DD52E1',
-  },
-  {name: 'Cricket', logo: <Cricket />, navigation: '', key: 3, color: 'orange'},
-  {
-    name: 'Athletics',
-    logo: <Athletics />,
-    navigation: '',
-    key: 4,
-    color: '#33A7E2',
-  },
-  {
-    name: 'Volleyball',
-    logo: <Volleyball />,
-    navigation: '',
-    key: 5,
-    color: '#23AD7C',
-  },
-  {
-    name: 'Marathon',
-    logo: <Marathon />,
-    navigation: '',
-    key: 6,
-    color: '#33A7E2',
-  },
-];
-
-const SportsHeader = ({selected}: Props) => {
+const SportsHeader = () => {
   const {userProfile} = useStore();
   const navigation = useNavigation();
   return (
@@ -94,7 +24,7 @@ const SportsHeader = ({selected}: Props) => {
             <Icon style={styles.searchIcon} name="search-outline" />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('profileSettings')}
+            onPress={() => navigation.navigate('Profile')}
             style={styles.profileButton}>
             {userProfile?.image ? (
               <Image
@@ -111,19 +41,6 @@ const SportsHeader = ({selected}: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <ScrollView style={styles.sportsCarousel} horizontal>
-        {categories.map(sport => {
-          return (
-            <TouchableOpacity key={sport.key} style={styles.sportButton}>
-              <View
-                style={[styles.sportLogoView, {backgroundColor: sport.color}]}>
-                {sport.logo}
-              </View>
-              <Text style={styles.sportName}>{sport.name}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView> */}
     </View>
   );
 };
