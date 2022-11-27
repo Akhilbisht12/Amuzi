@@ -1,4 +1,4 @@
-import Storage from '@react-native-async-storage/async-storage';
+// import Storage from '@react-native-async-storage/async-storage';
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {slack} from '../constants/secrets';
 import useStore from '../store/store';
@@ -19,20 +19,20 @@ const headers: Readonly<Record<string, string | boolean>> = {
   'X-Requested-With': 'XMLHttpRequest',
 };
 
-const injectToken = async (
-  config: AxiosRequestConfig,
-): Promise<AxiosRequestConfig> => {
-  try {
-    let token = await Storage.getItem('access');
-    console.log(token, 'from http');
-    if (token != null) {
-      config.headers!.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  } catch (error: any) {
-    throw new Error(error);
-  }
-};
+// const injectToken = async (
+//   config: AxiosRequestConfig,
+// ): Promise<AxiosRequestConfig> => {
+//   try {
+//     let token = await Storage.getItem('access');
+//     console.log(token, 'from http');
+//     if (token != null) {
+//       config.headers!.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   } catch (error: any) {
+//     throw new Error(error);
+//   }
+// };
 
 class Http {
   private instance: AxiosInstance | null = null;

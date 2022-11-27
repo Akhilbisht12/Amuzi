@@ -1,10 +1,10 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {black, grayLight, white} from '../../../constants/colors';
+import {black, grayLight, green, white} from '../../../constants/colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {sm, xs} from '../../../constants/fonts';
-import {px2, px4, py1} from '../../../constants/spacing';
+import {px1, px2, px4, px6, py1} from '../../../constants/spacing';
 import {useNavigation} from '@react-navigation/native';
 
 const AdminSettings = () => {
@@ -12,7 +12,9 @@ const AdminSettings = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <TouchableOpacity onPress={() => adminSheet.current?.open()}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => adminSheet.current?.open()}>
         <Icon name="settings" color={white} size={30} />
       </TouchableOpacity>
       <RBSheet height={150} ref={adminSheet}>
@@ -76,6 +78,14 @@ const styles = StyleSheet.create({
   editCardActionPara: {
     color: grayLight,
     fontSize: xs,
+  },
+  button: {
+    position: 'absolute',
+    bottom: -15,
+    right: 10,
+    backgroundColor: green,
+    padding: px2,
+    borderRadius: px6,
   },
 });
 export default AdminSettings;

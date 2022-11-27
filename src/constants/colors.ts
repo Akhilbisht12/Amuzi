@@ -6,3 +6,5 @@ export const green = '#94DD26';
 export const white = '#ffffff';
 export const background = '#141414';
 export const yellow = '#FACC15';
+export const red = '#EB5757';
+export const blue = '#4461A5';

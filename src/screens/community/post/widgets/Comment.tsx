@@ -13,6 +13,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import useStore from '../../../../store/store';
+import useCommunityStore from '../../../../store/communityStore';
 
 type Props = {
   comment: COMMENT;
@@ -25,7 +26,8 @@ const Comment = ({comment}: Props) => {
     comment.downvoteCount,
   );
   const vertSheet = useRef<RBSheet | null>(null);
-  const {userProfile, deleteStoreComment, community} = useStore();
+  const {deleteStoreComment} = useCommunityStore();
+  const {userProfile} = useStore();
   const navigation = useNavigation();
   const voteOnCommentHandler = async (vote: boolean) => {
     try {

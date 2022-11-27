@@ -20,7 +20,9 @@ const SportsHeader = () => {
           <Image style={styles.logo} source={logo} />
         </View>
         <View style={styles.headerButtons}>
-          <TouchableOpacity style={styles.searchButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('search')}
+            style={styles.searchButton}>
             <Icon style={styles.searchIcon} name="search-outline" />
           </TouchableOpacity>
           <TouchableOpacity

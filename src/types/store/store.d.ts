@@ -1,5 +1,4 @@
-import {COMMUNITY} from '../community/community';
-import {POST} from '../community/post';
+import {PLAYLIST_MEDIA} from '../content/playlist';
 
 export interface state extends user, theme, event, authState {
   loading: boolean;
@@ -17,7 +16,7 @@ export interface userProfile {
 }
 
 export interface user {
-  userState: 'loggedIn' | 'loggedOut' | 'onBoarded';
+  userState: 'loggedIn' | 'loggedOut' | 'onBoarded' | null;
   userProfile: userProfile | undefined;
   setUser: (state: userProfile) => void;
   setUserState: (state: 'loggedIn' | 'loggedOut' | 'onBoarded') => void;
@@ -31,31 +30,6 @@ export interface theme {
   setTheme: (changedTheme: 'dark' | 'light') => void;
 }
 
-export interface event {
-  posts: POST[];
-  community: COMMUNITY;
-  sportScrollYOffset: number;
-  setSportScrollYOffset: (value: number) => void;
-  scrollUp: boolean;
-  setCommunity: (community: COMMUNITY) => void;
-  setPosts: (posts: POST[]) => void;
-  deleteStoragePost: (id: string) => void;
-  postRefresh: boolean;
-  communityCreate: boolean;
-  createdRefresh: boolean;
-  setCommunityCreate: (value: boolean) => void;
-  setPostRefresh: () => void;
-  setCreatedRefresh: () => void;
-  post: POST | null;
-  setPost: (post: POST) => void;
-  deleteStoreComment: (id: string) => void;
-  editStoreComment: (id: string, content: string) => void;
-  setCommunityImage: (url: string) => void;
-  approvalPosts: POST[];
-  setApprovalPosts: (posts: POST[]) => void;
-  updateApprovalPosts: (id: string) => void;
-}
-
 export interface authState {
   otp: number[];
   pushOtp: (value: number) => void;
@@ -63,4 +37,12 @@ export interface authState {
   timer: number;
   setTimer: () => void;
   resetTimer: () => void;
+}
+
+export interface iWatchlistStore {
+  watchlist: string[];
+  setWatchlist: (media: string[]) => void;
+  editWatchlist: (mediaId: string) => boolean;
+  watchListMedia: PLAYLIST_MEDIA[];
+  setWatchListMedia: (media: PLAYLIST_MEDIA[]) => void;
 }

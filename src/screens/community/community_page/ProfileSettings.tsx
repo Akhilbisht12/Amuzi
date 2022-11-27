@@ -19,7 +19,7 @@ import {
   updateCommunityImage,
 } from '../../../api/community/community.api';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
 import DocumentPicker from 'react-native-document-picker';
 import http from '../../../api/http';
 import ImageCropPicker from 'react-native-image-crop-picker';

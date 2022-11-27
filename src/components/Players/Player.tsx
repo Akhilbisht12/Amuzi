@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Platform, StatusBar, StyleSheet} from 'react-native';
 import JWPlayer, {Config} from 'react-native-jw-media-player';
 import Orientation from 'react-native-orientation-locker';
 import {width} from '../../constants/dimensions';
+import {px2} from '../../constants/spacing';
 
 type Props = {
-  ref: React.RefObject<JWPlayer>;
+  // ref: React.RefObject<JWPlayer>;
   config: Omit<Config, 'license'>;
 };
 
-const Player = ({ref, config}: Props) => {
+
+
+const Player = ({config}: Props) => {
   const landscapeOnFullScreen = () => {
     Orientation.lockToLandscape();
     StatusBar.setHidden(true);
@@ -19,6 +22,8 @@ const Player = ({ref, config}: Props) => {
     Orientation.lockToPortrait();
     StatusBar.setHidden(false);
   };
+
+  const ref = useRef<JWPlayer>(null);
   return (
     <JWPlayer
       config={{
@@ -39,6 +44,7 @@ const Player = ({ref, config}: Props) => {
 const styles = StyleSheet.create({
   player: {
     height: (9 / 16) * width,
+    borderRadius: px2,
   },
 });
 

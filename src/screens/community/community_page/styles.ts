@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {black, gray, grayLight, white} from '../../../constants/colors';
-import {width} from '../../../constants/dimensions';
+import {black, gray, grayLight, green, white} from '../../../constants/colors';
+import {height} from '../../../constants/dimensions';
 import {bold, md, nm, sm, xs} from '../../../constants/fonts';
-import {px3, px4, py1} from '../../../constants/spacing';
+import {px1, px2, px3, px4, py1} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
@@ -13,25 +13,18 @@ const styles = StyleSheet.create({
     paddingVertical: 0.2,
     backgroundColor: gray,
     marginHorizontal: px4,
+    marginVertical: py1,
   },
   container: {
     paddingHorizontal: px4,
-    paddingVertical: py1,
+    paddingTop: py1,
   },
-  communityHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  communityHeader: {},
   communityHeaderImage: {
-    width: 0.2 * width,
-    height: 0.2 * width,
-    borderRadius: 0.15 * width,
-    resizeMode: 'contain',
-    marginRight: px3,
-  },
-  communityDetails: {
-    marginVertical: py1,
+    height: 0.15 * height,
+    width: 'auto',
+    borderRadius: px2,
+    resizeMode: 'cover',
   },
   communityDetailsTitle: {
     color: white,
@@ -39,12 +32,26 @@ const styles = StyleSheet.create({
     fontFamily: bold,
   },
   communityDetailsCategory: {
-    color: grayLight,
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    color: white,
     fontSize: xs,
+    backgroundColor: green,
+    paddingVertical: px1,
+    paddingHorizontal: px4,
+    borderRadius: px1,
+  },
+  readMoreToggle: {
+    fontFamily: bold,
+    color: grayLight,
   },
   communityDetailsDescription: {
-    color: white,
+    color: grayLight,
     fontSize: sm,
+  },
+  titleDesc: {
+    paddingVertical: py1,
   },
   communityCountView: {},
   communityCount: {
@@ -59,15 +66,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   createPost: {
-    backgroundColor: white,
+    backgroundColor: green,
     padding: px3,
     borderRadius: 100,
     position: 'absolute',
     bottom: 15,
     right: 15,
+    elevation: 10,
   },
   createPostIcon: {
-    color: black,
+    color: white,
     fontSize: 30,
   },
   adminManageView: {},

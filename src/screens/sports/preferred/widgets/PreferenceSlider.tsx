@@ -1,37 +1,38 @@
-import {View, Text, FlatList} from 'react-native';
+import {FlatList, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {getPlaylist} from '../../../../api/playlist/playlist';
-import {FEED, PLAYLIST_MEDIA} from '../../../../types/content/playlist';
 import HeroCard from '../../widgets/HeroCard';
 import {px4} from '../../../../constants/spacing';
+import useLiveStore from '../../../../store/liveStore';
+import {iLive} from '../../../../types/store/live';
 
-const PreferenceSlider = () => {
-  const [playlist, setPlaylist] = useState<FEED>();
-  const getPlaylistHandler = async () => {
-    const response = await getPlaylist('fGt4FY4s');
-    setPlaylist(response);
-    try {
-    } catch (error) {}
-  };
+type Props = {
+  category?: string;
+};
+
+const PreferenceSlider = ({category}: Props) => {
+  const [filteredEvents, setFilteredEvents] = useState<iLive[]>([]);
+  const {events} = useLiveStore();
 
   useEffect(() => {
-    getPlaylistHandler();
-  }, []);
+    if (!category) return setFilteredEvents(events);
+    const result = events.filter(
+      item => item.eventType.toUpperCase() === category?.toUpperCase(),
+    );
+    setFilteredEvents(result);
+  }, [category, events]);
 
-  const renderCard = ({item}: {item: PLAYLIST_MEDIA}) => {
-    return <HeroCard media={item} />;
+  const renderCard = ({item, index}: {item: iLive; index: number}) => {
+    return <HeroCard live={item} index={index} />;
   };
-
-  return playlist?.playlist ? (
+  if (filteredEvents.length === 0) return <View />;
+  return (
     <FlatList
       style={{padding: px4}}
       horizontal
-      data={playlist?.playlist}
+      data={filteredEvents}
       renderItem={renderCard}
-      keyExtractor={card => card.mediaid}
+      keyExtractor={item => item.id}
     />
-  ) : (
-    <View />
   );
 };
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import CommunityHome from '../../../../screens/community/CommunityHome';
 import CreateCommunity from '../../../../screens/community/create_community/CreateCommunity';
 import Discover from '../../../../screens/community/discover/Discover';
 import CommunityPage from '../../../../screens/community/community_page/CommunityPage';
@@ -8,13 +7,12 @@ import Post from '../../../../screens/community/post/Post';
 import {COMMENT} from '../../../../types/community/post';
 import Reply from '../../../../screens/community/post/widgets/Replies';
 import CreatePost from '../../../../screens/community/create_post/CreatePost';
-import CommunityTabs from './CommunityTabs';
 import EditPost from '../../../../screens/community/post/EditPost';
 import ProfileSettings from '../../../../screens/community/community_page/ProfileSettings';
 import EditComment from '../../../../screens/community/post/widgets/EditComment';
 import Approvals from '../../../../screens/community/community_page/Approvals';
 import {COMMUNITY} from '../../../../types/community/community';
-
+import CommunityHome from '../../../../screens/community/Community';
 type name = {
   name: string;
 };
@@ -23,11 +21,7 @@ export type CommunityStack = {
   CommunityHome: undefined;
   CreateCommunity: name;
   Discover: name;
-  CommunityPage: {
-    name: string;
-    item: COMMUNITY;
-    isAdmin?: boolean;
-  };
+  CommunityPage: undefined;
   Post: {
     _id: string;
     community_id: string;
@@ -51,11 +45,11 @@ export type CommunityStack = {
   Approvals: undefined;
 };
 
-const Community = () => {
+const CommunityRoutes = () => {
   const Stack = createNativeStackNavigator<CommunityStack>();
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="CommunityHome" component={CommunityTabs} />
+      <Stack.Screen name="CommunityHome" component={CommunityHome} />
       <Stack.Screen name="CreateCommunity" component={CreateCommunity} />
       <Stack.Screen name="Discover" component={Discover} />
       <Stack.Screen name="CommunityPage" component={CommunityPage} />
@@ -70,4 +64,4 @@ const Community = () => {
   );
 };
 
-export default Community;
+export default CommunityRoutes;

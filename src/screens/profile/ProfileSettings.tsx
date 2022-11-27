@@ -4,7 +4,7 @@ import ViewWrapper from '../../components/wrappers/ViewWrapper';
 import useStore from '../../store/store';
 import {width} from '../../constants/dimensions';
 import {black, gray, grayLight, white} from '../../constants/colors';
-import {lg, md, medium, nm, sm, xl} from '../../constants/fonts';
+import {lg, md, medium, nm, sm, xl, xs} from '../../constants/fonts';
 import {px2, px4, py1, py2} from '../../constants/spacing';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -42,23 +42,23 @@ const ProfileSettings = ({navigation}: Props) => {
       </View>
       <View style={styles.menu}>
         {[
-          {
-            name: 'Downloads',
-            description: 'Watch videos offline',
-            handler: () => console.log('nav'),
-            icon: 'cloud-upload-outline',
-          },
+          // {
+          //   name: 'Downloads',
+          //   description: 'Watch videos offline',
+          //   handler: () => console.log('nav'),
+          //   icon: 'cloud-upload-outline',
+          // },
           {
             name: 'Watchlist',
             description: 'Save to watch later',
-            handler: () => console.log('nav'),
-            icon: 'time-outline',
+            handler: () => navigation.navigate('watchlist'),
+            icon: 'albums-outline',
           },
           {
             name: 'History',
             description: 'Continue watching',
             handler: () => console.log('nav'),
-            icon: 'timer-outline',
+            icon: 'time-outline',
           },
         ].map((item, i) => {
           return (
@@ -86,7 +86,7 @@ const ProfileSettings = ({navigation}: Props) => {
           {
             name: 'Subscription / Passes',
             handler: () => console.log('nav'),
-            icon: 'receipt-outline',
+            icon: 'wallet-outline',
           },
           {
             name: 'Select Language',
@@ -116,9 +116,9 @@ const ProfileSettings = ({navigation}: Props) => {
       <View style={styles.menu}>
         {[
           {
-            name: 'Prefrences',
+            name: 'FAQ',
             handler: () => console.log('nav'),
-            icon: 'settings-outline',
+            icon: 'chatbox-ellipses-outline',
           },
           {
             name: 'Help',
@@ -144,20 +144,16 @@ const ProfileSettings = ({navigation}: Props) => {
         <Text style={styles.listDesc}>Privacy Policy </Text>
         <Text style={styles.listDesc}>&#xB7; T&C</Text>
       </View>
-      <View>
+      <View style={styles.signout}>
         <TouchableOpacity
+          style={styles.list}
           onPress={() => {
             setUser(null);
             setUserState('loggedOut');
             AsyncStorage.clear();
           }}>
-          <Text
-            style={[
-              styles.listName,
-              {textAlign: 'center', marginVertical: py2},
-            ]}>
-            Sign out
-          </Text>
+          <Icon name="log-out-outline" size={30} color={white} />
+          <Text style={[styles.listName]}>Sign out</Text>
         </TouchableOpacity>
       </View>
     </ViewWrapper>
@@ -209,18 +205,24 @@ const styles = StyleSheet.create({
   },
   listName: {
     color: white,
-    fontSize: lg,
+    fontSize: md,
     fontFamily: medium,
   },
   listDesc: {
     color: grayLight,
-    fontSize: nm,
+    fontSize: xs,
     fontFamily: medium,
+    letterSpacing: 0.5,
   },
   divider: {
     marginVertical: py1,
-    backgroundColor: grayLight,
-    padding: 1,
+    marginHorizontal: px4,
+    backgroundColor: gray,
+    padding: 0.5,
+  },
+  signout: {
+    alignItems: 'center',
+    marginVertical: py1,
   },
 });
 

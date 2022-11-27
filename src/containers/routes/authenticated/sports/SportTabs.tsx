@@ -16,20 +16,23 @@ import {
 } from 'react-native';
 import SportsHeader from '../../../../screens/sports/widgets/SportsHeader';
 import useStore from '../../../../store/store';
-import {px1, px2, px4, py1, pyh} from '../../../../constants/spacing';
+import {px4, pyh} from '../../../../constants/spacing';
 import {medium} from '../../../../constants/fonts';
 import {height, width} from '../../../../constants/dimensions';
+import useThemeStore from '../../../../store/states/themeStore';
 
 const Tab = createMaterialTopTabNavigator();
 
 const SportTabs = () => {
   const {screens, setScreens} = useSportStore();
   const {scrollUp, sportScrollYOffset} = useStore();
+  const {setTheme} = useThemeStore();
   const headerTop = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     const getAllScreenHandler = async () => {
       try {
         const screenResponse = await getAllScreens();
+        setTheme(screenResponse[0]);
         setScreens(screenResponse);
       } catch (error) {}
     };
@@ -84,6 +87,7 @@ const SportTabs = () => {
             const isFocused = state.index === index;
 
             const onPress = () => {
+              setTheme(screens[route.params.index]);
               const event = navigation.emit({
                 type: 'tabPress',
                 target: route.key,
@@ -181,8 +185,8 @@ const styles = StyleSheet.create({
   screenOptions: {
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginHorizontal: px2,
     paddingBottom: pyh,
+    marginRight: 0.07 * width,
   },
   label: {
     fontFamily: medium,

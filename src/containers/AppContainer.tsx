@@ -7,11 +7,12 @@ import Unauthenticated from './routes/unauthenticated/Unauthenticated';
 import useStore from '../store/store';
 import {getProfile} from '../api/profile/profile.api';
 import jwtDecode from 'jwt-decode';
+import {GetWatchListHandler} from '../handlers/watchlist/watchListHandler';
+import Splash from '../components/splash/Splash';
 
 const AppContainer = () => {
   // Storage.clear();
   const {userState, setUserState, setUser, setAccess} = useStore();
-
   useEffect(() => {
     const getUser = async () => {
       const access = await Storage.getItem('access');
@@ -24,30 +25,33 @@ const AppContainer = () => {
         const expDate = new Date(1970, 0, 1);
         expDate.setSeconds(exp);
         if (expDate < Date.now()) {
-          console.log('token expired');
           Storage.clear();
           setUserState('loggedOut');
           return;
         }
         setAccess(access);
-        const user = await getProfile();
-        if (user.onboarded) {
-          setUser(user);
-          setUserState('onBoarded');
-        } else {
-          setUser(user);
-          setUserState('loggedIn');
-        }
+        getProfile().then(user => {
+          if (user.onboarded) {
+            setUser(user);
+            setUserState('onBoarded');
+          } else {
+            setUser(user);
+            setUserState('loggedIn');
+          }
+        });
       }
     };
     getUser();
-  }, [setUser, setUserState, setAccess]);
+    if (userState === 'onBoarded') {
+      GetWatchListHandler();
+    }
+  }, [setUser, setUserState, setAccess, userState]);
 
   if (userState === 'loggedIn') {
     return <ProfileSetup />;
   } else if (userState === 'onBoarded') {
     return <Authenticated />;
-  } else {
+  } else if (userState === 'loggedOut') {
     return <Unauthenticated />;
   }
 };

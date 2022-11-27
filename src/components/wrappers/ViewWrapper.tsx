@@ -1,4 +1,4 @@
-import {View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
+import {View, StyleSheet, RefreshControl, FlatList} from 'react-native';
 import React, {useState} from 'react';
 import {height} from '../../constants/dimensions';
 import {black} from '../../constants/colors';
@@ -12,7 +12,10 @@ const ViewWrapper = ({children, refreshAction}: Props) => {
   const [refresh, setRefresh] = useState(false);
   return (
     <View style={styles.main}>
-      <ScrollView
+      <FlatList
+        data={[]}
+        renderItem={null}
+        ListEmptyComponent={null}
         refreshControl={
           <RefreshControl
             refreshing={refresh}
@@ -23,10 +26,8 @@ const ViewWrapper = ({children, refreshAction}: Props) => {
             }}
           />
         }
-        style={styles.mainScroll}>
-        {children}
-      </ScrollView>
-      {/* <FlatList ListHeaderComponent={...children} /> */}
+        ListHeaderComponent={() => <React.Fragment>{children}</React.Fragment>}
+      />
     </View>
   );
 };

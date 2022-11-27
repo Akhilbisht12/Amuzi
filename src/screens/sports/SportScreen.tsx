@@ -1,52 +1,43 @@
-import {StyleSheet, ScrollView, Animated} from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import {StyleSheet, FlatList} from 'react-native';
+import React from 'react';
 import {iScreen} from '../../types/store/sport';
-import {black} from '../../constants/colors';
 import MediaSlider from './widgets/MediaSlider';
 import PreferenceSlider from './preferred/widgets/PreferenceSlider';
-import useStore from '../../store/store';
-import {height} from '../../constants/dimensions';
+import ViewWrapper from '../../components/wrappers/ViewWrapper';
+import {getEvents} from '../../api/events/events.api';
 
 type Props = {
   sport: iScreen;
 };
 
 const SportScreen = ({sport}: Props) => {
-  const {setSportScrollYOffset, sportScrollYOffset, scrollUp} = useStore();
-  const marginTop = useRef(new Animated.Value(0.185 * height)).current;
-  useEffect(() => {
-    marginAnim(scrollUp || sportScrollYOffset === 0 ? true : false);
-  }, [scrollUp, sportScrollYOffset]);
-  const marginAnim = (show: boolean) => {
-    Animated.timing(marginTop, {
-      toValue: show ? 0.185 * height : 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
+  const renderSportComponents = ({item}: {item: string}) => {
+    return <MediaSlider playlistId={item} />;
   };
+
   return (
-    <ScrollView
-      contentContainerStyle={{
-        backgroundColor: black,
-        flexGrow: 1,
-      }}
-      onScroll={event => {
-        setSportScrollYOffset(event.nativeEvent.contentOffset.y);
-      }}>
-      <Animated.View style={[styles.main]}>
-        <PreferenceSlider />
-        {sport.playlists?.map(playlistId => {
-          return <MediaSlider key={playlistId} playlistId={playlistId} />;
-        })}
-      </Animated.View>
-    </ScrollView>
+    <ViewWrapper refreshAction={() => getEvents()}>
+      <FlatList
+        ListHeaderComponent={
+          <PreferenceSlider
+            category={
+              sport.name.toLowerCase() === 'all'
+                ? undefined
+                : sport.name.toUpperCase()
+            }
+          />
+        }
+        contentContainerStyle={styles.main}
+        data={sport.playlists}
+        renderItem={renderSportComponents}
+      />
+    </ViewWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
-    backgroundColor: black,
+    flexGrow: 1,
   },
 });
 

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {grayLight, white} from '../../../constants/colors';

@@ -6,7 +6,7 @@ import {black, grayLight, white} from '../../../../constants/colors';
 import {px1, px2, px4, py1} from '../../../../constants/spacing';
 import Button from '../../../../components/button/Button';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../../containers/routes/authenticated/community/Community';
+import {CommunityStack} from '../../../../containers/routes/authenticated/community/CommunityRoutes';
 import {updateComment} from '../../../../api/community/community.api';
 import useStore from '../../../../store/store';
 

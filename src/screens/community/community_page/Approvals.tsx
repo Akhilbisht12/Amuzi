@@ -111,6 +111,17 @@ const Approvals = () => {
       </View>
     );
   };
+
+  const EmptyList = () => {
+    return (
+      <View style={styles.emptyCommunityView}>
+        <Icon name="people" color={grayLight} size={100} />
+        <Text style={styles.emptyCommunity}>
+          Communities joined by you will appear here.
+        </Text>
+      </View>
+    );
+  };
   return (
     <ViewWrapper>
       <BackTitleHeader title="Post Approvals" />
@@ -123,7 +134,12 @@ const Approvals = () => {
           />
         </View>
         <View>
-          <FlatList renderItem={renderApprovalPosts} data={approvalPosts} />
+          <FlatList
+            ListEmptyComponent={() => <EmptyList />}
+            keyExtractor={item => item._id}
+            renderItem={renderApprovalPosts}
+            data={approvalPosts}
+          />
         </View>
       </View>
     </ViewWrapper>
@@ -202,6 +218,16 @@ const styles = StyleSheet.create({
     color: white,
     textAlign: 'center',
     fontSize: sm,
+  },
+  emptyCommunityView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyCommunity: {
+    color: grayLight,
+    paddingHorizontal: px4,
+    marginVertical: py2,
   },
 });
 

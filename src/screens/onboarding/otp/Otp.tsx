@@ -27,7 +27,7 @@ type Props = NativeStackScreenProps<UnauthenticatedStack, 'Otp'>;
 
 const Otp = ({route}: Props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const {setUserState, setLoading, loading, setAccess} = useStore();
+  const {setUserState, setLoading, loading, setAccess, setUser} = useStore();
   const OtpBoxRef = useRef(null);
   // component to render timer
   const RenderTimer = () => {
@@ -102,7 +102,8 @@ const Otp = ({route}: Props) => {
           const {data} = await verifyOtp(route.params.phone, otp);
           await Storage.setItem('access', data.accessToken);
           await Storage.setItem('refresh', data.refreshToken);
-          await Storage.setItem('onBoarded', data.onboarded.toString());
+          // console.log(data);
+          // setUser(data); /not user
           setAccess(data.accessToken);
           setUserState(data.onboarded ? 'onBoarded' : 'loggedIn');
         } catch (error: any) {

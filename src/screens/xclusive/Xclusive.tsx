@@ -1,86 +1,139 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import ViewWrapper from '../../components/wrappers/ViewWrapper';
-import {px4, py1} from '../../constants/spacing';
-import {black, white} from '../../constants/colors';
-import {md, medium} from '../../constants/fonts';
-import NewsHeroCard, {news} from './widgets/NewsHeroCard';
-import MediaSlider from '../sports/widgets/MediaSlider';
+import {px2, px4, px6, py1} from '../../constants/spacing';
+import {black, gray, green, white} from '../../constants/colors';
+import {md, medium, nm} from '../../constants/fonts';
+import NewsHeroCard from './widgets/NewsHeroCard';
+import useXclusiveStore from '../../store/xclusiveStore';
+import {
+  GetXclusiveCategories,
+  GetXclusivePosts,
+} from '../../handlers/xclusive/xclusiveHandler';
+import {iXclusivePost} from '../../types/store/xclusiveStore';
 import NewsCard from './widgets/NewsCard';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {iAuthenticated} from '../../containers/routes/authenticated/Authenticated';
 
-const newsHead = [
-  {
-    badgeText: '#Top News',
-    title:
-      'Rumours about Barcelona return for Lionel Messi shut down by Argentine’s camp',
-    creatorName: 'Soccer News',
-    creatorImage:
-      'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
-    time: '1 hour ago',
-    image:
-      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
-  },
-  {
-    badgeText: '#Top News',
-    title:
-      'Rumours about Barcelona return for Lionel Messi shut down by Argentine’s camp',
-    creatorName: 'Soccer News',
-    creatorImage:
-      'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
-    time: '1 hour',
-    image:
-      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
-  },
-  {
-    badgeText: '#Top News',
-    title:
-      'Rumours about Barcelona return for Lionel Messi shut down by Argentine’s camp',
-    creatorName: 'Soccer News',
-    creatorImage:
-      'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
-    time: '1 hour ago',
-    image:
-      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
-  },
-  {
-    badgeText: '#Top News',
-    title:
-      'Rumours about Barcelona return for Lionel Messi shut down by Argentine’s camp',
-    creatorName: 'Soccer News',
-    creatorImage:
-      'https://images.unsplash.com/photo-1659893982154-d4f9a9f0922e',
-    time: '1 hour',
-    image:
-      'https://cdn.pixabay.com/photo/2019/09/06/02/52/football-4455306_960_720.jpg',
-  },
-];
+type Props = NativeStackScreenProps<iAuthenticated, 'Home'>;
 
-const Xclusive = () => {
-  const renderNewsHero = ({item, index}: {item: news; index: number}) => {
-    return <NewsHeroCard news={item} index={index} />;
+const Xclusive = ({navigation}: Props) => {
+  const {
+    selectedCategory,
+    selectedSubCategories,
+    posts,
+    categories,
+    setSelectedCategory,
+    setSelectedSubCategories,
+  } = useXclusiveStore();
+
+  // fetching posts every time categories changes
+  useEffect(() => {
+    const getPosts = async () => {
+      await GetXclusivePosts();
+    };
+    getPosts();
+  }, [selectedCategory, selectedSubCategories]);
+
+  // fetching categories in first render
+  useEffect(() => {
+    const getCategories = async () => {
+      await GetXclusiveCategories();
+    };
+    getCategories();
+  }, []);
+
+  const renderNewsHero = ({
+    item,
+    index,
+  }: {
+    item: iXclusivePost;
+    index: number;
+  }) => {
+    if (item.type === 'video') {
+      return (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('xclusivePost', {index})}>
+          <NewsHeroCard post={item} index={index} />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('xclusivePost', {index})}>
+          <NewsCard post={item} index={index} />
+        </TouchableOpacity>
+      );
+    }
   };
-  const renderNews = ({item}: {item: news}) => {
-    return <NewsCard news={item} />;
-  };
+
   return (
     <View style={styles.main}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Amuzi Xclusive</Text>
+      <View>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Amuzi Xclusive</Text>
+        </View>
+        <ScrollView horizontal>
+          {selectedCategory !== 'ALL' && (
+            <Text
+              onPress={() => setSelectedCategory('ALL')}
+              style={[
+                styles.categoryTitleButton,
+                styles.categoryTitle,
+                {marginLeft: px4, backgroundColor: green},
+              ]}>
+              {categories.find(item => item._id === selectedCategory)?.name}
+            </Text>
+          )}
+          {selectedCategory !== 'ALL' &&
+            categories
+              .find(item => item._id === selectedCategory)
+              ?.subCategories.map((subCat, i) => {
+                return (
+                  <TouchableOpacity
+                    key={subCat._id}
+                    style={[
+                      styles.categoryTitleButton,
+                      i === 0 && {marginLeft: px2},
+                      selectedSubCategories.findIndex(
+                        item => item === subCat._id,
+                      ) !== -1 && {backgroundColor: green},
+                    ]}
+                    onPress={() => setSelectedSubCategories(subCat._id)}>
+                    <Text style={styles.categoryTitle}>{subCat.name}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+          {selectedCategory === 'ALL' &&
+            categories.map((item, i) => {
+              return (
+                <TouchableOpacity
+                  key={item._id}
+                  onPress={() => setSelectedCategory(item._id)}
+                  style={[
+                    styles.categoryTitleButton,
+                    i === 0 && {marginLeft: px4},
+                  ]}>
+                  <Text style={styles.categoryTitle}>{item.name}</Text>
+                </TouchableOpacity>
+              );
+            })}
+        </ScrollView>
       </View>
       <ViewWrapper>
         <FlatList
           style={styles.heroSlider}
           renderItem={renderNewsHero}
-          horizontal
-          data={newsHead}
+          keyExtractor={item => item._id}
+          data={posts}
         />
-        <MediaSlider playlistId="pqZLtwsU" />
-        <FlatList
-          style={styles.newsList}
-          renderItem={renderNews}
-          data={newsHead}
-        />
-        <MediaSlider playlistId="pqZLtwsU" />
       </ViewWrapper>
     </View>
   );
@@ -102,10 +155,26 @@ const styles = StyleSheet.create({
   },
   heroSlider: {
     marginVertical: py1,
+    flexGrow: 1,
   },
   newsList: {
     marginVertical: py1,
     paddingHorizontal: px4,
+  },
+  categoryMain: {
+    flexGrow: 1,
+  },
+  categoryTitleButton: {
+    marginRight: px2,
+    backgroundColor: gray,
+    height: 'auto',
+    paddingVertical: px2,
+    paddingHorizontal: px4,
+    borderRadius: px6,
+  },
+  categoryTitle: {
+    color: white,
+    fontSize: nm,
   },
 });
 

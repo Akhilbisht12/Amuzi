@@ -5,20 +5,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {PLAYLIST_MEDIA} from '../../../types/content/playlist';
-import {px3} from '../../../constants/spacing';
+import {px3, px4, py1, pyh} from '../../../constants/spacing';
 import {width} from '../../../constants/dimensions';
-import {white} from '../../../constants/colors';
+import {background, blue, red, white} from '../../../constants/colors';
 import {medium} from '../../../constants/fonts';
+import {iLive} from '../../../types/store/live';
+import dayjs from 'dayjs';
+import {useNavigation} from '@react-navigation/native';
 
-const HeroCard = ({media}: {media: PLAYLIST_MEDIA}) => {
+const HeroCard = ({live, index}: {live: iLive; index: number}) => {
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('sportsLive', {index: index})}>
       <ImageBackground
-        borderRadius={10}
+        borderRadius={15}
         style={styles.main}
-        source={{uri: media.images[0].src}}>
-        <Text style={styles.title}>{media.title}</Text>
+        source={{uri: live.thumbnailUrl}}>
+        <Text style={styles.title}>{live.title}</Text>
+        <Text
+          style={[
+            styles.live,
+            {backgroundColor: live.state === 2 ? red : blue},
+          ]}>
+          {live.state === 2 ? 'Live' : 'Upcoming'}
+        </Text>
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -38,6 +49,14 @@ const styles = StyleSheet.create({
     bottom: 15,
     left: 15,
     width: 0.83 * width,
+  },
+  live: {
+    position: 'absolute',
+    color: white,
+    paddingHorizontal: px4,
+    paddingVertical: py1,
+    borderTopLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
 });
 export default HeroCard;

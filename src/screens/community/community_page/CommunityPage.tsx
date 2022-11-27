@@ -1,7 +1,7 @@
-import {View, Image, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
 import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,20 +11,20 @@ import useStore from '../../../store/store';
 import AdminSettings from './AdminSettings';
 import ViewWrapper from '../../../components/wrappers/ViewWrapper';
 import {py4} from '../../../constants/spacing';
+import useCommunityStore from '../../../store/communityStore';
 
 type Props = NativeStackScreenProps<CommunityStack, 'CommunityPage'>;
 
-const CommunityPage = ({route, navigation}: Props) => {
-  const community = route.params.item;
-
-  const {userProfile, posts, setPosts} = useStore();
+const CommunityPage = ({navigation}: Props) => {
+  const {userProfile} = useStore();
+  const {posts, setPosts, community} = useCommunityStore();
   const [skip, setSkip] = useState(0);
+  const [descReadMore, setDescReadMore] = useState(false);
 
   const getCommunityPostsHandler = async () => {
     try {
-      const response = await getCommunityPosts(community._id, skip);
+      const response = await getCommunityPosts(community!._id, skip);
       setPosts([...response]);
-      console.log('this ran');
     } catch (error) {}
   };
 
@@ -32,70 +32,83 @@ const CommunityPage = ({route, navigation}: Props) => {
     getCommunityPostsHandler();
   }, []);
 
+  const renderPost = ({item}: {item: any}) => {
+    return (
+      <Post
+        key={item._id}
+        isAdmin={community!.admin === userProfile?.phoneNo}
+        post={{
+          ...item,
+          name: community!.name,
+          profile: community!.image,
+          communityId: community!._id,
+        }}
+      />
+    );
+  };
+
   return (
     <View style={styles.main}>
-      <BackTitleHeader title={route.params.name} />
+      <BackTitleHeader title={community!.name} />
       <ViewWrapper refreshAction={() => getCommunityPostsHandler()}>
-        <View style={styles.container}>
-          <View style={styles.communityHeader}>
-            <Image
-              source={{uri: community.image}}
-              style={styles.communityHeaderImage}
-            />
-            <View style={styles.communityCountView}>
-              <Text style={styles.communityCount}>{community.postCount}</Text>
-              <Text style={styles.communityCountName}>Posts</Text>
-            </View>
-            <View style={styles.communityCountView}>
-              <Text style={styles.communityCount}>{community.memberCount}</Text>
-              <Text style={styles.communityCountName}>Members</Text>
-            </View>
-            {community.admin === userProfile?.phoneNo ? (
-              // <View style={styles.adminManageView}>
-              //   <TouchableOpacity style={styles.adminManageButton}>
-              //     <Icon name="settings-outline" color={white} size={30} />
-              //   </TouchableOpacity>
-              // </View>
-              <AdminSettings />
-            ) : (
-              <View />
-            )}
-          </View>
-          <View style={styles.communityDetails}>
-            <Text style={styles.communityDetailsTitle}>{community.name}</Text>
-            <Text style={styles.communityDetailsCategory}>
-              {community.category}
-            </Text>
-            <Text style={styles.communityDetailsDescription}>
-              {community.description}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.divider} />
+        <FlatList
+          ListHeaderComponent={() => (
+            <>
+              <View style={styles.container}>
+                <View style={styles.communityHeader}>
+                  <View>
+                    <Image
+                      source={{uri: community!.image}}
+                      style={styles.communityHeaderImage}
+                    />
+                    <Text style={styles.communityDetailsCategory}>
+                      {community!.category}
+                    </Text>
 
-        {/* posts render */}
-        {posts.map(post => {
-          return (
-            <Post
-              key={post._id}
-              isAdmin={community.admin === userProfile?.phoneNo}
-              post={{
-                ...post,
-                name: community.name,
-                profile: community.image,
-                communityId: community._id,
-              }}
-            />
-          );
-        })}
+                    {community!.admin === userProfile?.phoneNo && (
+                      <AdminSettings />
+                    )}
+                  </View>
+                  <View style={styles.titleDesc}>
+                    <Text style={styles.communityDetailsTitle}>
+                      {community!.name}
+                    </Text>
+                    <Text style={styles.communityDetailsDescription}>
+                      {descReadMore
+                        ? community!.description
+                        : community!.description.length < 80
+                        ? community!.description
+                        : community!.description.substring(0, 80) + '...'}
+                      {community!.description.length > 80 && (
+                        <Text
+                          onPress={() => setDescReadMore(!descReadMore)}
+                          style={styles.readMoreToggle}>
+                          {descReadMore ? 'Read Less' : 'Read More'}
+                        </Text>
+                      )}
+                    </Text>
+                    <Text style={styles.communityDetailsDescription}>
+                      {community!.postCount} Posts · {community!.memberCount}{' '}
+                      Members
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.divider} />
+            </>
+          )}
+          data={posts}
+          keyExtractor={item => item._id}
+          renderItem={renderPost}
+        />
         <View style={{paddingVertical: py4}} />
       </ViewWrapper>
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('CreatePost', {
             name: 'Create Community Post',
-            community: community?.name,
-            communityId: community?._id,
+            community: community!.name,
+            communityId: community!._id,
           })
         }
         style={styles.createPost}>

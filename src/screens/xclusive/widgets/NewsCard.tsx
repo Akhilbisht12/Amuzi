@@ -1,9 +1,10 @@
 import {View, Text, Image, StyleSheet} from 'react-native';
 import React from 'react';
 import {width} from '../../../constants/dimensions';
-import {px1, px2, px3, px4, py1} from '../../../constants/spacing';
+import {px1, px2, px3, px4, py1, pyh} from '../../../constants/spacing';
 import {gray, grayLight, white} from '../../../constants/colors';
-import {medium, nm, sm} from '../../../constants/fonts';
+import {medium, nm, sm, xs} from '../../../constants/fonts';
+import {iXclusivePost} from '../../../types/store/xclusiveStore';
 
 export type news = {
   badgeText: string;
@@ -14,23 +15,16 @@ export type news = {
   image: string;
 };
 
-const NewsCard = ({news}: {news: news}) => {
+const NewsCard = ({post, index}: {post: iXclusivePost; index: number}) => {
   return (
     <View style={[styles.main]}>
       <View style={styles.newsInfo}>
-        <Image style={styles.image} source={{uri: news.image}} />
-        <Text style={styles.title}>{news.title}</Text>
-      </View>
-      <View style={styles.creatorView}>
-        <View style={styles.creatorInfo}>
-          <Image
-            style={styles.creatorImage}
-            source={{uri: news.creatorImage}}
-          />
-          <Text style={styles.creatorName}>{news.creatorName}</Text>
-        </View>
+        <Image style={styles.image} source={{uri: post.image}} />
         <View>
-          <Text style={styles.date}>{news.time}</Text>
+          <Text style={styles.title}>{post.title}</Text>
+          <Text style={styles.content}>
+            {post.content.substring(0, 120)}..<Text>Read More</Text>
+          </Text>
         </View>
       </View>
     </View>
@@ -39,10 +33,10 @@ const NewsCard = ({news}: {news: news}) => {
 
 const styles = StyleSheet.create({
   main: {
-    marginVertical: py1,
+    marginVertical: pyh,
     backgroundColor: gray,
-    padding: px2,
-    borderRadius: px2,
+    paddingVertical: px2,
+    paddingHorizontal: px4,
   },
   newsInfo: {
     flexDirection: 'row',
@@ -50,41 +44,20 @@ const styles = StyleSheet.create({
   image: {
     width: 0.2 * width,
     height: 0.2 * width,
-    borderRadius: px4,
-    marginRight: px4,
+    borderRadius: px1,
+    marginRight: px2,
   },
 
   title: {
     color: white,
     fontSize: nm,
     fontFamily: medium,
-    width: 0.6 * width,
+    width: 0.7 * width,
   },
-  creatorView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: py1,
-  },
-  creatorInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  creatorName: {
+  content: {
+    fontSize: xs,
     color: white,
-    fontSize: nm,
-    fontFamily: medium,
-  },
-  creatorImage: {
-    width: 0.1 * width,
-    height: 0.1 * width,
-    borderRadius: 0.05 * width,
-    marginRight: px2,
-  },
-  date: {
-    color: grayLight,
-    fontSize: sm,
-    fontFamily: medium,
+    width: 0.7 * width,
   },
 });
 

@@ -1,14 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {
-  black,
-  blackLight,
-  grayLight,
-  green,
-  white,
-} from '../../../constants/colors';
+import {black, gray, grayLight, green, white} from '../../../constants/colors';
 import {height, width} from '../../../constants/dimensions';
 import {medium, nm} from '../../../constants/fonts';
-import {px2, px4, py1, py2} from '../../../constants/spacing';
+import {px1, px4, pxh, py1, py2} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
@@ -16,34 +10,44 @@ const styles = StyleSheet.create({
     backgroundColor: black,
   },
   container: {
+    flex: 1,
     paddingHorizontal: px4,
     paddingVertical: py2,
   },
+  communityList: {
+    flexGrow: 1,
+  },
   communityMain: {
-    backgroundColor: blackLight,
+    backgroundColor: gray,
     borderRadius: 8,
-    padding: px2,
-    flexDirection: 'row',
+    padding: pxh,
+    width: 0.45 * width,
+    alignItems: 'center',
+    marginHorizontal: px1,
+    marginVertical: py2,
   },
   communityImage: {
     width: 0.2 * width,
     height: 0.2 * width,
-    borderRadius: 8,
-    marginRight: px2,
+    borderRadius: 0.1 * width,
+    marginVertical: py1,
   },
   communityDetailsView: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   communityTitle: {
     fontSize: nm,
     fontFamily: medium,
     color: white,
+    textAlign: 'center',
   },
   communityCategory: {
     color: grayLight,
+    marginVertical: 1,
+    textAlign: 'center',
   },
   joinButton: {
-    width: 0.6 * width,
+    width: 0.4 * width,
     backgroundColor: `${green}60`,
     borderRadius: 10,
     paddingVertical: 10,

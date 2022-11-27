@@ -3,12 +3,12 @@ import React, {useEffect, useRef, useState} from 'react';
 import OnDemandPlayer from '../../../components/Players/OnDemandPlayer';
 import styles from './styles';
 import {NativeStackScreenProps} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {SportsStack} from '../../../containers/routes/Sports';
 import {PLAYLIST_MEDIA} from '../../../types/content/playlist';
-import Player from '../../../components/Players/Player';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
+import Watchlist from '../../../components/watchlist/Watchlist';
+import {iAuthenticated} from '../../../containers/routes/authenticated/Authenticated';
 
-type Props = NativeStackScreenProps<SportsStack, 'onDemand'>;
+type Props = NativeStackScreenProps<iAuthenticated, 'OnDemand'>;
 
 const OnDemand = ({route}: Props) => {
   const {feed, mediaid} = route.params;
@@ -117,6 +117,9 @@ const OnDemand = ({route}: Props) => {
         <Text style={styles.playingPlaylistTitle}>
           {feed.title.toUpperCase()}
         </Text>
+      </View>
+      <View style={styles.actionView}>
+        <Watchlist mediaId={mediaid} />
       </View>
 
       <FlatList

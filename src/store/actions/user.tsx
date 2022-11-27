@@ -2,7 +2,7 @@ import {user} from '../../types/store/store';
 import useStore from '../store';
 
 const userActions: user = {
-  userState: 'loggedOut',
+  userState: null,
   setUserState: state => {
     useStore.setState({
       userState: state,

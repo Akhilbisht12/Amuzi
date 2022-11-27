@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
   playingPlaylistTitle: {
     color: white,
   },
+  actionView: {
+    paddingHorizontal: px4,
+  },
   mediaListParent: {
     paddingHorizontal: px4,
   },

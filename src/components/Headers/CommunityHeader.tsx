@@ -1,7 +1,7 @@
 import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import React from 'react';
 // import {useNavigation} from '@react-navigation/native';
-import {bold, medium, nm} from '../../constants/fonts';
+import {bold, lg, medium, nm} from '../../constants/fonts';
 import {px4} from '../../constants/spacing';
 import {height} from '../../constants/dimensions';
 import {white} from '../../constants/colors';
@@ -29,12 +29,12 @@ const CommunityHeader = ({title}: Props) => {
         <TouchableOpacity style={styles.icon}>
           <SearchIco />
         </TouchableOpacity>
-        <View style={styles.pointsView}>
+        {/* <View style={styles.pointsView}>
           <TouchableOpacity style={styles.icon}>
             <Image source={coin} />
           </TouchableOpacity>
           <Text style={styles.pointsText}>1,450</Text>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: white,
-    fontSize: 18,
+    fontSize: nm,
     // marginLeft: 30,
     fontFamily: bold,
   },

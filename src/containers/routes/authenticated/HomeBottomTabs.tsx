@@ -1,19 +1,19 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {black, blackLight, green, white} from '../../constants/colors';
-import CommunityIcon from '../../assets/icons/Community';
+import {black, gray, green, white} from '../../../constants/colors';
+import CommunityIcon from '../../../assets/icons/Community';
 import {StatusBar} from 'react-native';
-import Loader from '../../components/loader/Loader';
-import XclusiveIcon from '../../assets/icons/Xclusive';
-import RewardsIcon from '../../assets/icons/Rewards';
-import Community from './authenticated/community/Community';
+import Loader from '../../../components/loader/Loader';
+import XclusiveIcon from '../../../assets/icons/Xclusive';
+import RewardsIcon from '../../../assets/icons/Rewards';
+import Community from './community/CommunityRoutes';
 // import Basketball from '../../assets/icons/Basketball';
-import Xclusive from '../../screens/xclusive/Xclusive';
-import Rewards from '../../screens/rewards/Rewards';
-import SportsHome from './authenticated/sports/SportTabs';
+import Xclusive from '../../../screens/xclusive/Xclusive';
+import Rewards from '../../../screens/rewards/Rewards';
+import SportsHome from './sports/SportTabs';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-const Home = () => {
+const HomeBottomTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
     <>
@@ -45,12 +45,11 @@ const Home = () => {
             return Icon;
           },
           tabBarStyle: {
-            borderTopColor: black,
+            backgroundColor: black,
+            borderTopColor: gray,
           },
           tabBarActiveTintColor: green,
           tabBarInactiveTintColor: white,
-          tabBarActiveBackgroundColor: blackLight,
-          tabBarInactiveBackgroundColor: blackLight,
         })}>
         <Tab.Screen name="Sports" component={SportsHome} />
         {/* <Tab.Screen name="TV shows" component={Home} /> */}
@@ -63,4 +62,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeBottomTabs;

@@ -1,6 +1,5 @@
 import create from 'zustand';
 import {state} from '../types/store/store';
-import eventActions from './actions/events';
 import themeActions from './actions/theme';
 import userActions from './actions/user';
 import authActions from './states/auth.state';
@@ -11,7 +10,6 @@ const useStore = create<state>(set => ({
     set({loading: loading});
   },
   ...userActions,
-  ...eventActions,
   ...themeActions,
   ...authActions,
 }));

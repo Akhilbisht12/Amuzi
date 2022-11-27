@@ -1,14 +1,30 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
-import {px1, px2, px3, px4, py1, py2, py4} from '../../../constants/spacing';
-import {black, gray, grayLight, white} from '../../../constants/colors';
-import {height, width} from '../../../constants/dimensions';
+import {px1, px2, px3, px4, py1, pyh} from '../../../constants/spacing';
+import {
+  black,
+  blackLight,
+  gray,
+  grayLight,
+  white,
+} from '../../../constants/colors';
+import {width} from '../../../constants/dimensions';
 import {medium, sm, xs} from '../../../constants/fonts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {deletePost, voteOnPost} from '../../../api/community/community.api';
 import {useNavigation} from '@react-navigation/native';
 import {POST} from '../../../types/community/post';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import Dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import useCommunityStore from '../../../store/communityStore';
 import useStore from '../../../store/store';
 
 interface Props {
@@ -16,12 +32,17 @@ interface Props {
   isAdmin: boolean;
 }
 
-const PostCard = ({post, isAdmin}: Props) => {
+const PostCard = ({post}: Props) => {
   const [liked, setLiked] = useState<boolean | null>(post.voteStatus);
   const [upvoteCount, setUpVoteCount] = useState(post.upvoteCount);
   const [downVoteCount, setDownVoteCount] = useState(post.downvoteCount);
   const navigation = useNavigation();
   const editSheet = useRef<RBSheet | null>(null);
+  const {deleteStoragePost, setPost, community} = useCommunityStore();
+  const {userProfile} = useStore();
+
+  Dayjs.extend(relativeTime);
+
   const postVoteHandler = async (event: boolean) => {
     try {
       const response = await voteOnPost(
@@ -34,7 +55,6 @@ const PostCard = ({post, isAdmin}: Props) => {
       setDownVoteCount(response.downvoteCount);
     } catch (error) {}
   };
-  const {deleteStoragePost, userProfile, setPost, community} = useStore();
 
   const deletePostHandler = async () => {
     try {
@@ -82,7 +102,8 @@ const PostCard = ({post, isAdmin}: Props) => {
                 </View>
               </TouchableOpacity>
             )}
-            {(userProfile?.phoneNo === post.author.phoneNo || isAdmin) && (
+            {(userProfile?.phoneNo === post.author.phoneNo ||
+              community?.admin === userProfile?.phoneNo) && (
               <TouchableOpacity
                 onPress={deletePostHandler}
                 style={styles.editCardActionView}>
@@ -124,37 +145,35 @@ const PostCard = ({post, isAdmin}: Props) => {
           <View>
             <Text style={styles.headerCommunityName}>{post.author.name}</Text>
             <Text style={styles.headerPostDetails}>
-              {community.name} &#183;
-              {Math.round(
-                (Date.now() - new Date(post.date)) / (1000 * 60 * 60 * 24),
-              )}
-              D
+              {Dayjs(post.date).fromNow()}
             </Text>
           </View>
         </View>
 
-        {isAdmin && <EditCard />}
+        {userProfile?.phoneNo === post.author.phoneNo ||
+          (userProfile?.phoneNo === community?.admin && <EditCard />)}
       </View>
-      <TouchableOpacity
-        onPress={() =>
+      <Pressable
+        onPress={() => {
+          setPost(null);
           navigation.navigate('Post', {
             _id: post._id,
             community_id: post.communityId,
-          })
-        }>
+          });
+        }}>
         <View style={styles.contentView}>
           <Text style={styles.contentText}>{post.content}</Text>
         </View>
         {post.image !== null && (
           <Image style={styles.postImage} source={{uri: post.image}} />
         )}
-      </TouchableOpacity>
+      </Pressable>
 
       <View style={styles.engagementView}>
         <View style={styles.voteView}>
           <TouchableOpacity
             onPress={() => postVoteHandler(true)}
-            style={styles.engagementAction}>
+            style={[styles.engagementAction, {marginRight: px4}]}>
             <Icon
               style={styles.engagementIcon}
               name={liked === true ? 'thumb-up' : 'thumb-up-off-alt'}
@@ -183,20 +202,19 @@ const PostCard = ({post, isAdmin}: Props) => {
           <Icon style={styles.engagementIcon} name="chat-bubble-outline" />
           <Text style={styles.engagementActionText}>{post.commentCount}</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.engagementView}>
-          <Icon style={styles.engagementIcon} name="share-social-outline" />
-          <Text style={styles.engagementActionText}>Share</Text>
-        </TouchableOpacity> */}
       </View>
-      <View style={styles.divider} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    paddingHorizontal: px4,
-    marginVertical: py1,
+    padding: px3,
+    marginVertical: pyh,
+    borderRadius: px2,
+    backgroundColor: blackLight,
+    marginHorizontal: px3,
+    elevation: 5,
   },
   divider: {
     borderBottomWidth: 0.2,
@@ -228,8 +246,7 @@ const styles = StyleSheet.create({
     fontSize: xs,
   },
   postImage: {
-    width: width * 0.92,
-    height: 0.5 * height,
+    height: width * 0.92,
     marginVertical: py1,
     borderRadius: 10,
     resizeMode: 'cover',
@@ -257,7 +274,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: white,
     marginRight: px1,
-    marginHorizontal: px3,
   },
   contentView: {
     marginVertical: py1,

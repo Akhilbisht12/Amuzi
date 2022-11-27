@@ -1,22 +1,20 @@
-import {ScrollView, View} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
+import React, {useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
 import {getCommunityPost} from '../../../api/community/community.api';
 import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import PostCard from '../widgets/PostCard';
-import {POST} from '../../../types/community/post';
 import Comments from './widgets/Comments';
 import PostComment from './widgets/PostComment';
-import useStore from '../../../store/store';
 import ViewWrapper from '../../../components/wrappers/ViewWrapper';
+import useCommunityStore from '../../../store/communityStore';
 
 type Props = NativeStackScreenProps<CommunityStack, 'Post'>;
 
 const Post = ({route}: Props) => {
-  const {post, setPost} = useStore();
-  const {postRefresh} = useStore();
+  const {postRefresh, post, setPost} = useCommunityStore();
   const getCommunityPostHandler = async () => {
     try {
       const post_response = await getCommunityPost(

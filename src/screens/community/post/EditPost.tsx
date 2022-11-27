@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CommunityStack} from '../../../containers/routes/authenticated/community/Community';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
 import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import useStore from '../../../store/store';
@@ -19,7 +19,7 @@ import {height, width} from '../../../constants/dimensions';
 import Button from '../../../components/button/Button';
 import {updatePostContent} from '../../../api/community/community.api';
 
-type Props = NativeStackScreenProps<CommunityStack, 'Post'>;
+type Props = NativeStackScreenProps<CommunityStack, 'EditPost'>;
 
 const EditPost = ({navigation}: Props) => {
   const {post, setLoading} = useStore();
