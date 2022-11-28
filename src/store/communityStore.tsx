@@ -10,6 +10,13 @@ const useCommunityStore = create<iCommunityStore>((set, get) => ({
   setPosts: posts => {
     set({posts});
   },
+  updatePostCounts(index, upVoteCount, downVoteCount, liked) {
+    const updatedPosts = get().posts;
+    updatedPosts[index].upvoteCount = upVoteCount;
+    updatedPosts[index].downvoteCount = downVoteCount;
+    updatedPosts[index].voteStatus = liked;
+    set({posts: updatedPosts});
+  },
   deleteStoragePost: (id: string) => {
     const posts = get().posts;
     const index = posts.findIndex(item => item._id === id);
@@ -57,6 +64,13 @@ const useCommunityStore = create<iCommunityStore>((set, get) => ({
     const index = posts!.findIndex(item => item._id === id);
     posts.splice(index, 1);
     set({approvalPosts: posts});
+  },
+  updateCommentVote: (index, upVote, downVote, voteStatus) => {
+    const currentPost = get().post;
+    currentPost!.comments[index].upvoteCount = upVote;
+    currentPost!.comments[index].downvoteCount = downVote;
+    currentPost!.comments[index].voteStatus = voteStatus;
+    set({post: currentPost});
   },
 }));
 

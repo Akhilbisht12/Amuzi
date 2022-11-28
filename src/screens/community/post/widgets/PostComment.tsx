@@ -8,12 +8,19 @@ import {
 import React, {useState} from 'react';
 import {USER} from '../../../../types/user/user';
 import {width} from '../../../../constants/dimensions';
-import {black, gray, grayLight, white} from '../../../../constants/colors';
-import {px2, px4, px8, py1} from '../../../../constants/spacing';
+import {
+  black,
+  blackLight,
+  gray,
+  grayLight,
+  white,
+} from '../../../../constants/colors';
+import {px2, px3, px4, px8, py1} from '../../../../constants/spacing';
 import {sm} from '../../../../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {commentOnPost} from '../../../../api/community/community.api';
 import useStore from '../../../../store/store';
+import useCommunityStore from '../../../../store/communityStore';
 
 type Props = {
   author: USER;
@@ -25,7 +32,8 @@ type Props = {
 const PostComment = ({communityId, postId, parentId}: Props) => {
   const [content, setContent] = useState('');
   const {userProfile} = useStore();
-  const {setPostRefresh, setLoading} = useStore();
+  const {setLoading} = useStore();
+  const {setPostRefresh} = useCommunityStore();
 
   const commentOnPostHandler = async () => {
     try {
@@ -57,7 +65,9 @@ const PostComment = ({communityId, postId, parentId}: Props) => {
           placeholder="Add a comment"
         />
         {content.length > 0 && (
-          <TouchableOpacity onPress={commentOnPostHandler}>
+          <TouchableOpacity
+            style={styles.postButton}
+            onPress={commentOnPostHandler}>
             <Icon style={styles.inputSend} name="paper-plane" />
           </TouchableOpacity>
         )}
@@ -70,11 +80,15 @@ const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingHorizontal: px4,
+    paddingHorizontal: px2,
     marginVertical: py1,
-    // borderBottomWidth: 1,
-    // borderColor: gray,
+    marginHorizontal: px3,
+    borderRadius: px2,
+    elevation: 4,
+    backgroundColor: blackLight,
+    paddingVertical: py1,
   },
+
   inputView: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -93,6 +107,9 @@ const styles = StyleSheet.create({
   inputSend: {
     color: white,
     fontSize: 25,
+  },
+  postButton: {
+    marginTop: py1,
   },
 });
 

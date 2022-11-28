@@ -27,7 +27,7 @@ const PreferenceSlider = ({category}: Props) => {
   if (filteredEvents.length === 0) return <View />;
   return (
     <FlatList
-      style={{padding: px4}}
+      style={{paddingVertical: px4}}
       horizontal
       data={filteredEvents}
       renderItem={renderCard}

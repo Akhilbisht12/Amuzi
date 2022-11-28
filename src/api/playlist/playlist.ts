@@ -23,7 +23,6 @@ export const searchMedia = async (
   const media = await Promise.all(
     data.media.map((item: any) => getMedia(item.id)),
   );
-  console.log(media);
   const results = media.map((item, i) => (data.media[i] = item.playlist[0]));
   return results;
 };

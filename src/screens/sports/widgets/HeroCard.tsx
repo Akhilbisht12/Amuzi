@@ -5,18 +5,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {px3, px4, py1, pyh} from '../../../constants/spacing';
+import {px3, px4, py1} from '../../../constants/spacing';
 import {width} from '../../../constants/dimensions';
-import {background, blue, red, white} from '../../../constants/colors';
+import {blue, red, white} from '../../../constants/colors';
 import {medium} from '../../../constants/fonts';
 import {iLive} from '../../../types/store/live';
-import dayjs from 'dayjs';
 import {useNavigation} from '@react-navigation/native';
 
 const HeroCard = ({live, index}: {live: iLive; index: number}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
+      style={index === 0 && {marginLeft: px4}}
       onPress={() => navigation.navigate('sportsLive', {index: index})}>
       <ImageBackground
         borderRadius={15}

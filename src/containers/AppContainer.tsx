@@ -8,8 +8,7 @@ import useStore from '../store/store';
 import {getProfile} from '../api/profile/profile.api';
 import jwtDecode from 'jwt-decode';
 import {GetWatchListHandler} from '../handlers/watchlist/watchListHandler';
-import Splash from '../components/splash/Splash';
-
+import RNBootSplash from 'react-native-bootsplash';
 const AppContainer = () => {
   // Storage.clear();
   const {userState, setUserState, setUser, setAccess} = useStore();
@@ -46,6 +45,8 @@ const AppContainer = () => {
       GetWatchListHandler();
     }
   }, [setUser, setUserState, setAccess, userState]);
+
+  if (userState !== null) RNBootSplash.hide({fade: true});
 
   if (userState === 'loggedIn') {
     return <ProfileSetup />;

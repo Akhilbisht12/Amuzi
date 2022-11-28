@@ -14,7 +14,7 @@ export interface POST {
   commentCount: number;
   approved: true;
   createdAt: Date;
-  voteStatus: true;
+  voteStatus: boolean | null;
   comments: COMMENTS[];
 }
 

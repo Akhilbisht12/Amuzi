@@ -4,7 +4,7 @@ import {iScreen} from '../../types/store/sport';
 import MediaSlider from './widgets/MediaSlider';
 import PreferenceSlider from './preferred/widgets/PreferenceSlider';
 import ViewWrapper from '../../components/wrappers/ViewWrapper';
-import {getEvents} from '../../api/events/events.api';
+import {GetEventHandler} from '../../handlers/events/eventsHandler';
 
 type Props = {
   sport: iScreen;
@@ -16,7 +16,7 @@ const SportScreen = ({sport}: Props) => {
   };
 
   return (
-    <ViewWrapper refreshAction={() => getEvents()}>
+    <ViewWrapper refreshAction={() => GetEventHandler()}>
       <FlatList
         ListHeaderComponent={
           <PreferenceSlider

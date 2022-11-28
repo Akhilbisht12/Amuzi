@@ -27,12 +27,13 @@ export const getXclusivePosts = async (
   const media = await Promise.all(
     data.map(item => item.mediaId && getMedia(item.mediaId)),
   );
+  console.log(media);
   let index = 0;
   data.forEach(item => {
     if (item.type === 'video') {
       item.media = media[index];
-      index++;
     }
+    index++;
   });
 
   return data;

@@ -2,9 +2,15 @@ import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {COMMENT} from '../../../../types/community/post';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {black, gray, grayLight, white} from '../../../../constants/colors';
-import {px1, px2, px4, px8, py1, py2} from '../../../../constants/spacing';
-import {medium, nm, sm, xs} from '../../../../constants/fonts';
+import {
+  black,
+  blackLight,
+  gray,
+  grayLight,
+  white,
+} from '../../../../constants/colors';
+import {px1, px2, px3, px4, px8, py1, py2} from '../../../../constants/spacing';
+import {medium, nm, sm, xs, xs2} from '../../../../constants/fonts';
 import {width} from '../../../../constants/dimensions';
 import {
   deleteComment,
@@ -14,19 +20,22 @@ import {useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import useStore from '../../../../store/store';
 import useCommunityStore from '../../../../store/communityStore';
+import Dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 type Props = {
   comment: COMMENT;
+  index: number;
 };
 
-const Comment = ({comment}: Props) => {
-  const [liked, setLiked] = useState<boolean | null>(comment.voteStatus);
-  const [upVoteCount, setUpVoteCount] = useState<number>(comment.upvoteCount);
-  const [downVoteCount, setDownVoteCount] = useState<number>(
-    comment.downvoteCount,
-  );
+const Comment = ({comment, index}: Props) => {
+  // const [liked, setLiked] = useState<boolean | null>(comment.voteStatus);
+  // const [upVoteCount, setUpVoteCount] = useState<number>(comment.upvoteCount);
+  // const [downVoteCount, setDownVoteCount] = useState<number>(
+  // comment.downvoteCount,
+  // );
   const vertSheet = useRef<RBSheet | null>(null);
-  const {deleteStoreComment} = useCommunityStore();
+  const {deleteStoreComment, updateCommentVote} = useCommunityStore();
   const {userProfile} = useStore();
   const navigation = useNavigation();
   const voteOnCommentHandler = async (vote: boolean) => {
@@ -34,12 +43,18 @@ const Comment = ({comment}: Props) => {
       const {upvoteCount, downvoteCount} = await voteOnComment(
         comment.communityId,
         comment.postId,
-        vote === liked ? null : vote,
+        vote === comment.voteStatus ? null : vote,
         comment._id,
       );
-      setLiked(vote === liked ? null : vote);
-      setUpVoteCount(upvoteCount);
-      setDownVoteCount(downvoteCount);
+      updateCommentVote(
+        index,
+        upvoteCount,
+        downvoteCount,
+        vote === comment.voteStatus ? null : vote,
+      );
+      // setLiked(vote === liked ? null : vote);
+      // setUpVoteCount(upvoteCount);
+      // setDownVoteCount(downvoteCount);
     } catch (error) {}
   };
 
@@ -49,7 +64,7 @@ const Comment = ({comment}: Props) => {
       await deleteComment(comment.communityId, comment.postId, comment._id);
     } catch (error) {}
   };
-
+  Dayjs.extend(relativeTime);
   const VertSheet = () => {
     return (
       <View>
@@ -142,11 +157,7 @@ const Comment = ({comment}: Props) => {
             <View style={styles.commentInfo}>
               <Text style={styles.authorName}>{comment.author.name} </Text>
               <Text style={styles.commentTime}>
-                {Math.round(
-                  (Date.now() - new Date(comment.createdAt)) /
-                    (1000 * 60 * 60 * 24),
-                )}
-                D
+                {Dayjs(comment.createdAt).fromNow(true)}
               </Text>
             </View>
             <View style={styles.commentView}>
@@ -161,19 +172,25 @@ const Comment = ({comment}: Props) => {
             onPress={() => voteOnCommentHandler(true)}
             style={styles.voteButton}>
             <Icon
-              name={liked === true ? 'thumb-up' : 'thumb-up-off-alt'}
+              name={
+                comment.voteStatus === true ? 'thumb-up' : 'thumb-up-off-alt'
+              }
               style={styles.voteIcon}
             />
-            <Text style={styles.voteCount}>{upVoteCount}</Text>
+            <Text style={styles.voteCount}>{comment.upvoteCount}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => voteOnCommentHandler(false)}
             style={styles.voteButton}>
             <Icon
-              name={liked === false ? 'thumb-down' : 'thumb-down-off-alt'}
+              name={
+                comment.voteStatus === false
+                  ? 'thumb-down'
+                  : 'thumb-down-off-alt'
+              }
               style={styles.voteIcon}
             />
-            <Text style={styles.voteCount}>{downVoteCount}</Text>
+            <Text style={styles.voteCount}>{comment.downvoteCount}</Text>
           </TouchableOpacity>
           {!comment.parentId && (
             <TouchableOpacity
@@ -194,9 +211,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: py2,
-    paddingHorizontal: px4,
-    // borderBottomColor: gray,
-    // borderBottomWidth: 2,
+    paddingHorizontal: px2,
+    backgroundColor: blackLight,
+    marginVertical: 2,
+    marginHorizontal: px3,
+    borderRadius: px2,
+    elevation: 4,
   },
   image: {
     width: 0.1 * width,
@@ -215,7 +235,7 @@ const styles = StyleSheet.create({
   },
   commentTime: {
     color: grayLight,
-    fontSize: xs,
+    fontSize: xs2,
   },
   commentView: {
     width: 0.7 * width,

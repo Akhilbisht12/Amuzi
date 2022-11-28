@@ -32,11 +32,13 @@ const CommunityPage = ({navigation}: Props) => {
     getCommunityPostsHandler();
   }, []);
 
-  const renderPost = ({item}: {item: any}) => {
+  const renderPost = ({item, index}: {item: any; index: number}) => {
+    console.log(index);
     return (
       <Post
+        navigate={true}
         key={item._id}
-        isAdmin={community!.admin === userProfile?.phoneNo}
+        index={index}
         post={{
           ...item,
           name: community!.name,

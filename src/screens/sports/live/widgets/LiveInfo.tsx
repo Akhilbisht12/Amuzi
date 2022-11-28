@@ -23,11 +23,12 @@ const LiveInfo = ({route}: Props) => {
         <Text style={styles.description}>
           {readMore
             ? channel.description
-            : channel.description.substring(0, 120) + '...'}
-
-          <Text style={{color: white}} onPress={() => setReadMore(!readMore)}>
-            {readMore ? ' Read Less' : ' Read More'}
-          </Text>
+            : channel.description.substring(0, 120)}
+          {channel.description.length > 120 && (
+            <Text style={{color: white}} onPress={() => setReadMore(!readMore)}>
+              {readMore ? '... Read Less' : '... Read More'}
+            </Text>
+          )}
         </Text>
       </View>
     </ViewWrapper>

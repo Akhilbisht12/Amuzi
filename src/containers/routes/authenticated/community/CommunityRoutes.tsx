@@ -25,6 +25,7 @@ export type CommunityStack = {
   Post: {
     _id: string;
     community_id: string;
+    index: number;
   };
   Reply: {
     comment: COMMENT;

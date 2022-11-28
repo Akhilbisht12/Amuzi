@@ -29,30 +29,34 @@ import useStore from '../../../store/store';
 
 interface Props {
   post: POST;
-  isAdmin: boolean;
+  index: number;
+  navigate: boolean;
 }
 
-const PostCard = ({post}: Props) => {
-  const [liked, setLiked] = useState<boolean | null>(post.voteStatus);
-  const [upvoteCount, setUpVoteCount] = useState(post.upvoteCount);
-  const [downVoteCount, setDownVoteCount] = useState(post.downvoteCount);
+const PostCard = ({index, navigate}: Props) => {
+  const {deleteStoragePost, setPost, community, updatePostCounts, posts} =
+    useCommunityStore();
+
+  const post = posts[index];
+
   const navigation = useNavigation();
   const editSheet = useRef<RBSheet | null>(null);
-  const {deleteStoragePost, setPost, community} = useCommunityStore();
+
   const {userProfile} = useStore();
-
   Dayjs.extend(relativeTime);
-
   const postVoteHandler = async (event: boolean) => {
     try {
       const response = await voteOnPost(
-        event === liked ? null : event,
+        event === post.voteStatus ? null : event,
         post.communityId,
         post._id,
       );
-      setLiked(liked === event ? null : event);
-      setUpVoteCount(response.upvoteCount);
-      setDownVoteCount(response.downvoteCount);
+      updatePostCounts(
+        index,
+        response.upvoteCount,
+        response.downvoteCount,
+        post.voteStatus === event ? null : event,
+      );
     } catch (error) {}
   };
 
@@ -127,6 +131,15 @@ const PostCard = ({post}: Props) => {
     );
   };
 
+  const handleNavigation = async () => {
+    setPost(null);
+    navigation.navigate('Post', {
+      _id: post._id,
+      community_id: post.communityId,
+      index,
+    });
+  };
+
   return (
     <View style={styles.main}>
       <View style={styles.postHeader}>
@@ -153,14 +166,7 @@ const PostCard = ({post}: Props) => {
         {userProfile?.phoneNo === post.author.phoneNo ||
           (userProfile?.phoneNo === community?.admin && <EditCard />)}
       </View>
-      <Pressable
-        onPress={() => {
-          setPost(null);
-          navigation.navigate('Post', {
-            _id: post._id,
-            community_id: post.communityId,
-          });
-        }}>
+      <Pressable onPress={() => navigate && handleNavigation()}>
         <View style={styles.contentView}>
           <Text style={styles.contentText}>{post.content}</Text>
         </View>
@@ -176,32 +182,39 @@ const PostCard = ({post}: Props) => {
             style={[styles.engagementAction, {marginRight: px4}]}>
             <Icon
               style={styles.engagementIcon}
-              name={liked === true ? 'thumb-up' : 'thumb-up-off-alt'}
+              name={post.voteStatus === true ? 'thumb-up' : 'thumb-up-off-alt'}
             />
-            <Text style={styles.engagementActionText}>{upvoteCount}</Text>
+            <Text style={styles.engagementActionText}>{post.upvoteCount}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => postVoteHandler(false)}
             style={styles.engagementAction}>
             <Icon
               style={styles.engagementIcon}
-              name={liked === false ? 'thumb-down' : 'thumb-down-off-alt'}
+              name={
+                post.voteStatus === false ? 'thumb-down' : 'thumb-down-off-alt'
+              }
             />
-            <Text style={styles.engagementActionText}>{downVoteCount}</Text>
+            <Text style={styles.engagementActionText}>
+              {post.downvoteCount}
+            </Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('Post', {
-              _id: post._id,
-              community_id: post.communityId,
-            })
-          }
-          style={styles.engagementAction}>
-          <Icon style={styles.engagementIcon} name="chat-bubble-outline" />
-          <Text style={styles.engagementActionText}>{post.commentCount}</Text>
-        </TouchableOpacity>
+        {navigate && (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Post', {
+                _id: post._id,
+                community_id: post.communityId,
+                index,
+              })
+            }
+            style={styles.engagementAction}>
+            <Icon style={styles.engagementIcon} name="chat-bubble-outline" />
+            <Text style={styles.engagementActionText}>{post.commentCount}</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

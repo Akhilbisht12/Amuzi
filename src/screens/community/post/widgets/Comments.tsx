@@ -1,13 +1,15 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import {COMMENT} from '../../../../types/community/post';
 import Comment from './Comment';
+import useCommunityStore from '../../../../store/communityStore';
 
-const Comments = ({comments}: {comments: COMMENT[]}) => {
+const Comments = () => {
+  const {post} = useCommunityStore();
+  const comments = post?.comments;
   return (
     <View style={styles.main}>
-      {comments.map(comment => {
-        return <Comment key={comment._id} comment={comment} />;
+      {comments?.map((comment, index) => {
+        return <Comment key={comment._id} index={index} comment={comment} />;
       })}
     </View>
   );

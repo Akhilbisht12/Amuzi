@@ -14,7 +14,7 @@ import useCommunityStore from '../../../store/communityStore';
 type Props = NativeStackScreenProps<CommunityStack, 'Post'>;
 
 const Post = ({route}: Props) => {
-  const {postRefresh, post, setPost} = useCommunityStore();
+  const {postRefresh, post, setPost, posts} = useCommunityStore();
   const getCommunityPostHandler = async () => {
     try {
       const post_response = await getCommunityPost(
@@ -32,7 +32,13 @@ const Post = ({route}: Props) => {
     <View style={styles.main}>
       <BackTitleHeader title="Community" />
       <ViewWrapper refreshAction={() => getCommunityPostHandler()}>
-        {post && <PostCard post={post} />}
+        {post && (
+          <PostCard
+            navigate={false}
+            index={route.params.index}
+            post={posts[route.params.index]}
+          />
+        )}
         {post && (
           <PostComment
             {...{
@@ -42,7 +48,7 @@ const Post = ({route}: Props) => {
             }}
           />
         )}
-        {post && <Comments comments={post.comments} />}
+        {post && <Comments />}
       </ViewWrapper>
     </View>
   );

@@ -6,6 +6,12 @@ export interface iCommunityStore {
   community: COMMUNITY | null;
   setCommunity: (community: COMMUNITY) => void;
   setPosts: (posts: POST[]) => void;
+  updatePostCounts: (
+    index: number,
+    upVoteCount: number,
+    downVoteCount: number,
+    liked: null | boolean,
+  ) => void;
   deleteStoragePost: (id: string) => void;
   postRefresh: boolean;
   communityCreate: boolean;
@@ -21,4 +27,10 @@ export interface iCommunityStore {
   approvalPosts: POST[];
   setApprovalPosts: (posts: POST[]) => void;
   updateApprovalPosts: (id: string) => void;
+  updateCommentVote: (
+    index: number,
+    upVote: number,
+    downVote: number,
+    voteStatus: boolean | null,
+  ) => void;
 }
