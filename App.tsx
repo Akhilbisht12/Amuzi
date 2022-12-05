@@ -3,7 +3,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {NavigationContainer} from '@react-navigation/native';
 import AppContainer from './src/containers/AppContainer';
 import {Modal, View, Text} from 'react-native';
-import {black, blackLight, grayLight, white} from './src/constants/colors';
+import {black, grayLight, white} from './src/constants/colors';
 import {px4} from './src/constants/spacing';
 import {width} from './src/constants/dimensions';
 import {medium, nm} from './src/constants/fonts';
@@ -12,7 +12,6 @@ const App = () => {
   const [internet, setInternet] = useState<boolean | null>(true);
   useEffect(() => {
     NetInfo.fetch().then(info => {
-      // console.log(info);
       setInternet(info.isInternetReachable);
     });
   }, [internet]);

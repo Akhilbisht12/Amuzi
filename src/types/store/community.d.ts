@@ -33,4 +33,7 @@ export interface iCommunityStore {
     downVote: number,
     voteStatus: boolean | null,
   ) => void;
+  discoverCommunities: COMMUNITY[];
+  setDiscoverCommunities: (communities: COMMUNITY[]) => void;
+  removeDiscoverCommunity: (id: string) => void;
 }

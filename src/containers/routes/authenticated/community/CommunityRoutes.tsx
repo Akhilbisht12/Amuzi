@@ -1,26 +1,25 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CreateCommunity from '../../../../screens/community/create_community/CreateCommunity';
-import Discover from '../../../../screens/community/discover/Discover';
 import CommunityPage from '../../../../screens/community/community_page/CommunityPage';
 import Post from '../../../../screens/community/post/Post';
 import {COMMENT} from '../../../../types/community/post';
 import Reply from '../../../../screens/community/post/widgets/Replies';
 import CreatePost from '../../../../screens/community/create_post/CreatePost';
 import EditPost from '../../../../screens/community/post/EditPost';
-import ProfileSettings from '../../../../screens/community/community_page/ProfileSettings';
+import CommunitySettings from '../../../../screens/community/community_page/CommunitySettings';
 import EditComment from '../../../../screens/community/post/widgets/EditComment';
 import Approvals from '../../../../screens/community/community_page/Approvals';
-import {COMMUNITY} from '../../../../types/community/community';
 import CommunityHome from '../../../../screens/community/Community';
+import {NavigatorScreenParams} from '@react-navigation/native';
+import {iCommunityTabs} from './CommunityTabs';
 type name = {
   name: string;
 };
 
 export type CommunityStack = {
-  CommunityHome: undefined;
+  CommunityHome: NavigatorScreenParams<iCommunityTabs>;
   CreateCommunity: name;
-  Discover: name;
   CommunityPage: undefined;
   Post: {
     _id: string;
@@ -52,9 +51,8 @@ const CommunityRoutes = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="CommunityHome" component={CommunityHome} />
       <Stack.Screen name="CreateCommunity" component={CreateCommunity} />
-      <Stack.Screen name="Discover" component={Discover} />
       <Stack.Screen name="CommunityPage" component={CommunityPage} />
-      <Stack.Screen name="ProfileSettings" component={ProfileSettings} />
+      <Stack.Screen name="ProfileSettings" component={CommunitySettings} />
       <Stack.Screen name="Approvals" component={Approvals} />
       <Stack.Screen name="Post" component={Post} />
       <Stack.Screen name="EditPost" component={EditPost} />

@@ -33,7 +33,6 @@ const CommunityPage = ({navigation}: Props) => {
   }, []);
 
   const renderPost = ({item, index}: {item: any; index: number}) => {
-    console.log(index);
     return (
       <Post
         navigate={true}

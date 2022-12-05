@@ -33,8 +33,8 @@ const OnDemandPlayer = forwardRef(
     const config: Config = {
       license:
         Platform.OS === 'ios'
-          ? 'y0DeWSyjixhmZ/tBu/bidi9rqn3jqjiVo1ZP7SJHzGfjyJM48Ru/kHQOD34='
-          : 'qgDAENLeDwYY3/N8TqcAIWdfJbXWnToTz9yPRWeWxiIrHQETupvMPpYecBg=',
+          ? '4CgAXHzCyznDrVR7jAZOZ3JqeQ0qh49YmVFIuAPqZcp+7AcWjGrkBgAti9c='
+          : '6OVf7W54zrVXWkBwsxP/sOyFFhBtmfAIjPyWz0dN95PuCB3xR7PlPq1F2Xg=',
       autostart: true,
       backgroundAudioEnabled: true,
       styling: {

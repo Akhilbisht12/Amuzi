@@ -1,61 +1,61 @@
 import {StyleSheet} from 'react-native';
-import {black, gray, grayLight, green, white} from '../../../constants/colors';
+import {black, blackLight, grayLight, white} from '../../../constants/colors';
 import {height, width} from '../../../constants/dimensions';
-import {medium, nm} from '../../../constants/fonts';
-import {px1, px4, pxh, py1, py2} from '../../../constants/spacing';
+import {medium, nm, xs} from '../../../constants/fonts';
+import {px1, px2, px4, py2, pyh} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: black,
+    paddingTop: pyh,
   },
   container: {
     flex: 1,
-    paddingHorizontal: px4,
-    paddingVertical: py2,
+    paddingHorizontal: px2,
   },
   communityList: {
     flexGrow: 1,
   },
   communityMain: {
-    backgroundColor: gray,
+    backgroundColor: blackLight,
+    elevation: 5,
     borderRadius: 8,
-    padding: pxh,
-    width: 0.45 * width,
-    alignItems: 'center',
-    marginHorizontal: px1,
-    marginVertical: py2,
+    padding: px1,
+    marginHorizontal: px2,
+    marginVertical: pyh,
   },
   communityImage: {
-    width: 0.2 * width,
-    height: 0.2 * width,
-    borderRadius: 0.1 * width,
-    marginVertical: py1,
+    width: 'auto',
+    height: 0.15 * height,
+    borderRadius: px1,
+    resizeMode: 'cover',
   },
   communityDetailsView: {
-    alignItems: 'center',
+    marginTop: pyh,
+    paddingVertical: pyh,
+    paddingHorizontal: px1,
   },
   communityTitle: {
     fontSize: nm,
     fontFamily: medium,
     color: white,
-    textAlign: 'center',
   },
   communityCategory: {
     color: grayLight,
     marginVertical: 1,
-    textAlign: 'center',
   },
   joinButton: {
-    width: 0.4 * width,
-    backgroundColor: `${green}60`,
+    backgroundColor: white,
     borderRadius: 10,
     paddingVertical: 10,
-    marginVertical: py1,
+    marginTop: py2,
   },
   joinButtonText: {
+    color: black,
     textAlign: 'center',
-    color: white,
+    fontFamily: medium,
+    fontSize: xs,
   },
   emptyCommunityView: {
     flex: 1,

@@ -15,9 +15,6 @@ export type UnauthenticatedStack = {
     name: string;
     phone: number;
   };
-  Language: undefined;
-  SportSelection: undefined;
-  Profile: name;
 };
 const Unauthenticated = () => {
   const Stack = createNativeStackNavigator<UnauthenticatedStack>();

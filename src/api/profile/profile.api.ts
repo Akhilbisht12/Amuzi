@@ -30,6 +30,5 @@ export const updateProfile = async (
     dob,
     gender,
   });
-  console.log(data);
   return data;
 };

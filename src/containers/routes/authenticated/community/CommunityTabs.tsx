@@ -21,6 +21,9 @@ const CommunityTabs = () => {
         tabBarActiveTintColor: white,
         tabBarInactiveTintColor: grayLight,
         tabBarStyle: {backgroundColor: black},
+        tabBarIndicatorStyle: {
+          backgroundColor: white,
+        },
       }}>
       <Tab.Screen name="Discover" component={Discover} />
       <Tab.Screen name="Joined" component={JoinedCommunities} />

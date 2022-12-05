@@ -92,8 +92,8 @@ const EditProfile = ({navigation}: Props) => {
 
     // Parse the date parts to integers
     var parts = dateString.split('/');
-    var day = parseInt(parts[1], 10);
-    var month = parseInt(parts[0], 10);
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10);
     var year = parseInt(parts[2], 10);
 
     // Check the ranges of month and year
@@ -114,7 +114,11 @@ const EditProfile = ({navigation}: Props) => {
     if (loading || !check) return;
     try {
       setLoading(true);
-      const user = await updateProfile(name, dob, gender);
+      const user = await updateProfile(
+        name,
+        `${dob[1]}-${dob[0]}-${dob[2]}`, // mm-dd-yyyy
+        gender,
+      );
       setUser(user);
       navigation.navigate('profile');
     } catch (error: any) {

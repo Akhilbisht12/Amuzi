@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {black, grayLight, green, white} from '../../../constants/colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {sm, xs} from '../../../constants/fonts';
-import {px1, px2, px4, px6, py1} from '../../../constants/spacing';
+import {px2, px4, px6, py1} from '../../../constants/spacing';
 import {useNavigation} from '@react-navigation/native';
 
 const AdminSettings = () => {

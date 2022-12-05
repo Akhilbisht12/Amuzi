@@ -25,7 +25,6 @@ export const GetWatchListMediaHandler = async () => {
 export const EditWatchListHandler = async (mediaId: string) => {
   const {editWatchlist} = useWatchListStore.getState();
   const editRes = editWatchlist(mediaId);
-  console.log('reached here');
   if (editRes) {
     await addToWatchList(mediaId);
   } else {

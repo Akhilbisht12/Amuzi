@@ -45,7 +45,7 @@ const Live = ({route}: Props) => {
         }),
       ]),
     ).start();
-  }, []);
+  }, [eventState, eventTime]);
 
   return (
     <View style={styles.main}>

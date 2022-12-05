@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {px3, px4, py1} from '../../../constants/spacing';
+import {px4, py1} from '../../../constants/spacing';
 import {width} from '../../../constants/dimensions';
 import {blue, red, white} from '../../../constants/colors';
 import {medium} from '../../../constants/fonts';
@@ -16,8 +16,8 @@ const HeroCard = ({live, index}: {live: iLive; index: number}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      style={index === 0 && {marginLeft: px4}}
-      onPress={() => navigation.navigate('sportsLive', {index: index})}>
+      // style={index === 0 && {marginLeft: px4}}
+      onPress={() => navigation.navigate('sportsOverview', {index: index})}>
       <ImageBackground
         borderRadius={15}
         style={styles.main}
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     height: (0.85 * width * 9) / 16,
     width: 0.85 * width,
     resizeMode: 'cover',
-    marginRight: px3,
+    // marginRight: px3,
   },
   title: {
     color: white,

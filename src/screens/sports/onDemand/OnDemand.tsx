@@ -119,7 +119,7 @@ const OnDemand = ({route}: Props) => {
         </Text>
       </View>
       <View style={styles.actionView}>
-        <Watchlist mediaId={mediaid} />
+      <Watchlist mediaId={feed.playlist[playingIndex].mediaid} />
       </View>
 
       <FlatList

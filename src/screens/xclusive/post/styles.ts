@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {grayLight, white} from '../../../constants/colors';
 import {width} from '../../../constants/dimensions';
-import {md, medium, nm} from '../../../constants/fonts';
+import {lg, medium, nm} from '../../../constants/fonts';
 import {px2, px4, py1} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
 
   postTitle: {
-    fontSize: md,
+    fontSize: lg,
     fontFamily: medium,
     marginVertical: py1,
     color: white,

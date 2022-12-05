@@ -21,7 +21,10 @@ const EditComment = ({route, navigation}: Props) => {
     try {
       setLoading(true);
       await updateComment(commentId, postId, communityId, content);
-      navigation.navigate('Post', {_id: postId, community_id: commentId});
+      navigation.navigate('Post', {
+        _id: postId,
+        community_id: commentId,
+      });
     } catch (error) {
     } finally {
       setLoading(false);

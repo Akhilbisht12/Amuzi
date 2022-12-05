@@ -12,7 +12,6 @@ import ViewWrapper from '../../../components/wrappers/ViewWrapper';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import {gray, grayLight, green, white} from '../../../constants/colors';
 import {px2, px4, py1, py2, py4} from '../../../constants/spacing';
-import useStore from '../../../store/store';
 import {
   castApprovalStatus,
   getPostsForApproval,
@@ -22,16 +21,17 @@ import {height, width} from '../../../constants/dimensions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {medium, sm, xs} from '../../../constants/fonts';
 import {POST} from '../../../types/community/post';
+import useCommunityStore from '../../../store/communityStore';
 
 const Approvals = () => {
   const {community, setApprovalPosts, approvalPosts, updateApprovalPosts} =
-    useStore();
+    useCommunityStore();
   const [approvalSwitch, setApprovalSwitch] = useState(
-    community.approvalRequired,
+    community?.approvalRequired,
   );
   const switchApprovalHandler = async (value: boolean) => {
     try {
-      await switchApprovalRequired(community._id, value);
+      await switchApprovalRequired(community?._id, value);
       setApprovalSwitch(value);
     } catch (error) {}
   };
@@ -117,7 +117,7 @@ const Approvals = () => {
       <View style={styles.emptyCommunityView}>
         <Icon name="people" color={grayLight} size={100} />
         <Text style={styles.emptyCommunity}>
-          Communities joined by you will appear here.
+          Posts for approvals in your community will appear here
         </Text>
       </View>
     );
@@ -135,6 +135,7 @@ const Approvals = () => {
         </View>
         <View>
           <FlatList
+            contentContainerStyle={{flexGrow: 1}}
             ListEmptyComponent={() => <EmptyList />}
             keyExtractor={item => item._id}
             renderItem={renderApprovalPosts}

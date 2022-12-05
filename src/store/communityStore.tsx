@@ -72,6 +72,18 @@ const useCommunityStore = create<iCommunityStore>((set, get) => ({
     currentPost!.comments[index].voteStatus = voteStatus;
     set({post: currentPost});
   },
+  discoverCommunities: [],
+  setDiscoverCommunities: communities => {
+    set({
+      discoverCommunities: communities,
+    });
+  },
+  removeDiscoverCommunity: id => {
+    const filteredCommunities = get().discoverCommunities.filter(
+      item => item._id !== id,
+    );
+    set({discoverCommunities: filteredCommunities});
+  },
 }));
 
 export default useCommunityStore;

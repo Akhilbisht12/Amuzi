@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useEffect} from 'react';
 import ViewWrapper from '../../components/wrappers/ViewWrapper';
-import {px2, px4, px6, py1} from '../../constants/spacing';
+import {px1, px2, px4, px6, py1, pyh} from '../../constants/spacing';
 import {black, gray, green, white} from '../../constants/colors';
 import {md, medium, nm} from '../../constants/fonts';
 import NewsHeroCard from './widgets/NewsHeroCard';
@@ -80,7 +80,7 @@ const Xclusive = ({navigation}: Props) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Amuzi Xclusive</Text>
         </View>
-        <ScrollView horizontal>
+        <ScrollView contentContainerStyle={{paddingBottom: py1}} horizontal>
           {selectedCategory !== 'ALL' && (
             <Text
               onPress={() => setSelectedCategory('ALL')}

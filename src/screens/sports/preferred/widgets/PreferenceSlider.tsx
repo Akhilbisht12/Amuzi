@@ -1,10 +1,10 @@
-import {FlatList, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import HeroCard from '../../widgets/HeroCard';
-import {px4} from '../../../../constants/spacing';
 import useLiveStore from '../../../../store/liveStore';
 import {iLive} from '../../../../types/store/live';
-
+import {width} from '../../../../constants/dimensions';
+import Carousel from 'react-native-snap-carousel-v4';
 type Props = {
   category?: string;
 };
@@ -12,6 +12,7 @@ type Props = {
 const PreferenceSlider = ({category}: Props) => {
   const [filteredEvents, setFilteredEvents] = useState<iLive[]>([]);
   const {events} = useLiveStore();
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     if (!category) return setFilteredEvents(events);
@@ -26,12 +27,13 @@ const PreferenceSlider = ({category}: Props) => {
   };
   if (filteredEvents.length === 0) return <View />;
   return (
-    <FlatList
-      style={{paddingVertical: px4}}
-      horizontal
+    <Carousel
+      loop
       data={filteredEvents}
       renderItem={renderCard}
-      keyExtractor={item => item.id}
+      sliderWidth={width}
+      itemWidth={0.85 * width}
+      ref={flatListRef}
     />
   );
 };

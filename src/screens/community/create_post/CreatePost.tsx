@@ -20,6 +20,7 @@ import useStore from '../../../store/store';
 import Button from '../../../components/button/Button';
 import congrats from '../../../assets/images/congratulations.png';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import useCommunityStore from '../../../store/communityStore';
 
 type PROPS = NativeStackScreenProps<CommunityStack, 'CreatePost'>;
 
@@ -31,7 +32,8 @@ const CreatePost = ({route, navigation}: PROPS) => {
     {path: string; mime: string} | undefined
   >();
   const [content, setContent] = useState('');
-  const {setLoading, setPostRefresh, community, userProfile} = useStore();
+  const {setLoading, userProfile} = useStore();
+  const {setPostRefresh, community} = useCommunityStore();
   const handleDoc = async () => {
     const doc = await ImageCropPicker.openPicker({
       height: 1080,
@@ -51,20 +53,15 @@ const CreatePost = ({route, navigation}: PROPS) => {
         image
           ? {
               uri: image?.path,
-              name: userProfile.name + Date.now(),
+              name: userProfile!.name + Date.now(),
               type: image?.mime,
             }
           : null,
       );
       await createPost(communityId, postData);
-
       setPostRefresh();
-      community.approvalRequired && setPostSuccess(true);
-      navigation.navigate('CommunityPage', {
-        item: community,
-        name: community.name,
-        isAdmin: community.admin === userProfile.phoneNo,
-      });
+      community?.approvalRequired && setPostSuccess(true);
+      navigation.navigate('CommunityPage');
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,7 +81,7 @@ const CreatePost = ({route, navigation}: PROPS) => {
                 size={xl}
               />
             </TouchableOpacity>
-            <Text style={styles.backHeaderTitle}>{community.name}</Text>
+            <Text style={styles.backHeaderTitle}>{community?.name}</Text>
           </View>
           <TouchableOpacity
             onPress={() => createPostHandler()}
@@ -94,11 +91,11 @@ const CreatePost = ({route, navigation}: PROPS) => {
         </View>
         <View style={styles.paddedArea}>
           <View style={styles.profileHeader}>
-            {userProfile.image ? (
+            {userProfile?.image ? (
               <Image
                 style={styles.avatar}
                 source={{
-                  uri: userProfile.image,
+                  uri: userProfile?.image,
                 }}
               />
             ) : (
@@ -107,14 +104,14 @@ const CreatePost = ({route, navigation}: PROPS) => {
               </View>
             )}
             <View>
-              <Text style={styles.userName}>{userProfile.name}</Text>
+              <Text style={styles.userName}>{userProfile?.name}</Text>
               <View style={styles.communityBadge}>
                 <Icon
                   style={styles.communityBadgeIcon}
                   name="people-outline"
                   size={25}
                 />
-                <Text style={styles.communityBadgeText}>{community.name}</Text>
+                <Text style={styles.communityBadgeText}>{community?.name}</Text>
               </View>
             </View>
           </View>

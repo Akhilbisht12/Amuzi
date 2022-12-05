@@ -26,9 +26,9 @@ const CommunityHeader = ({title}: Props) => {
           style={styles.icon}>
           <Add />
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.icon}>
+        {/* <TouchableOpacity style={styles.icon}>
           <SearchIco />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* <View style={styles.pointsView}>
           <TouchableOpacity style={styles.icon}>
             <Image source={coin} />

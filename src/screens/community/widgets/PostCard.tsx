@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {px1, px2, px3, px4, py1, pyh} from '../../../constants/spacing';
 import {
   black,
@@ -158,7 +158,7 @@ const PostCard = ({index, navigate}: Props) => {
           <View>
             <Text style={styles.headerCommunityName}>{post.author.name}</Text>
             <Text style={styles.headerPostDetails}>
-              {Dayjs(post.date).fromNow()}
+              {Dayjs(post.createdAt).fromNow()}
             </Text>
           </View>
         </View>

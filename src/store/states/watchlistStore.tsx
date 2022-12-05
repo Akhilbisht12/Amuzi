@@ -1,4 +1,5 @@
 import create from 'zustand';
+
 import {iWatchlistStore} from '../../types/store/store';
 const useWatchListStore = create<iWatchlistStore>((set, get) => ({
   watchlist: [],

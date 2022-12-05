@@ -14,7 +14,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import DocumentPicker, {
   DocumentPickerResponse,
 } from 'react-native-document-picker';
-import {UnauthenticatedStack} from '../../../containers/routes/Unauthenticated';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button/Button';
@@ -23,8 +22,9 @@ import Storage from '@react-native-async-storage/async-storage';
 import {createProfile} from '../../../api/profile/profile.api';
 import useStore from '../../../store/store';
 import Loader from '../../../components/loader/Loader';
+import {ProfileSetupStack} from '../../../containers/routes/unauthenticated/ProfileSetup';
 
-type Props = NativeStackScreenProps<UnauthenticatedStack, 'Profile'>;
+type Props = NativeStackScreenProps<ProfileSetupStack, 'profileSetup'>;
 
 const Profile = ({route}: Props) => {
   const [name, setName] = useState('');
@@ -147,9 +147,7 @@ const Profile = ({route}: Props) => {
       await createProfile(profile);
       await Storage.setItem('onBoarded', 'true');
       setUserState('onBoarded');
-      console.log('success');
     } catch (error: any) {
-      console.log(error);
       ToastAndroid.show('Something went wrong!', ToastAndroid.SHORT);
     } finally {
       setLoading(false);

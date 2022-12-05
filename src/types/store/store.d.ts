@@ -3,6 +3,10 @@ import {PLAYLIST_MEDIA} from '../content/playlist';
 export interface state extends user, theme, event, authState {
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  openSubsriptionPanel: boolean;
+  setOpenSubscriptionPanel: (value: boolean) => void;
+  currentEvent?: string;
+  setCurrentEvent: (value: string) => void;
 }
 
 export interface userProfile {

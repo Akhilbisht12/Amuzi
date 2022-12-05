@@ -2,7 +2,13 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 import React from 'react';
 import {height, width} from '../../../constants/dimensions';
 import {px2, px4, px6, py1, pyh} from '../../../constants/spacing';
-import {blackLight, grayLight, green, white} from '../../../constants/colors';
+import {
+  black,
+  blackLight,
+  grayLight,
+  green,
+  white,
+} from '../../../constants/colors';
 import {bold, medium, nm, regular, sm} from '../../../constants/fonts';
 import {iXclusivePost} from '../../../types/store/xclusiveStore';
 import useXclusiveStore from '../../../store/xclusiveStore';
@@ -32,8 +38,14 @@ const NewsHeroCard = ({post}: {post: iXclusivePost; index: number}) => {
               style={styles.image}
               source={{uri: post.media?.playlist[0].image}}
             />
-            <View style={styles.playBadge}>
-              <Icon name="play" size={50} color={white} />
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                {alignItems: 'center', justifyContent: 'center'},
+              ]}>
+              <View style={styles.playBadge}>
+                <Icon name="play" size={40} color={white} />
+              </View>
             </View>
           </View>
         )}
@@ -66,25 +78,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   badgeText: {
-    color: white,
+    color: black,
     position: 'absolute',
     backgroundColor: green,
     top: 10,
     left: 10,
     borderRadius: px6,
-    paddingHorizontal: px2,
-    paddingVertical: py1,
+    paddingHorizontal: px4,
+    paddingVertical: pyh,
     fontSize: sm,
   },
   playBadge: {
-    position: 'absolute',
-    right: 0.37 * width,
-    top: 0.22 * width,
     backgroundColor: blackLight,
-    borderRadius: 0.2 * width,
-    height: 0.1 * height,
-    width: 0.1 * height,
-    padding: px2,
+    borderRadius: 0.1 * height,
+    height: 0.08 * height,
+    width: 0.08 * height,
     alignItems: 'center',
     justifyContent: 'center',
   },

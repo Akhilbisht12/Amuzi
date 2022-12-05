@@ -5,35 +5,38 @@ import {
   Image,
   TouchableOpacity,
   ToastAndroid,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
-import {
-  discoverCommunities,
-  joinCommunity,
-} from '../../../api/community/community.api';
+import {joinCommunity} from '../../../api/community/community.api';
 import {grayLight, white} from '../../../constants/colors';
 import useStore from '../../../store/store';
 import {COMMUNITY} from '../../../types/community/community';
 import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 import {iCommunityTabs} from '../../../containers/routes/authenticated/community/CommunityTabs';
+import useCommunityStore from '../../../store/communityStore';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
+import {getDiscoverCommunitiesHandler} from '../../../handlers/community/discover';
 
-type Props = MaterialTopTabScreenProps<iCommunityTabs, 'Discover'>;
+type Props = CompositeScreenProps<
+  MaterialTopTabScreenProps<iCommunityTabs, 'Discover'>,
+  NativeStackScreenProps<CommunityStack>
+>;
 
 const Discover = ({navigation}: Props) => {
-  const [communities, setCommunities] = useState<COMMUNITY[]>([]);
-  const {setLoading, setCommunity} = useStore();
-  const discoverCommunitiesHandler = async () => {
-    const data = await discoverCommunities();
-    setCommunities(data);
-    try {
-    } catch (error: any) {
-      console.log(error.data.error);
-    }
-  };
+  const {setLoading} = useStore();
+  const [refresh, setRefresh] = useState(false);
+  const {setCommunity, discoverCommunities, removeDiscoverCommunity} =
+    useCommunityStore();
+
   useEffect(() => {
-    discoverCommunitiesHandler();
+    (async function () {
+      await getDiscoverCommunitiesHandler();
+    })();
   }, []);
 
   const EmptyCommunity = () => {
@@ -55,11 +58,8 @@ const Discover = ({navigation}: Props) => {
           setLoading(true);
           await joinCommunity(communityId);
           setCommunity(item);
-          navigation.navigate('CommunityPage', {
-            item: item,
-            name: item.name,
-            isAdmin: false,
-          });
+          removeDiscoverCommunity(item._id);
+          navigation.navigate('CommunityPage');
         } catch (error) {
           ToastAndroid.show('Try Again!', ToastAndroid.SHORT);
         } finally {
@@ -72,9 +72,9 @@ const Discover = ({navigation}: Props) => {
           <Image style={styles.communityImage} source={{uri: item.image}} />
           <View style={styles.communityDetailsView}>
             <Text style={styles.communityTitle}>{item.name}</Text>
-            <Text style={styles.communityCategory}>{item.category}</Text>
             <Text style={styles.communityCategory}>
-              {item.postCount}Posts · {item.memberCount} members
+              {item.category} · {item.postCount} Posts · {item.memberCount}{' '}
+              members
             </Text>
             <Text style={styles.communityCategory}>
               {readMore ? item.description : item.description.substring(0, 80)}
@@ -99,10 +99,19 @@ const Discover = ({navigation}: Props) => {
     <View style={styles.main}>
       <View style={styles.container}>
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={() => {
+                setRefresh(true);
+                getDiscoverCommunitiesHandler();
+                setRefresh(false);
+              }}
+            />
+          }
           contentContainerStyle={styles.communityList}
           ListEmptyComponent={() => <EmptyCommunity />}
-          numColumns={2}
-          data={communities}
+          data={discoverCommunities}
           keyExtractor={item => item._id}
           renderItem={renderItem}
         />

@@ -15,6 +15,13 @@ import {GetEventHandler} from '../../../handlers/events/eventsHandler';
 import Live from '../../../screens/sports/live/Live';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {iCommunityTabs} from './community/CommunityTabs';
+import Overview from '../../../screens/sports/live/Overview';
+import {GetWatchListHandler} from '../../../handlers/watchlist/watchListHandler';
+import {getUserSubscriptionPlanHandler} from '../../../handlers/pricing/pricingHandler';
+import Subscription from '../../../components/subscription/Subscription';
+import useStore from '../../../store/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getUserSubscriptionPlan} from '../../../api/pricing/pricing';
 
 export type iAuthenticated = {
   Home: undefined;
@@ -33,13 +40,32 @@ export type iAuthenticated = {
   sportsLive: {
     index: number;
   };
+  sportsOverview: {
+    index: number;
+  };
 };
 
 const Authenticated = () => {
   const Stack = createNativeStackNavigator<iAuthenticated>();
   useEffect(() => {
-    GetEventHandler();
+    (async function () {
+      await GetWatchListHandler();
+      await GetEventHandler();
+      await getUserSubscriptionPlanHandler();
+    })();
   }, []);
+  const {setOpenSubscriptionPanel} = useStore();
+  getUserSubscriptionPlan().then(subscription => {
+    if (subscription === null) {
+      AsyncStorage.getItem('subscriptionPopup').then(res => {
+        if (res !== 'shown') {
+          setOpenSubscriptionPanel(true);
+          AsyncStorage.setItem('subscriptionPopup', 'shown');
+        }
+      });
+    }
+  });
+
   return (
     <>
       <StatusBar backgroundColor={black} />
@@ -60,8 +86,10 @@ const Authenticated = () => {
         <Stack.Screen name="watchlist" component={WatchList} />
         <Stack.Screen name="xclusivePost" component={Post} />
         <Stack.Screen name="sportsLive" component={Live} />
+        <Stack.Screen name="sportsOverview" component={Overview} />
       </Stack.Navigator>
       <Loader />
+      <Subscription />
     </>
   );
 };

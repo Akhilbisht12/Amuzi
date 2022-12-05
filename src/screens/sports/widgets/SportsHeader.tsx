@@ -1,23 +1,43 @@
-import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+  Text,
+} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {height, width} from '../../../constants/dimensions';
 import {logo} from '../../../constants/files';
-import {gray, grayLight, white} from '../../../constants/colors';
-import {px2, px4, py2} from '../../../constants/spacing';
-import {sm} from '../../../constants/fonts';
+import {gray, grayLight, green, white} from '../../../constants/colors';
+import {px2, px3, px4, py2, pyh} from '../../../constants/spacing';
+import {sm, xs2} from '../../../constants/fonts';
 
 import useStore from '../../../store/store';
 import {useNavigation} from '@react-navigation/native';
+import usePricingStore from '../../../store/pricingStore';
 
 const SportsHeader = () => {
-  const {userProfile} = useStore();
+  const {userProfile, setOpenSubscriptionPanel, openSubsriptionPanel} =
+    useStore();
+  const {userSubscription} = usePricingStore();
   const navigation = useNavigation();
   return (
     <View style={styles.main}>
       <View style={styles.header}>
         <View style={styles.logoView}>
           <Image style={styles.logo} source={logo} />
+          <Pressable
+            onPress={() =>
+              userSubscription === null &&
+              setOpenSubscriptionPanel(!openSubsriptionPanel)
+            }
+            style={[styles.subscribe]}>
+            <Text style={[{color: green, fontSize: xs2}]}>
+              {userSubscription === null ? 'Subscribe' : userSubscription.name}
+            </Text>
+          </Pressable>
         </View>
         <View style={styles.headerButtons}>
           <TouchableOpacity
@@ -55,7 +75,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: px4,
   },
-  logoView: {},
+  logoView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   logo: {
     width: 0.2 * width,
     height: 0.08 * height,
@@ -99,6 +122,14 @@ const styles = StyleSheet.create({
     color: white,
     textAlign: 'center',
     fontSize: sm,
+  },
+  subscribe: {
+    borderColor: green,
+    borderWidth: 1,
+    paddingHorizontal: px3,
+    paddingVertical: pyh,
+    marginLeft: px2,
+    borderRadius: px2,
   },
 });
 

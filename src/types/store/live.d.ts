@@ -14,6 +14,7 @@ export interface iLive {
     DASH: string;
     HSS: string;
   };
+  price: number;
 }
 
 export interface iLiveStore {

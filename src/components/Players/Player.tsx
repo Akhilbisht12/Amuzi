@@ -1,7 +1,14 @@
-import React, {useRef} from 'react';
-import {Platform, StatusBar, StyleSheet} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import JWPlayer, {Config} from 'react-native-jw-media-player';
 import Orientation from 'react-native-orientation-locker';
+import {black, white} from '../../constants/colors';
 import {width} from '../../constants/dimensions';
 import {px2} from '../../constants/spacing';
 
@@ -10,9 +17,8 @@ type Props = {
   config: Omit<Config, 'license'>;
 };
 
-
-
 const Player = ({config}: Props) => {
+  const [loading, setLoading] = useState(true);
   const landscapeOnFullScreen = () => {
     Orientation.lockToLandscape();
     StatusBar.setHidden(true);
@@ -23,28 +29,50 @@ const Player = ({config}: Props) => {
     StatusBar.setHidden(false);
   };
 
+  useEffect(() => {
+    setLoading(true);
+  }, [config]);
+
   const ref = useRef<JWPlayer>(null);
   return (
-    <JWPlayer
-      config={{
-        license:
-          Platform.OS === 'ios'
-            ? 'y0DeWSyjixhmZ/tBu/bidi9rqn3jqjiVo1ZP7SJHzGfjyJM48Ru/kHQOD34='
-            : 'qgDAENLeDwYY3/N8TqcAIWdfJbXWnToTz9yPRWeWxiIrHQETupvMPpYecBg=',
-        ...config,
-      }}
-      style={styles.player}
-      ref={ref}
-      onFullScreenRequested={landscapeOnFullScreen}
-      onFullScreenExit={exitLandscape}
-    />
+    <View style={styles.main}>
+      <JWPlayer
+        config={{
+          license:
+            Platform.OS === 'ios'
+              ? '4CgAXHzCyznDrVR7jAZOZ3JqeQ0qh49YmVFIuAPqZcp+7AcWjGrkBgAti9c='
+              : '6OVf7W54zrVXWkBwsxP/sOyFFhBtmfAIjPyWz0dN95PuCB3xR7PlPq1F2Xg=',
+          ...config,
+        }}
+        style={styles.player}
+        ref={ref}
+        onPlay={_ => setLoading(false)}
+        onFullScreenRequested={landscapeOnFullScreen}
+        onFullScreenExit={exitLandscape}
+      />
+      {loading && (
+        <View style={[StyleSheet.absoluteFill, styles.loader]}>
+          <ActivityIndicator size={40} color={white} />
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  main: {
+    position: 'relative',
+  },
   player: {
     height: (9 / 16) * width,
     borderRadius: px2,
+    width: 'auto',
+  },
+  loader: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: black,
+    zIndex: 30,
   },
 });
 

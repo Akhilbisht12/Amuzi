@@ -116,6 +116,7 @@ const CreateCommunity = ({route, navigation}: Props) => {
       await createCommunity(communityData);
       setCreatedRefresh();
       setCommunitySuccess(true);
+      navigation.navigate('CommunityHome', {screen: 'Approvals'});
     } catch (error: any) {
       ToastAndroid.show(
         error.data.error ? error.data.error : 'Something went wrong!',

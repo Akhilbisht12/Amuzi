@@ -12,17 +12,25 @@ import {height} from '../../../constants/dimensions';
 import {black, blackLight, grayLight, white} from '../../../constants/colors';
 import {px1, px2, px3, px4, py2, pyh} from '../../../constants/spacing';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {bold, nm, sm, xs} from '../../../constants/fonts';
+import {medium, nm, sm, xs} from '../../../constants/fonts';
 import {getJoinedCommunities} from '../../../api/community/community.api';
-import {useNavigation} from '@react-navigation/native';
+import {CompositeScreenProps} from '@react-navigation/native';
 import {COMMUNITY} from '../../../types/community/community';
 import useCommunityStore from '../../../store/communityStore';
+import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
+import {iCommunityTabs} from '../../../containers/routes/authenticated/community/CommunityTabs';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
 
-const JoinedCommunities = () => {
+type JoinedNavigationProp = CompositeScreenProps<
+  MaterialTopTabScreenProps<iCommunityTabs, 'Joined'>,
+  NativeStackScreenProps<CommunityStack>
+>;
+
+const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
   const [refresh, setRefresh] = useState(false);
   const [joinedCommunities, setJoinedCommunities] = useState<COMMUNITY[]>();
   const {setCommunity, setPosts} = useCommunityStore();
-  const navigation = useNavigation();
 
   const getJoinedCommunitiesHandler = async () => {
     try {
@@ -104,6 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: black,
     paddingHorizontal: px2,
+    paddingTop: pyh,
   },
   communityViewMain: {
     marginVertical: pyh,
@@ -133,7 +142,7 @@ const styles = StyleSheet.create({
   communityViewText: {
     color: white,
     fontSize: nm,
-    fontFamily: bold,
+    fontFamily: medium,
   },
   communityCategory: {
     color: grayLight,

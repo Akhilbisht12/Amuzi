@@ -9,6 +9,11 @@ import Player from '../../../components/Players/Player';
 import styles from './styles';
 import {Config} from 'react-native-jw-media-player';
 import {FEED} from '../../../types/content/playlist';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import globalStyles from '../../../styles/globals';
+
+dayjs.extend(relativeTime);
 
 type Props = NativeStackScreenProps<iAuthenticated, 'xclusivePost'>;
 
@@ -37,15 +42,15 @@ const Post = ({route}: Props) => {
   return (
     <View style={styles.main}>
       <BackTitleHeader title="" />
+      {post.type === 'video' && renderPlayer(post.media!)}
       <ViewWrapper>
         <View style={styles.postView}>
-          {post.type === 'video' && renderPlayer(post.media!)}
           {post.type === 'image' && (
             <Image style={styles.postImage} source={{uri: post.image}} />
           )}
           <Text style={styles.postTitle}>{post.title}</Text>
-          <Text style={styles.postDate}>{post.createdAt}</Text>
-          <Text style={styles.content}>{post.content}</Text>
+          <Text style={styles.postDate}>{dayjs(post.createdAt).fromNow()}</Text>
+          <Text style={globalStyles.textLight}>{post.content}</Text>
         </View>
       </ViewWrapper>
     </View>

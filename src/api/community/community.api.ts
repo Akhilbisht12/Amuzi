@@ -1,4 +1,3 @@
-import {DocumentPickerResponse} from 'react-native-document-picker';
 import http, {server} from '../http';
 
 export const createCommunity = async (community: any) => {
@@ -90,7 +89,6 @@ export const createPost = async (communityId: string, postData: any) => {
       headers: {'Content-Type': 'multipart/form-data'},
     },
   );
-  console.log(data);
   return data;
 };
 

@@ -6,10 +6,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button/Button';
 import {grayLight, green, white} from '../../../constants/colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {UnauthenticatedStack} from '../../../containers/routes/Unauthenticated';
 import Storage from '@react-native-async-storage/async-storage';
+import {ProfileSetupStack} from '../../../containers/routes/unauthenticated/ProfileSetup';
 
-type Props = NativeStackScreenProps<UnauthenticatedStack, 'Language'>;
+type Props = NativeStackScreenProps<ProfileSetupStack, 'Language'>;
 
 const Languages = [
   {

@@ -10,7 +10,7 @@ type name = {
 export type ProfileSetupStack = {
   Language: undefined;
   SportSelection: undefined;
-  Profile: name;
+  profileSetup: name;
 };
 
 const ProfileSetup = () => {
@@ -22,7 +22,7 @@ const ProfileSetup = () => {
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Language" component={Language} />
       <Stack.Screen name="SportSelection" component={SportSelection} />
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="profileSetup" component={Profile} />
     </Stack.Navigator>
   );
 };

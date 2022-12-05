@@ -1,20 +1,37 @@
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import React from 'react';
 import ViewWrapper from '../../components/wrappers/ViewWrapper';
 import useStore from '../../store/store';
 import {width} from '../../constants/dimensions';
-import {black, gray, grayLight, white} from '../../constants/colors';
-import {lg, md, medium, nm, sm, xl, xs} from '../../constants/fonts';
+import {
+  blackLight,
+  gray,
+  grayLight,
+  green,
+  white,
+} from '../../constants/colors';
+import {lg, md, medium, sm, xs} from '../../constants/fonts';
 import {px2, px4, py1, py2} from '../../constants/spacing';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ProfileRoutesStack} from '../../containers/routes/ProfileRoutes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ProfileRoutesStack} from '../../containers/routes/authenticated/profile/ProfileRoutes';
+import usePricingStore from '../../store/pricingStore';
+import dayjs from 'dayjs';
 
 type Props = NativeStackScreenProps<ProfileRoutesStack, 'profile'>;
 
 const ProfileSettings = ({navigation}: Props) => {
-  const {userProfile, setUserState, setUser} = useStore();
+  const {userSubscription} = usePricingStore();
+  const {userProfile, setUserState, setUser, setOpenSubscriptionPanel} =
+    useStore();
   return (
     <ViewWrapper>
       {/* header */}
@@ -33,13 +50,71 @@ const ProfileSettings = ({navigation}: Props) => {
           </View>
           <View>
             <Text style={styles.greetingUser}>Hello</Text>
-            <Text style={styles.userName}>{userProfile.name}</Text>
+            <Text style={styles.userName}>{userProfile?.name}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="close-outline" color={white} size={35} />
         </TouchableOpacity>
       </View>
+      {/* subscription */}
+      <Pressable
+        style={[
+          styles.list,
+          {
+            marginHorizontal: px4,
+            borderRadius: px2,
+            borderWidth: 1,
+            paddingVertical: py2,
+            borderColor: userSubscription === null ? grayLight : green,
+            backgroundColor: blackLight,
+          },
+        ]}
+        onPress={() => {
+          userSubscription === null && setOpenSubscriptionPanel(true);
+        }}>
+        <View style={styles.listInfo}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: py2,
+            }}>
+            <Icon
+              color={userSubscription === null ? grayLight : green}
+              size={22}
+              name={'ribbon-outline'}
+            />
+            <Text
+              style={[
+                styles.listDesc,
+                {
+                  marginLeft: px2,
+                  color: userSubscription === null ? grayLight : green,
+                  fontSize: sm,
+                  textTransform: 'uppercase',
+                },
+              ]}>
+              Subscription
+            </Text>
+          </View>
+          <Text style={[styles.listName, {fontSize: lg}]}>
+            {userSubscription
+              ? userSubscription.name + ' Plan'
+              : 'No Active Plan'}
+          </Text>
+          <Text
+            style={[
+              styles.listDesc,
+              {color: userSubscription === null ? green : grayLight},
+            ]}>
+            {userSubscription
+              ? 'Expires on ' +
+                dayjs(userSubscription?.expiresAt).format('DD MMM YYYY')
+              : 'Buy Subscription Plan'}
+          </Text>
+        </View>
+      </Pressable>
       <View style={styles.menu}>
         {[
           // {
@@ -82,11 +157,6 @@ const ProfileSettings = ({navigation}: Props) => {
             name: 'Transactions',
             handler: () => console.log('nav'),
             icon: 'card-outline',
-          },
-          {
-            name: 'Subscription / Passes',
-            handler: () => console.log('nav'),
-            icon: 'wallet-outline',
           },
           {
             name: 'Select Language',

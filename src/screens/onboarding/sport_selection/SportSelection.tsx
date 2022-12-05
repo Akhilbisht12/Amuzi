@@ -3,12 +3,12 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Storage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, {useState} from 'react';
-import {UnauthenticatedStack} from '../../../containers/routes/Unauthenticated';
 import Button from '../../../components/button/Button';
 import * as files from '../../../constants/files';
 import styles from './styles';
+import {ProfileSetupStack} from '../../../containers/routes/unauthenticated/ProfileSetup';
 
-type Props = NativeStackScreenProps<UnauthenticatedStack, 'SportsSelection'>;
+type Props = NativeStackScreenProps<ProfileSetupStack, 'SportSelection'>;
 
 const SportSelection = ({navigation}: Props) => {
   // state of multiple sports
@@ -79,7 +79,7 @@ const SportSelection = ({navigation}: Props) => {
             title="Continue"
             onPress={() =>
               check &&
-              navigation.navigate('Profile', {name: 'Complete profile'})
+              navigation.navigate('profileSetup', {name: 'Complete profile'})
             }
           />
         </View>

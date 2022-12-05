@@ -8,14 +8,24 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {width} from '../../../constants/dimensions';
-import {black, gray, grayLight, green, white} from '../../../constants/colors';
+import {height} from '../../../constants/dimensions';
+import {
+  black,
+  blackLight,
+  grayLight,
+  green,
+  white,
+} from '../../../constants/colors';
 import {px1, px2, px4, py1, py2, pyh} from '../../../constants/spacing';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {bold, md, nm, sm, xs2} from '../../../constants/fonts';
+import {bold, md, medium, nm, xs2} from '../../../constants/fonts';
 import {getCreatedCommunities} from '../../../api/community/community.api';
-import useStore from '../../../store/store';
-import {useNavigation} from '@react-navigation/native';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
+import {iCommunityTabs} from '../../../containers/routes/authenticated/community/CommunityTabs';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
+import useCommunityStore from '../../../store/communityStore';
 
 type communityBadge = {
   _id: string;
@@ -25,13 +35,17 @@ type communityBadge = {
   description: string;
 };
 
-const CreatedCommunities = () => {
+type ApprovalProp = CompositeScreenProps<
+  MaterialTopTabScreenProps<iCommunityTabs, 'Approvals'>,
+  NativeStackScreenProps<CommunityStack>
+>;
+
+const CreatedCommunities = ({}: ApprovalProp) => {
   const [refresh, setRefresh] = useState(false);
   const [createdCommunities, setCreatedCommunities] =
     useState<communityBadge[]>();
 
-  const navigation = useNavigation();
-  const {createdRefresh, setCreatedRefresh} = useStore();
+  const {createdRefresh, setCreatedRefresh} = useCommunityStore();
   const getJoinedCommunitiesHandler = async () => {
     try {
       const communities = await getCreatedCommunities();
@@ -49,15 +63,7 @@ const CreatedCommunities = () => {
       const [readMoreReason, setReadMoreReason] = useState(false);
 
       return (
-        <TouchableOpacity
-          // onPress={() =>
-          //   navigation.navigate('CommunityPage', {
-          //     name: item.name,
-          //     item,
-          //     isAdmin: true,
-          //   })
-          // }
-          style={styles.communityViewMain}>
+        <TouchableOpacity style={styles.communityViewMain}>
           <View style={styles.mediaStatus}>
             <Image
               style={styles.communityViewImage}
@@ -86,7 +92,7 @@ const CreatedCommunities = () => {
               </Text>
               {readMoreDesc
                 ? community.description
-                : community.description.substring(0, 40)}
+                : community.description.substring(0, 80)}
 
               <Text
                 onPress={() => setReadMoreDesc(!readMoreDesc)}
@@ -98,7 +104,7 @@ const CreatedCommunities = () => {
               <Text style={{color: grayLight, fontFamily: bold}}>Reason: </Text>
               {readMoreReason
                 ? community.description
-                : community.description.substring(0, 40)}
+                : community.description.substring(0, 80)}
 
               <Text
                 onPress={() => setReadMoreReason(!readMoreReason)}
@@ -112,16 +118,19 @@ const CreatedCommunities = () => {
     };
     return <CommunityView community={item} />;
   };
+
+  const EmptyComponent = () => {
+    return (
+      <View style={styles.emptyCommunity}>
+        <Icon name="person-add" style={styles.emptyCommunityIcon} />
+        <Text style={styles.emptyCommunityText}>
+          Communities created by you will appear here.
+        </Text>
+      </View>
+    );
+  };
   return (
     <View style={styles.main}>
-      {createdCommunities?.length === 0 && (
-        <View style={styles.emptyCommunity}>
-          <Icon name="person-add" style={styles.emptyCommunityIcon} />
-          <Text style={styles.emptyCommunityText}>
-            Communities created by you will appear here.
-          </Text>
-        </View>
-      )}
       <FlatList
         refreshControl={
           <RefreshControl
@@ -133,6 +142,7 @@ const CreatedCommunities = () => {
             }}
           />
         }
+        ListEmptyComponent={() => <EmptyComponent />}
         data={createdCommunities}
         keyExtractor={item => item._id}
         renderItem={renderCommunityView}
@@ -145,49 +155,32 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: black,
-    paddingVertical: py2,
+    paddingVertical: pyh,
     paddingHorizontal: px4,
-  },
-  communityHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: px4,
-    marginVertical: py2,
-  },
-  communityHeaderTitle: {
-    color: white,
-    fontSize: md,
-    fontFamily: bold,
-  },
-  communityHeaderIcon: {
-    color: white,
-    fontSize: 25,
   },
   communityViewMain: {
-    flexDirection: 'row',
-    backgroundColor: gray,
+    backgroundColor: blackLight,
     padding: px1,
     borderRadius: px2,
-    marginVertical: py1,
+    marginVertical: pyh,
+    elevation: 5,
   },
-  mediaStatus: {
-    marginRight: px2,
-  },
+  mediaStatus: {},
   communityViewImage: {
-    width: width * 0.2,
-    height: 0.2 * width,
-    borderRadius: 8,
-    marginRight: px2,
+    width: 'auto',
+    height: 0.15 * height,
+    borderRadius: px2,
   },
   communityDetails: {
     alignItems: 'flex-start',
     flex: 1,
+    paddingVertical: py1,
+    paddingHorizontal: px1,
   },
   communityViewText: {
     color: white,
-    fontSize: sm,
-    fontFamily: bold,
+    fontSize: nm,
+    fontFamily: medium,
   },
 
   communityViewDesc: {
@@ -197,25 +190,32 @@ const styles = StyleSheet.create({
   },
   readMoreButton: {},
   readMoreText: {
-    color: white,
+    color: grayLight,
+    fontFamily: bold,
   },
   approvedBadge: {
     backgroundColor: green,
     padding: px1,
     borderRadius: px1,
-    marginVertical: py1,
+    position: 'absolute',
+    top: 10,
+    left: 10,
   },
   pendingBadge: {
     backgroundColor: 'orange',
     padding: px1,
     borderRadius: px1,
-    marginVertical: py1,
+    position: 'absolute',
+    top: 10,
+    left: 10,
   },
   rejectedBadge: {
     backgroundColor: 'red',
     padding: px1,
     borderRadius: px1,
-    marginVertical: py1,
+    position: 'absolute',
+    top: 10,
+    left: 10,
   },
   statusBadgeText: {
     color: white,

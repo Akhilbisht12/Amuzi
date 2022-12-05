@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {COMMENT} from '../../../../types/community/post';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
@@ -9,7 +9,16 @@ import {
   grayLight,
   white,
 } from '../../../../constants/colors';
-import {px1, px2, px3, px4, px8, py1, py2} from '../../../../constants/spacing';
+import {
+  px1,
+  px2,
+  px3,
+  px4,
+  px8,
+  py1,
+  py2,
+  pyh,
+} from '../../../../constants/spacing';
 import {medium, nm, sm, xs, xs2} from '../../../../constants/fonts';
 import {width} from '../../../../constants/dimensions';
 import {
@@ -29,11 +38,6 @@ type Props = {
 };
 
 const Comment = ({comment, index}: Props) => {
-  // const [liked, setLiked] = useState<boolean | null>(comment.voteStatus);
-  // const [upVoteCount, setUpVoteCount] = useState<number>(comment.upvoteCount);
-  // const [downVoteCount, setDownVoteCount] = useState<number>(
-  // comment.downvoteCount,
-  // );
   const vertSheet = useRef<RBSheet | null>(null);
   const {deleteStoreComment, updateCommentVote} = useCommunityStore();
   const {userProfile} = useStore();
@@ -52,9 +56,6 @@ const Comment = ({comment, index}: Props) => {
         downvoteCount,
         vote === comment.voteStatus ? null : vote,
       );
-      // setLiked(vote === liked ? null : vote);
-      // setUpVoteCount(upvoteCount);
-      // setDownVoteCount(downvoteCount);
     } catch (error) {}
   };
 
@@ -247,9 +248,9 @@ const styles = StyleSheet.create({
   voteView: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: pyh,
   },
   voteButton: {
-    marginHorizontal: px2,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     color: white,
     fontSize: nm,
     fontFamily: medium,
-    marginHorizontal: px2,
+    marginRight: px4,
   },
   replyView: {
     marginVertical: py1,

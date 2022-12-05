@@ -20,28 +20,24 @@ import {
 } from '../../../api/community/community.api';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
-import DocumentPicker from 'react-native-document-picker';
-import http from '../../../api/http';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import useCommunityStore from '../../../store/communityStore';
 
 type Props = NativeStackScreenProps<CommunityStack, 'ProfileSettings'>;
 
-const ProfileSettings = ({navigation}: Props) => {
-  const {community, setLoading, setCommunityImage} = useStore();
-  const [image, setImage] = useState(community.image);
-  const [description, setDescription] = useState(community.description);
+const CommunitySettings = ({navigation}: Props) => {
+  const {setLoading} = useStore();
+  const {community, setCommunityImage} = useCommunityStore();
+  const [description, setDescription] = useState(community?.description);
   const updateDescriptionHandler = async () => {
     try {
+      if (description === community?.description) return;
       setLoading(true);
-      await updateCommunityDescription(community._id, description);
+      await updateCommunityDescription(community!._id, description);
     } catch (error) {
     } finally {
       setLoading(false);
-      navigation.navigate('CommunityPage', {
-        item: {...community, description},
-        name: community.name,
-        isAdmin: true,
-      });
+      navigation.navigate('CommunityPage');
     }
   };
 
@@ -49,19 +45,20 @@ const ProfileSettings = ({navigation}: Props) => {
     try {
       const doc = await ImageCropPicker.openPicker({
         width: 1080,
-        height: 1080,
+        height: 360,
         cropping: true,
       });
 
       const imageData = new FormData();
       imageData.append('image', {
         uri: doc?.path,
-        name: community.name,
+        name: community?.name,
         type: doc?.mime,
       });
       setLoading(true);
       const {image} = await updateCommunityImage(community._id, imageData);
       setCommunityImage(image);
+      navigation.navigate('CommunityPage');
     } catch (error) {
     } finally {
       setLoading(false);
@@ -81,7 +78,7 @@ const ProfileSettings = ({navigation}: Props) => {
           </View>
           <View style={styles.avatarView}>
             <TouchableOpacity onPress={handleDoc} style={styles.avatarView}>
-              <Image style={styles.avatar} source={{uri: image}} />
+              <Image style={styles.avatar} source={{uri: community?.image}} />
               <View style={styles.avatarEditButton}>
                 <Icon name="edit" size={20} color={black} />
               </View>
@@ -89,6 +86,7 @@ const ProfileSettings = ({navigation}: Props) => {
           </View>
           <Text style={styles.label}>Description</Text>
           <TextInput
+            multiline
             value={description}
             onChangeText={setDescription}
             style={styles.description}
@@ -117,17 +115,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: py1,
   },
-  avatarView: {
-    alignItems: 'center',
-  },
+  avatarView: {},
   avatar: {
-    height: 0.25 * width,
-    width: 0.25 * width,
-    borderRadius: 0.125 * width,
-    resizeMode: 'contain',
+    height: 0.15 * height,
+    width: 'auto',
+    borderRadius: px2,
+    resizeMode: 'cover',
   },
   avatarEditButton: {
-    backgroundColor: grayLight,
+    backgroundColor: white,
     padding: px1,
     borderRadius: 0.1 * width,
     position: 'absolute',
@@ -151,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileSettings;
+export default CommunitySettings;

@@ -9,6 +9,16 @@ const useStore = create<state>(set => ({
   setLoading: (loading: boolean) => {
     set({loading: loading});
   },
+  openSubsriptionPanel: false,
+  setOpenSubscriptionPanel: value => {
+    set({openSubsriptionPanel: value});
+  },
+  currentEvent: undefined,
+  setCurrentEvent: value => {
+    set({
+      currentEvent: value,
+    });
+  },
   ...userActions,
   ...themeActions,
   ...authActions,

@@ -8,7 +8,6 @@ export interface POST {
     image: string;
     phoneNo: number;
   };
-  date: string;
   upvoteCount: number;
   downvoteCount: number;
   commentCount: number;
