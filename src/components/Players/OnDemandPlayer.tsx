@@ -12,7 +12,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import JWPlayer, {Config} from 'react-native-jw-media-player';
+import JWPlayer, {Config, PlaylistItem} from 'react-native-jw-media-player';
 import {width} from '../../constants/dimensions';
 import Orientation from 'react-native-orientation-locker';
 import {black, white} from '../../constants/colors';
@@ -28,7 +28,7 @@ type Props = {
 };
 
 const OnDemandPlayer = forwardRef(
-  ({playlist, changePlaylistItem}: Props, ref) => {
+  ({playlist, changePlaylistItem}: {playlist: PlaylistItem}, ref) => {
     const player = useRef<JWPlayer>(null);
     const config: Config = {
       license:
@@ -47,6 +47,18 @@ const OnDemandPlayer = forwardRef(
       landscapeOnFullScreen: true,
       preload: 'auto',
       playlist: playlist,
+      advertising: {
+        adClient: 'vast',
+        // adVmap:
+        // 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpreonly&ciu_szs=300x250%2C728x90&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&correlator=',
+        // tag: 'https://waf.upgrate.in/ad',
+        adSchedule: {
+          tag: 'https://waf.upgrate.in/ad',
+
+          // tag: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpreonly&ciu_szs=300x250%2C728x90&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&correlator=',
+          offset: 'pre',
+        },
+      },
     };
 
     useImperativeHandle(ref, () => ({
@@ -72,12 +84,15 @@ const OnDemandPlayer = forwardRef(
     return (
       <View>
         <JWPlayer
-          onPlay={_ => setLoading(false)}
+          // onPlay={_ => setLoading(false)}
+          onBeforePlay={_ => setLoading(false)}
           ref={player}
           style={styles.player}
           config={config}
           onFullScreenRequested={landscapeOnFullScreen}
           onFullScreenExit={exitLandscape}
+          onPlayerError={error => console.log(error)}
+          onSetupPlayerError={error => console.log('setup', error)}
         />
         {loading && (
           <View style={styles.loader}>

@@ -6,6 +6,7 @@ import javelin from '../assets/javelin.png';
 import volleyball from '../assets/volleyball.png';
 import marathon from '../assets/marathon.png';
 import success from '../assets/images/congratulations.png';
+import comingSoon from '../assets/images/commingsoon.png';
 export {
   logo,
   football,
@@ -15,4 +16,5 @@ export {
   volleyball,
   marathon,
   success,
+  comingSoon,
 };

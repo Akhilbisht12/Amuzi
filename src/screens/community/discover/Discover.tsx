@@ -77,12 +77,17 @@ const Discover = ({navigation}: Props) => {
               members
             </Text>
             <Text style={styles.communityCategory}>
-              {readMore ? item.description : item.description.substring(0, 80)}
-              <Text
-                onPress={() => setReadMore(!readMore)}
-                style={{color: white}}>
-                {readMore ? ' Read Less' : ' Read More'}
-              </Text>
+              {readMore
+                ? item.description
+                : item.description.substring(0, 80) +
+                  (item.description.length > 80 && '... ')}
+              {item.description.length > 80 && (
+                <Text
+                  onPress={() => setReadMore(!readMore)}
+                  style={{color: white}}>
+                  {readMore ? ' Read Less' : ' Read More'}
+                </Text>
+              )}
             </Text>
             <TouchableOpacity
               style={styles.joinButton}

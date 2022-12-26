@@ -17,8 +17,8 @@ import {
   green,
   white,
 } from '../../constants/colors';
-import {lg, md, medium, sm, xs} from '../../constants/fonts';
-import {px2, px4, py1, py2} from '../../constants/spacing';
+import {md, medium, sm, xs} from '../../constants/fonts';
+import {px2, px4, py1, py2, pyh} from '../../constants/spacing';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,6 +30,7 @@ type Props = NativeStackScreenProps<ProfileRoutesStack, 'profile'>;
 
 const ProfileSettings = ({navigation}: Props) => {
   const {userSubscription} = usePricingStore();
+  // const userSubscription = null;
   const {userProfile, setUserState, setUser, setOpenSubscriptionPanel} =
     useStore();
   return (
@@ -68,6 +69,7 @@ const ProfileSettings = ({navigation}: Props) => {
             paddingVertical: py2,
             borderColor: userSubscription === null ? grayLight : green,
             backgroundColor: blackLight,
+            position: 'relative',
           },
         ]}
         onPress={() => {
@@ -78,7 +80,7 @@ const ProfileSettings = ({navigation}: Props) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginBottom: py2,
+              marginBottom: py1,
             }}>
             <Icon
               color={userSubscription === null ? grayLight : green}
@@ -95,14 +97,16 @@ const ProfileSettings = ({navigation}: Props) => {
                   textTransform: 'uppercase',
                 },
               ]}>
-              Subscription
+              {userSubscription
+                ? userSubscription.name + ' Plan'
+                : 'No Active Plan'}
             </Text>
           </View>
-          <Text style={[styles.listName, {fontSize: lg}]}>
+          {/* <Text style={[styles.listName, {fontSize: lg}]}>
             {userSubscription
               ? userSubscription.name + ' Plan'
               : 'No Active Plan'}
-          </Text>
+          </Text> */}
           <Text
             style={[
               styles.listDesc,
@@ -114,6 +118,16 @@ const ProfileSettings = ({navigation}: Props) => {
               : 'Buy Subscription Plan'}
           </Text>
         </View>
+        <Text
+          style={[
+            styles.flag,
+            {
+              borderLeftColor: userSubscription === null ? grayLight : green,
+              borderBottomColor: userSubscription === null ? grayLight : green,
+            },
+          ]}>
+          Subscription
+        </Text>
       </Pressable>
       <View style={styles.menu}>
         {[
@@ -155,17 +169,17 @@ const ProfileSettings = ({navigation}: Props) => {
         {[
           {
             name: 'Transactions',
-            handler: () => console.log('nav'),
+            handler: () => navigation.navigate('transactions'),
             icon: 'card-outline',
           },
           {
             name: 'Select Language',
-            handler: () => console.log('nav'),
+            handler: () => navigation.navigate('updateLang'),
             icon: 'chatbubble-ellipses-outline',
           },
           {
             name: 'Your Favourite Sports',
-            handler: () => console.log('nav'),
+            handler: () => navigation.navigate('updateSport'),
             icon: 'football-outline',
           },
         ].map((item, i) => {
@@ -293,6 +307,20 @@ const styles = StyleSheet.create({
   signout: {
     alignItems: 'center',
     marginVertical: py1,
+  },
+  flag: {
+    backgroundColor: white,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    color: gray,
+    paddingHorizontal: px4,
+    paddingVertical: pyh,
+    borderTopRightRadius: 8,
+    borderBottomLeftRadius: 8,
+
+    borderLeftWidth: 1,
+    borderBottomWidth: 1,
   },
 });
 

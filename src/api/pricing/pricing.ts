@@ -50,3 +50,10 @@ export const getUserSubscriptionPlan = async () => {
   const {data} = await http.get(`${server}/current-subscription-plan`);
   return data;
 };
+
+export const getUserTransactions = async (page: number, pageLength: number) => {
+  const {data} = await http.get(
+    `${server}/transaction-history?page=${page}&pageLength=${pageLength}`,
+  );
+  return data;
+};

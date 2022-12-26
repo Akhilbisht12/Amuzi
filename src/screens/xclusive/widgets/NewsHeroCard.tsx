@@ -44,7 +44,12 @@ const NewsHeroCard = ({post}: {post: iXclusivePost; index: number}) => {
                 {alignItems: 'center', justifyContent: 'center'},
               ]}>
               <View style={styles.playBadge}>
-                <Icon name="play" size={40} color={white} />
+                <Icon
+                  name="play"
+                  style={{marginLeft: 5}}
+                  size={40}
+                  color={white}
+                />
               </View>
             </View>
           </View>
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: sm,
   },
   playBadge: {
-    backgroundColor: blackLight,
+    backgroundColor: `${blackLight}DD`,
     borderRadius: 0.1 * height,
     height: 0.08 * height,
     width: 0.08 * height,

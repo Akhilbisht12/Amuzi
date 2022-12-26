@@ -10,18 +10,27 @@ import {
 import React, {useEffect, useState} from 'react';
 import ViewWrapper from '../../../components/wrappers/ViewWrapper';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
-import {gray, grayLight, green, white} from '../../../constants/colors';
-import {px2, px4, py1, py2, py4} from '../../../constants/spacing';
+import {
+  blackLight,
+  gray,
+  grayLight,
+  green,
+  white,
+} from '../../../constants/colors';
+import {px2, px4, py1, py2, pyh} from '../../../constants/spacing';
 import {
   castApprovalStatus,
   getPostsForApproval,
   switchApprovalRequired,
 } from '../../../api/community/community.api';
-import {height, width} from '../../../constants/dimensions';
+import {width} from '../../../constants/dimensions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {medium, sm, xs} from '../../../constants/fonts';
 import {POST} from '../../../types/community/post';
 import useCommunityStore from '../../../store/communityStore';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const Approvals = () => {
   const {community, setApprovalPosts, approvalPosts, updateApprovalPosts} =
@@ -31,14 +40,14 @@ const Approvals = () => {
   );
   const switchApprovalHandler = async (value: boolean) => {
     try {
-      await switchApprovalRequired(community?._id, value);
+      await switchApprovalRequired(community!._id, value);
       setApprovalSwitch(value);
     } catch (error) {}
   };
 
   const getPostForApprovalHandler = async () => {
     try {
-      const posts = await getPostsForApproval(community._id);
+      const posts = await getPostsForApproval(community!._id);
 
       setApprovalPosts(posts);
     } catch (error) {}
@@ -77,18 +86,14 @@ const Approvals = () => {
             <View>
               <Text style={styles.headerCommunityName}>{post.author.name}</Text>
               <Text style={styles.headerPostDetails}>
-                &#183;
-                {Math.round(
-                  (Date.now() - new Date(post.date)) / (1000 * 60 * 60 * 24),
-                )}
-                D
+                {dayjs(post.createdAt).fromNow()}
               </Text>
             </View>
           </View>
 
           <View />
         </View>
-        <TouchableOpacity>
+        <View>
           <View style={styles.contentView}>
             <Text style={styles.contentText}>{post.content}</Text>
           </View>
@@ -97,17 +102,22 @@ const Approvals = () => {
           )}
           <View style={styles.approveView}>
             <TouchableOpacity
-              onPress={() => approvalHandler(true)}
-              style={[styles.approvalButton, {backgroundColor: green}]}>
-              <Text style={styles.buttonText}>Approve</Text>
+              onPress={() => approvalHandler(false)}
+              style={[
+                styles.approvalButton,
+                {borderColor: '#f94449', backgroundColor: '#f94449'},
+              ]}>
+              <Text style={[styles.buttonText, {color: white}]}>
+                Disapprove
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => approvalHandler(false)}
-              style={[styles.approvalButton, {backgroundColor: 'red'}]}>
-              <Text style={styles.buttonText}>Disapprove</Text>
+              onPress={() => approvalHandler(true)}
+              style={[styles.approvalButton, {borderColor: green}]}>
+              <Text style={[styles.buttonText, {color: green}]}>Approve</Text>
             </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -150,7 +160,7 @@ const Approvals = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    padding: px4,
+    padding: px2,
   },
   text: {
     color: white,
@@ -161,10 +171,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   postMain: {
-    marginVertical: py2,
-    borderBottomWidth: 2,
-    borderBottomColor: gray,
-    paddingBottom: py4,
+    marginVertical: pyh,
+    backgroundColor: blackLight,
+    elevation: 5,
+    padding: px2,
+    borderRadius: px2,
   },
   postHeader: {
     flexDirection: 'row',
@@ -192,10 +203,10 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: width * 0.92,
-    height: 0.5 * height,
-    marginVertical: py1,
+    height: width * 0.92,
+    marginVertical: pyh,
     borderRadius: 10,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   contentView: {
     marginVertical: py1,
@@ -214,6 +225,7 @@ const styles = StyleSheet.create({
     width: 0.45 * width,
     borderRadius: px2,
     paddingVertical: py1,
+    borderWidth: 1,
   },
   buttonText: {
     color: white,

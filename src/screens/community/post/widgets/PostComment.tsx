@@ -6,41 +6,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
-import {USER} from '../../../../types/user/user';
 import {width} from '../../../../constants/dimensions';
-import {
-  black,
-  blackLight,
-  gray,
-  grayLight,
-  white,
-} from '../../../../constants/colors';
-import {px2, px3, px4, px8, py1} from '../../../../constants/spacing';
+import {blackLight, gray, grayLight, white} from '../../../../constants/colors';
+import {px2, px3, px8, py1} from '../../../../constants/spacing';
 import {sm} from '../../../../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {commentOnPost} from '../../../../api/community/community.api';
 import useStore from '../../../../store/store';
 import useCommunityStore from '../../../../store/communityStore';
+import {getCommunityPostHandler} from '../../../../handlers/community/joined';
 
 type Props = {
-  author: USER;
-  communityId: string;
-  postId: string;
   parentId?: string;
 };
 
-const PostComment = ({communityId, postId, parentId}: Props) => {
+const PostComment = ({parentId}: Props) => {
   const [content, setContent] = useState('');
-  const {userProfile} = useStore();
-  const {setLoading} = useStore();
-  const {setPostRefresh} = useCommunityStore();
+  const {userProfile, setLoading} = useStore();
+  const {community, post} = useCommunityStore();
 
   const commentOnPostHandler = async () => {
     try {
       setLoading(true);
-      await commentOnPost(communityId, postId, content, parentId);
+      await commentOnPost(community!._id, post!._id, content, parentId);
       setContent('');
-      setPostRefresh();
+      await getCommunityPostHandler(post!._id, community!._id);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -62,7 +52,7 @@ const PostComment = ({communityId, postId, parentId}: Props) => {
           onChangeText={text => setContent(text)}
           style={styles.input}
           placeholderTextColor={grayLight}
-          placeholder="Add a comment"
+          placeholder={`Add a ${parentId ? 'reply' : 'comment'}`}
         />
         {content.length > 0 && (
           <TouchableOpacity
@@ -92,6 +82,7 @@ const styles = StyleSheet.create({
   inputView: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
   profileImage: {
     width: 0.1 * width,
@@ -100,7 +91,7 @@ const styles = StyleSheet.create({
     marginRight: px2,
   },
   input: {
-    width: 0.7 * width,
+    width: 0.65 * width,
     color: white,
     fontSize: sm,
   },

@@ -21,6 +21,7 @@ import Button from '../../../components/button/Button';
 import congrats from '../../../assets/images/congratulations.png';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import useCommunityStore from '../../../store/communityStore';
+import {getCommunityPostsHandler} from '../../../handlers/community/joined';
 
 type PROPS = NativeStackScreenProps<CommunityStack, 'CreatePost'>;
 
@@ -59,8 +60,8 @@ const CreatePost = ({route, navigation}: PROPS) => {
           : null,
       );
       await createPost(communityId, postData);
-      setPostRefresh();
       community?.approvalRequired && setPostSuccess(true);
+      await getCommunityPostsHandler(communityId, 0);
       navigation.navigate('CommunityPage');
     } catch (error) {
       console.log(error);

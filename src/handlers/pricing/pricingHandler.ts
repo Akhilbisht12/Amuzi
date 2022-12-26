@@ -4,6 +4,7 @@ import {
   getEventPass,
   getSubscriptionPlans,
   getUserSubscriptionPlan,
+  getUserTransactions,
   verifyEventPassPayment,
   verifySubscriptionPayment,
 } from '../../api/pricing/pricing';
@@ -117,4 +118,13 @@ export const getUserSubscriptionPlanHandler = async () => {
   if (data !== null) {
     setUserSubscription(data);
   }
+};
+
+export const getUserTransactionsHandler = async (
+  page: number,
+  pageLength: number,
+) => {
+  const {setTransactions} = usePricingStore.getState();
+  const transactions = await getUserTransactions(page, pageLength);
+  setTransactions(transactions);
 };

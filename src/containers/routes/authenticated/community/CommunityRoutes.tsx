@@ -27,20 +27,24 @@ export type CommunityStack = {
     index: number;
   };
   Reply: {
-    comment: COMMENT;
+    parentIndex: number;
+    postIndex: number;
   };
   CreatePost: {
     name: string;
     community: string;
     communityId: string;
   };
-  EditPost: undefined;
+  EditPost: {
+    postIndex: number;
+  };
   ProfileSettings: undefined;
   EditComment: {
     commentId: string;
     postId: string;
     communityId: string;
     comment: string;
+    postIndex: number;
   };
   Approvals: undefined;
 };

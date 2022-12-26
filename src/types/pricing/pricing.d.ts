@@ -17,6 +17,15 @@ export interface iUserSubscription {
   expiresAt: string;
 }
 
+export interface iTransaction {
+  _id: string;
+  type: 0 | 1;
+  amount: number;
+  paymentAt: string;
+  planName?: string;
+  eventTitle?: string;
+}
+
 export interface iPricingStore {
   eventPass: iEventPass | null;
   setEventPass: (pass: iEventPass) => void;
@@ -24,6 +33,8 @@ export interface iPricingStore {
   setSubscriptions: (subscriptions: iSubscription[]) => void;
   userSubscription: iUserSubscription | null;
   setUserSubscription: (subscriptions: iUserSubscription) => void;
+  transactions: iTransaction[];
+  setTransactions: (transactions: iTransaction[]) => void;
 }
 
 export interface iRazorPayOptions {

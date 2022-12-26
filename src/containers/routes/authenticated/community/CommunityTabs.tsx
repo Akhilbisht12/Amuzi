@@ -25,8 +25,8 @@ const CommunityTabs = () => {
           backgroundColor: white,
         },
       }}>
-      <Tab.Screen name="Discover" component={Discover} />
       <Tab.Screen name="Joined" component={JoinedCommunities} />
+      <Tab.Screen name="Discover" component={Discover} />
       <Tab.Screen name="Approvals" component={CreatedCommunities} />
     </Tab.Navigator>
   );

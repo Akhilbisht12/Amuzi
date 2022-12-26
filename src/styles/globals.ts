@@ -30,7 +30,8 @@ const globalStyles = StyleSheet.create({
     textAlign: 'center',
   },
   textLight: {
-    color: grayLight,
+    color: '#f9f9f9',
+    lineHeight: 23,
     fontSize: sm,
   },
   textHeading: {

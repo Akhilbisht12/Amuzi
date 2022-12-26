@@ -1,18 +1,20 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import React from 'react';
 import {black, white} from '../../constants/colors';
 import {xl} from '../../constants/fonts';
 import {px4} from '../../constants/spacing';
+import globalStyles from '../../styles/globals';
+import {comingSoon} from '../../constants/files';
+import {width} from '../../constants/dimensions';
 
 const Rewards = () => {
   return (
     <View style={styles.main}>
       <View>
-        <Text style={styles.text}>Rewards</Text>
+        <Text style={globalStyles.textHeading}>Rewards</Text>
       </View>
       <View style={styles.display}>
-        <Text style={styles.text}>Coming</Text>
-        <Text style={styles.text}>Soon</Text>
+        <Image source={comingSoon} style={styles.comingSoon} />
       </View>
     </View>
   );
@@ -32,6 +34,10 @@ const styles = StyleSheet.create({
   text: {
     color: white,
     fontSize: xl,
+  },
+  comingSoon: {
+    width: 0.8 * width,
+    resizeMode: 'contain',
   },
 });
 

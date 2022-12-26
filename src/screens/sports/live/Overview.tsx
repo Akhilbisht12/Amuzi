@@ -21,7 +21,7 @@ import {
   white,
 } from '../../../constants/colors';
 import Dayjs from 'dayjs';
-import {px4, px6, py1} from '../../../constants/spacing';
+import {px4, px6, py1, pyh} from '../../../constants/spacing';
 import {md, medium, nm} from '../../../constants/fonts';
 import {width} from '../../../constants/dimensions';
 import globalStyles from '../../../styles/globals';
@@ -32,7 +32,7 @@ import {
 import usePricingStore from '../../../store/pricingStore';
 import SuccessModal from '../../../components/modals/SuccessModal';
 import useStore from '../../../store/store';
-
+import dayjs from 'dayjs';
 type Props = NativeStackScreenProps<iAuthenticated, 'sportsOverview'>;
 const successTitle = 'Congratulations';
 const successBody = 'You have successfully purchased the subscription';
@@ -143,7 +143,12 @@ const Overview = ({route, navigation}: Props) => {
           <Text style={[globalStyles.textLight, {marginTop: py1}]}>
             #{channel.eventType}
           </Text>
-          <Text style={styles.title}>{channel.title}</Text>
+          <Text style={[styles.title, {marginVertical: pyh}]}>
+            {channel.title}
+          </Text>
+          <Text style={[globalStyles.textLight, {marginBottom: pyh}]}>
+            {dayjs(channel.startLiveAt).format('DD MMM YYYY hh:mm')}
+          </Text>
           {!eventPass?.pass && (
             <>
               <TouchableOpacity

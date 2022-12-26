@@ -22,6 +22,7 @@ import Subscription from '../../../components/subscription/Subscription';
 import useStore from '../../../store/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getUserSubscriptionPlan} from '../../../api/pricing/pricing';
+import MediaList from '../../../screens/sports/widgets/MediaList';
 
 export type iAuthenticated = {
   Home: undefined;
@@ -42,6 +43,9 @@ export type iAuthenticated = {
   };
   sportsOverview: {
     index: number;
+  };
+  mediaList: {
+    playlistId: string;
   };
 };
 
@@ -82,6 +86,7 @@ const Authenticated = () => {
         <Stack.Screen name="Community" component={CommunityRoutes} />
         <Stack.Screen name="Profile" component={ProfileRoutes} />
         <Stack.Screen name="OnDemand" component={OnDemand} />
+        <Stack.Screen name="mediaList" component={MediaList} />
         <Stack.Screen name="search" component={Search} />
         <Stack.Screen name="watchlist" component={WatchList} />
         <Stack.Screen name="xclusivePost" component={Post} />

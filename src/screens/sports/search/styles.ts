@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {black, white} from '../../../constants/colors';
+import {black, green, white} from '../../../constants/colors';
 import {width} from '../../../constants/dimensions';
 import {medium, xs} from '../../../constants/fonts';
 import {px1, px2, px4, py1} from '../../../constants/spacing';
@@ -13,11 +13,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: px4,
   },
+  searchUnderline: {
+    borderBottomWidth: 0.2,
+    borderBottomColor: white,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   searchInput: {
     flexGrow: 1,
     borderRadius: xs,
-    borderBottomWidth: 0.1,
-    borderBottomColor: white,
+
     color: white,
     paddingHorizontal: px4,
   },
@@ -48,5 +53,12 @@ export const styles = StyleSheet.create({
     fontFamily: medium,
     flexGrow: 1,
     width: 0.6 * width,
+  },
+  chip: {
+    backgroundColor: green,
+    borderRadius: px4,
+    paddingHorizontal: px2,
+    paddingVertical: px1,
+    marginLeft: px1,
   },
 });

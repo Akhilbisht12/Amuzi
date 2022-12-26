@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {black, white} from '../../../constants/colors';
-import {height, width} from '../../../constants/dimensions';
+import {black, grayLight, white} from '../../../constants/colors';
+import {width} from '../../../constants/dimensions';
 import {medium, sm, xs} from '../../../constants/fonts';
 import {px1, px2, py1} from '../../../constants/spacing';
 
@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerImage: {
-    width: 0.15 * width,
-    height: 0.15 * width,
+    width: 0.12 * width,
+    height: 0.12 * width,
     marginRight: px2,
     borderRadius: 0.15 * width,
     resizeMode: 'contain',
@@ -27,15 +27,15 @@ const styles = StyleSheet.create({
     fontFamily: medium,
   },
   headerPostDetails: {
-    color: white,
+    color: grayLight,
     fontSize: xs,
   },
   postImage: {
     width: width * 0.92,
-    height: 0.5 * height,
+    height: width * 0.92,
     marginVertical: py1,
     borderRadius: 10,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   engagementView: {
     flexDirection: 'row',

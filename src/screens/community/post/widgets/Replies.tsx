@@ -1,21 +1,25 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../../containers/routes/authenticated/community/CommunityRoutes';
 import {black} from '../../../../constants/colors';
 import BackTitleHeader from '../../../../components/Headers/BackTitleHeader';
 import Comment from './Comment';
-import {px2, px4, py1} from '../../../../constants/spacing';
+import {px4, py1} from '../../../../constants/spacing';
 import PostComment from './PostComment';
+import useCommunityStore from '../../../../store/communityStore';
+import {COMMENT} from '../../../../types/community/post';
 
 type Props = NativeStackScreenProps<CommunityStack, 'Reply'>;
 
 const Replies = ({route}: Props) => {
-  const comment = route.params.comment;
+  const {parentIndex, postIndex} = route.params;
+  const {post} = useCommunityStore();
+  const comment: COMMENT = post?.comments[parentIndex];
   return (
     <View style={styles.main}>
       <BackTitleHeader title="Replies" />
-      <Comment comment={comment} />
+      <Comment postIndex={postIndex} comment={comment} index={parentIndex} />
       <View style={styles.repliesBox}>
         <PostComment
           {...{
@@ -27,8 +31,16 @@ const Replies = ({route}: Props) => {
         />
 
         <View>
-          {comment.replies.map(reply => {
-            return <Comment key={reply._id} comment={reply} />;
+          {comment.replies.map((reply, index) => {
+            return (
+              <Comment
+                postIndex={postIndex}
+                key={reply._id}
+                comment={reply}
+                index={index}
+                parentIndex={parentIndex}
+              />
+            );
           })}
         </View>
       </View>

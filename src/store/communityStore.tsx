@@ -44,6 +44,13 @@ const useCommunityStore = create<iCommunityStore>((set, get) => ({
     post?.comments.splice(index, 1);
     set({post});
   },
+  deleteStoreReply: (index, parentIndex) => {
+    const post = get().post;
+    post?.comments[parentIndex].replies.splice(index, 1);
+    set({
+      post,
+    });
+  },
   editStoreComment: (id: string, content: string) => {
     const post = get().post;
     const index = post!.comments.findIndex(item => item._id === id);
@@ -70,6 +77,20 @@ const useCommunityStore = create<iCommunityStore>((set, get) => ({
     currentPost!.comments[index].upvoteCount = upVote;
     currentPost!.comments[index].downvoteCount = downVote;
     currentPost!.comments[index].voteStatus = voteStatus;
+    set({post: currentPost});
+  },
+  updateReplyVote: (
+    parentIndex,
+    upvoteCount,
+    downVoteCount,
+    voteStatus,
+    index,
+  ) => {
+    const currentPost = get().post;
+    currentPost!.comments[parentIndex].replies[index].upvoteCount = upvoteCount;
+    currentPost!.comments[parentIndex].replies[index].upvoteCount =
+      downVoteCount;
+    currentPost!.comments[parentIndex].replies[index].upvoteCount = voteStatus;
     set({post: currentPost});
   },
   discoverCommunities: [],

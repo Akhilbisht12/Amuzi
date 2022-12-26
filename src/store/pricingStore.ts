@@ -13,6 +13,10 @@ const usePricingStore = create<iPricingStore>(set => ({
   setUserSubscription: userSubscription => {
     set({userSubscription});
   },
+  transactions: [],
+  setTransactions: transactions => {
+    set({transactions});
+  },
 }));
 
 export default usePricingStore;

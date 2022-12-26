@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {black, blackLight, white} from '../../../constants/colors';
+import {black, blackLight, grayLight, white} from '../../../constants/colors';
 import {height, width} from '../../../constants/dimensions';
 import {bold, sm, xs} from '../../../constants/fonts';
 import {px1, px4, py1} from '../../../constants/spacing';
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     fontFamily: bold,
   },
   playingMediaDesc: {
-    color: white,
+    color: grayLight,
   },
   playingPlaylistTitle: {
     color: white,
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   },
   mediaDesc: {
     paddingHorizontal: py1,
+    width: 0.7 * width,
   },
   mediaTitle: {
     color: white,

@@ -35,14 +35,22 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 type Props = {
   comment: COMMENT;
   index: number;
+  parentIndex?: number;
+  postIndex: number;
 };
 
-const Comment = ({comment, index}: Props) => {
+const Comment = ({comment, index, parentIndex, postIndex}: Props) => {
   const vertSheet = useRef<RBSheet | null>(null);
-  const {deleteStoreComment, updateCommentVote} = useCommunityStore();
+  const {
+    deleteStoreComment,
+    updateCommentVote,
+    updateReplyVote,
+    deleteStoreReply,
+    community,
+  } = useCommunityStore();
   const {userProfile} = useStore();
   const navigation = useNavigation();
-  const voteOnCommentHandler = async (vote: boolean) => {
+  const voteOnCommentHandler = async (vote: boolean | null) => {
     try {
       const {upvoteCount, downvoteCount} = await voteOnComment(
         comment.communityId,
@@ -50,19 +58,29 @@ const Comment = ({comment, index}: Props) => {
         vote === comment.voteStatus ? null : vote,
         comment._id,
       );
-      updateCommentVote(
-        index,
-        upvoteCount,
-        downvoteCount,
-        vote === comment.voteStatus ? null : vote,
-      );
+      parentIndex === undefined &&
+        updateCommentVote(
+          index,
+          upvoteCount,
+          downvoteCount,
+          vote === comment.voteStatus ? null : vote,
+        );
+      parentIndex !== undefined &&
+        updateReplyVote(
+          parentIndex,
+          upvoteCount,
+          downvoteCount,
+          vote === comment.voteStatus ? null : vote,
+          index,
+        );
     } catch (error) {}
   };
 
   const deleteCommentHandler = async () => {
     try {
-      deleteStoreComment(comment._id);
       await deleteComment(comment.communityId, comment.postId, comment._id);
+      parentIndex === undefined && deleteStoreComment(comment._id);
+      parentIndex !== undefined && deleteStoreReply(index, parentIndex);
     } catch (error) {}
   };
   Dayjs.extend(relativeTime);
@@ -91,6 +109,7 @@ const Comment = ({comment, index}: Props) => {
                     postId: comment.postId,
                     comment: comment.content,
                     commentId: comment._id,
+                    postIndex,
                   })
                 }
                 style={styles.editCardActionView}>
@@ -108,7 +127,8 @@ const Comment = ({comment, index}: Props) => {
                 </View>
               </TouchableOpacity>
             )}
-            {(userProfile?.phoneNo === comment.author.phoneNo || true) && (
+            {(userProfile?.phoneNo === comment.author.phoneNo ||
+              userProfile?.phoneNo === community?.admin) && (
               <TouchableOpacity
                 onPress={deleteCommentHandler}
                 style={styles.editCardActionView}>
@@ -147,7 +167,7 @@ const Comment = ({comment, index}: Props) => {
             backgroundColor: gray,
             padding: px2,
             borderRadius: px8,
-            marginRight: px2,
+            marginRight: px3,
           }}>
           <Icon name="person" size={30} color={grayLight} />
         </View>
@@ -158,14 +178,15 @@ const Comment = ({comment, index}: Props) => {
             <View style={styles.commentInfo}>
               <Text style={styles.authorName}>{comment.author.name} </Text>
               <Text style={styles.commentTime}>
-                {Dayjs(comment.createdAt).fromNow(true)}
+                {Dayjs(comment.createdAt).fromNow()}
               </Text>
             </View>
             <View style={styles.commentView}>
               <Text style={styles.comment}>{comment.content}</Text>
             </View>
           </View>
-          <VertSheet />
+          {(userProfile?.phoneNo === comment.author.phoneNo ||
+            userProfile?.phoneNo === community?.admin) && <VertSheet />}
         </View>
 
         <View style={styles.voteView}>
@@ -195,7 +216,12 @@ const Comment = ({comment, index}: Props) => {
           </TouchableOpacity>
           {!comment.parentId && (
             <TouchableOpacity
-              onPress={() => navigation.navigate('Reply', {comment: comment})}
+              onPress={() =>
+                navigation.navigate('Reply', {
+                  parentIndex: index,
+                  postIndex,
+                })
+              }
               style={styles.voteButton}>
               <Icon name="chat-bubble-outline" style={styles.voteIcon} />
               <Text style={styles.voteCount}>{comment.repliesCount}</Text>
@@ -223,7 +249,7 @@ const styles = StyleSheet.create({
     width: 0.1 * width,
     height: 0.1 * width,
     borderRadius: 0.15 * width,
-    marginRight: px2,
+    marginRight: px3,
   },
   commentParentView: {},
   commentInfo: {
@@ -231,15 +257,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   authorName: {
-    color: grayLight,
+    color: white,
     fontSize: xs,
   },
   commentTime: {
     color: grayLight,
     fontSize: xs2,
+    textTransform: 'capitalize',
   },
   commentView: {
     width: 0.7 * width,
+    marginTop: pyh,
   },
   comment: {
     color: white,
@@ -256,7 +284,7 @@ const styles = StyleSheet.create({
   },
   voteIcon: {
     color: white,
-    fontSize: 24,
+    fontSize: 21,
     marginRight: px1,
   },
   voteCount: {

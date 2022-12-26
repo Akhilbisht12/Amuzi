@@ -130,11 +130,18 @@ const Subscription = () => {
                     globalStyles.textHeading,
                     {fontSize: lg, marginTop: py2},
                   ]}>
-                  Get Your Subscription
+                  Subscription Plans
                 </Text>
-                <Text style={[globalStyles.textLight, {width: width * 0.7}]}>
+                <Text
+                  style={[
+                    {
+                      width: width * 0.7,
+                      color: grayLight,
+                      paddingVertical: pyh,
+                    },
+                  ]}>
                   Get access to all live events and watch all videos without
-                  ads. Go Ad Free Now
+                  advertisements.
                 </Text>
               </View>
               <Pressable onPress={() => closeSheet()}>

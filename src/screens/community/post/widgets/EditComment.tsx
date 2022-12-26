@@ -13,7 +13,7 @@ import useStore from '../../../../store/store';
 type Props = NativeStackScreenProps<CommunityStack, 'EditComment'>;
 
 const EditComment = ({route, navigation}: Props) => {
-  const {postId, comment, commentId, communityId} = route.params;
+  const {postId, comment, commentId, communityId, postIndex} = route.params;
   const [content, setContent] = useState(comment);
   const {setLoading} = useStore();
 
@@ -23,7 +23,8 @@ const EditComment = ({route, navigation}: Props) => {
       await updateComment(commentId, postId, communityId, content);
       navigation.navigate('Post', {
         _id: postId,
-        community_id: commentId,
+        community_id: communityId,
+        index: postIndex,
       });
     } catch (error) {
     } finally {
@@ -40,6 +41,7 @@ const EditComment = ({route, navigation}: Props) => {
             value={content}
             onChangeText={setContent}
             style={styles.input}
+            multiline
           />
           <Button
             colored={content !== comment && content.length > 0}

@@ -1,54 +1,53 @@
-import {View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
-import {getCommunityPost} from '../../../api/community/community.api';
 import styles from './styles';
 import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import PostCard from '../widgets/PostCard';
-import Comments from './widgets/Comments';
+// import Comments from './widgets/Comments';
 import PostComment from './widgets/PostComment';
 import ViewWrapper from '../../../components/wrappers/ViewWrapper';
 import useCommunityStore from '../../../store/communityStore';
+import {getCommunityPostHandler} from '../../../handlers/community/joined';
+import Comment from './widgets/Comment';
 
 type Props = NativeStackScreenProps<CommunityStack, 'Post'>;
 
 const Post = ({route}: Props) => {
-  const {postRefresh, post, setPost, posts} = useCommunityStore();
-  const getCommunityPostHandler = async () => {
-    try {
-      const post_response = await getCommunityPost(
-        route.params.community_id,
-        route.params._id,
-      );
-      setPost(post_response);
-    } catch (error) {}
-  };
+  const {posts, post, community} = useCommunityStore();
+
   useEffect(() => {
-    getCommunityPostHandler();
-  }, [route.params._id, route.params.community_id, postRefresh]);
+    (async function () {
+      await getCommunityPostHandler(
+        route.params._id,
+        route.params.community_id,
+      );
+    })();
+  }, [route.params]);
 
   return (
     <View style={styles.main}>
-      <BackTitleHeader title="Community" />
-      <ViewWrapper refreshAction={() => getCommunityPostHandler()}>
+      <BackTitleHeader title={community?.name} />
+      <ViewWrapper
+        refreshAction={() =>
+          getCommunityPostHandler(route.params._id, route.params.community_id)
+        }>
         {post && (
-          <PostCard
-            navigate={false}
-            index={route.params.index}
-            post={posts[route.params.index]}
-          />
+          <PostCard navigate={false} index={route.params.index} post={post} />
         )}
-        {post && (
-          <PostComment
-            {...{
-              communityId: post.communityId,
-              postId: post._id,
-              author: post.author,
-            }}
-          />
-        )}
-        {post && <Comments />}
+        <PostComment />
+        <FlatList
+          renderItem={({item, index}) => (
+            <Comment
+              comment={item}
+              postIndex={route.params.index}
+              index={index}
+            />
+          )}
+          data={post?.comments}
+        />
+        {/* <Comments /> */}
       </ViewWrapper>
     </View>
   );

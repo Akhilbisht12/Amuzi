@@ -14,25 +14,30 @@ import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import useStore from '../../../store/store';
 import {grayLight, white} from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {px2, px4} from '../../../constants/spacing';
+import {px2, px4, py1} from '../../../constants/spacing';
 import {height, width} from '../../../constants/dimensions';
 import Button from '../../../components/button/Button';
 import {updatePostContent} from '../../../api/community/community.api';
+import useCommunityStore from '../../../store/communityStore';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import {getCommunityPostHandler} from '../../../handlers/community/joined';
+
+dayjs.extend(relativeTime);
 
 type Props = NativeStackScreenProps<CommunityStack, 'EditPost'>;
 
 const EditPost = ({navigation}: Props) => {
-  const {post, setLoading} = useStore();
-  const [content, setContent] = useState(post!.content);
+  const {setLoading} = useStore();
+  const {post, community} = useCommunityStore();
+  const [content, setContent] = useState(post?.content ? post.content : '');
 
   const updatePostContentHandler = async () => {
     try {
       setLoading(true);
       await updatePostContent(post!.communityId, post!._id, content);
-      navigation.navigate('Post', {
-        _id: post!._id,
-        community_id: post!.communityId,
-      });
+      await getCommunityPostHandler(post!._id, community!._id);
+      navigation.goBack();
     } catch (error) {
     } finally {
       setLoading(false);
@@ -61,11 +66,10 @@ const EditPost = ({navigation}: Props) => {
                 {post?.author.name}
               </Text>
               <Text style={styles.headerPostDetails}>
-                {post?.communityId} &#183;
-                {Math.round(
-                  (Date.now() - new Date(post.date)) / (1000 * 60 * 60 * 24),
-                )}
-                D
+                {community?.name} &#183;{' '}
+                <Text style={{textTransform: 'capitalize'}}>
+                  {dayjs(post?.createdAt).fromNow()}
+                </Text>
               </Text>
             </View>
           </View>
@@ -82,11 +86,13 @@ const EditPost = ({navigation}: Props) => {
             multiline
           />
         </View>
-        <Button
-          onPress={updatePostContentHandler}
-          colored={content?.length > 0 && content !== post?.content}
-          title="Update"
-        />
+        <View style={{paddingHorizontal: px4, paddingVertical: py1}}>
+          <Button
+            onPress={updatePostContentHandler}
+            colored={content?.length > 0 && content !== post?.content}
+            title="Update"
+          />
+        </View>
       </ScrollView>
     </View>
   );

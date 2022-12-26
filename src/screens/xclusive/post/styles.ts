@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {grayLight, white} from '../../../constants/colors';
 import {width} from '../../../constants/dimensions';
 import {lg, medium, nm} from '../../../constants/fonts';
-import {px2, px4, py1} from '../../../constants/spacing';
+import {px1, px2, px4, py1} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {
@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
   },
   postDate: {
     color: grayLight,
+    marginBottom: px1,
+    textTransform: 'capitalize',
   },
 });
 

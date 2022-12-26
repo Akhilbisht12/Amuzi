@@ -22,6 +22,7 @@ export interface iCommunityStore {
   post: POST | null;
   setPost: (post: POST | null) => void;
   deleteStoreComment: (id: string) => void;
+  deleteStoreReply: (index: number, parentIndex: number) => void;
   editStoreComment: (id: string, content: string) => void;
   setCommunityImage: (url: string) => void;
   approvalPosts: POST[];
@@ -32,6 +33,13 @@ export interface iCommunityStore {
     upVote: number,
     downVote: number,
     voteStatus: boolean | null,
+  ) => void;
+  updateReplyVote: (
+    parentIndex: number,
+    upVoteCount: number,
+    downVoteCount: number,
+    voteStatus: boolean | null,
+    index: number,
   ) => void;
   discoverCommunities: COMMUNITY[];
   setDiscoverCommunities: (communities: COMMUNITY[]) => void;

@@ -33,11 +33,9 @@ interface Props {
   navigate: boolean;
 }
 
-const PostCard = ({index, navigate}: Props) => {
-  const {deleteStoragePost, setPost, community, updatePostCounts, posts} =
+const PostCard = ({index, navigate, post}: Props) => {
+  const {deleteStoragePost, setPost, community, updatePostCounts} =
     useCommunityStore();
-
-  const post = posts[index];
 
   const navigation = useNavigation();
   const editSheet = useRef<RBSheet | null>(null);
@@ -64,13 +62,14 @@ const PostCard = ({index, navigate}: Props) => {
     try {
       deleteStoragePost(post._id);
       await deletePost(post.communityId, post._id);
+      navigation.replace('CommunityPage');
     } catch (error) {}
   };
 
   const EditCard = () => {
     const handleEditPost = () => {
       setPost(post);
-      navigation.navigate('EditPost');
+      navigation.navigate('EditPost', {postIndex: index});
     };
     return (
       <View>
@@ -163,8 +162,8 @@ const PostCard = ({index, navigate}: Props) => {
           </View>
         </View>
 
-        {userProfile?.phoneNo === post.author.phoneNo ||
-          (userProfile?.phoneNo === community?.admin && <EditCard />)}
+        {(userProfile?.phoneNo === post.author.phoneNo ||
+          userProfile?.phoneNo === community?.admin) && <EditCard />}
       </View>
       <Pressable onPress={() => navigate && handleNavigation()}>
         <View style={styles.contentView}>
@@ -255,7 +254,8 @@ const styles = StyleSheet.create({
     fontFamily: medium,
   },
   headerPostDetails: {
-    color: white,
+    color: grayLight,
+    textTransform: 'capitalize',
     fontSize: xs,
   },
   postImage: {

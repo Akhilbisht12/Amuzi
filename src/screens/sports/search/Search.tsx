@@ -76,15 +76,18 @@ const Search = ({navigation}: Props) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back-outline" size={25} color={white} />
         </TouchableOpacity>
-        <TextInput
-          onBlur={searchMediaHandler}
-          returnKeyType="search"
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Search"
-          placeholderTextColor={grayLight}
-          style={styles.searchInput}
-        />
+        <View style={styles.searchUnderline}>
+          <Text style={styles.chip}>{theme.name.toUpperCase()}</Text>
+          <TextInput
+            onBlur={searchMediaHandler}
+            returnKeyType="search"
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search..."
+            placeholderTextColor={grayLight}
+            style={styles.searchInput}
+          />
+        </View>
         <TouchableOpacity onPress={searchMediaHandler}>
           <Icon name="search-outline" size={25} color={white} />
         </TouchableOpacity>
