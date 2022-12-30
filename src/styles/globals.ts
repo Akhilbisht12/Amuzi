@@ -1,13 +1,12 @@
 import {StyleSheet} from 'react-native';
-import {black, gray, grayLight, white} from '../constants/colors';
-import {height} from '../constants/dimensions';
-import {bold, md, medium, nm, sm} from '../constants/fonts';
-import {px2, py1, pyh} from '../constants/spacing';
+import {black, gray, green, white} from '../constants/colors';
+import {bold, medium, nm, sm} from '../constants/fonts';
+import {px2, px4, py1, pyh} from '../constants/spacing';
 
 const globalStyles = StyleSheet.create({
   button: {
     backgroundColor: white,
-    paddingVertical: 0.015 * height,
+    paddingVertical: py1,
     borderRadius: px2,
     marginVertical: pyh,
   },
@@ -42,6 +41,19 @@ const globalStyles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: black,
+  },
+  flag: {
+    borderTopRightRadius: px4,
+    borderBottomLeftRadius: px4,
+    backgroundColor: green,
+    borderWidth: 2,
+    borderColor: green,
+    color: black,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    paddingHorizontal: px4,
+    paddingVertical: pyh,
   },
 });
 

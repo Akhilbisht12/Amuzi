@@ -8,7 +8,6 @@ import BackTitleHeader from '../../../components/Headers/BackTitleHeader';
 import styles from './styles';
 import {blue, red} from '../../../constants/colors';
 import LiveTabs from '../../../containers/layout/LiveTabs';
-import {py1} from '../../../constants/spacing';
 import Dayjs from 'dayjs';
 
 type Props = NativeStackScreenProps<iAuthenticated, 'sportsLive'>;
@@ -48,7 +47,7 @@ const Live = ({route}: Props) => {
   }, [eventState, eventTime]);
 
   return (
-    <View style={styles.main}>
+    <View style={[styles.main]}>
       <BackTitleHeader title="" />
       <View style={styles.mainArea}>
         {channel.state === 2 && (
@@ -95,9 +94,7 @@ const Live = ({route}: Props) => {
           </View>
         )}
       </View>
-      <View style={{marginTop: py1, flex: 1}}>
-        <LiveTabs index={index} />
-      </View>
+      <LiveTabs index={index} />
     </View>
   );
 };

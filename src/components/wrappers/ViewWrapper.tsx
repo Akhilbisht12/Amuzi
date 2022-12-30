@@ -1,6 +1,5 @@
 import {View, StyleSheet, RefreshControl, FlatList} from 'react-native';
 import React, {useState} from 'react';
-import {height} from '../../constants/dimensions';
 import {black} from '../../constants/colors';
 
 type Props = {
@@ -15,6 +14,7 @@ const ViewWrapper = ({children, refreshAction}: Props) => {
       <FlatList
         data={[]}
         renderItem={null}
+        contentContainerStyle={styles.mainScroll}
         ListEmptyComponent={null}
         refreshControl={
           <RefreshControl
@@ -34,11 +34,11 @@ const ViewWrapper = ({children, refreshAction}: Props) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: black,
   },
   mainScroll: {
-    height: height,
+    flexGrow: 1,
   },
 });
 

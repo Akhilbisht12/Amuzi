@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {grayLight, green, white} from '../../../constants/colors';
 import {width} from '../../../constants/dimensions';
 import {md, nm} from '../../../constants/fonts';
-import {px2, px4, px6, py1} from '../../../constants/spacing';
+import {px4, px6, py1} from '../../../constants/spacing';
 
 const styles = StyleSheet.create({
   main: {

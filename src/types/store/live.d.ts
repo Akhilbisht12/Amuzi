@@ -17,7 +17,23 @@ export interface iLive {
   price: number;
 }
 
+export interface iChatRoom {
+  _id: string;
+  roomName: string;
+  eventId: string;
+  createdBy: number;
+  memberCount: number;
+}
+
 export interface iLiveStore {
   events: iLive[];
   setEvents: (events: iLive[]) => void;
+  chatRooms: iChatRoom[];
+  setChatRooms: (rooms: iChatRoom[]) => void;
+  createModalSheet: boolean;
+  setCreateModalSheet: (value: boolean) => void;
+  joinModalSheet: boolean;
+  setJoinModalSheet: (value: boolean) => void;
+  onLiveIndex: number | null;
+  setOnLiveIndex: (index: number) => void;
 }
