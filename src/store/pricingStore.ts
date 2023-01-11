@@ -9,7 +9,7 @@ const usePricingStore = create<iPricingStore>(set => ({
   setSubscriptions: subscriptions => {
     set({subscriptions});
   },
-  userSubscription: null,
+  userSubscription: 'loading',
   setUserSubscription: userSubscription => {
     set({userSubscription});
   },

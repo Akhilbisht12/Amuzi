@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {black, gray, green, white} from '../constants/colors';
-import {bold, medium, nm, sm} from '../constants/fonts';
+import {black, gray, grayLight, white} from '../constants/colors';
+import {width} from '../constants/dimensions';
+import {bold, medium, nm, sm, xs} from '../constants/fonts';
 import {px2, px4, py1, pyh} from '../constants/spacing';
 
 const globalStyles = StyleSheet.create({
@@ -31,13 +32,24 @@ const globalStyles = StyleSheet.create({
   textLight: {
     color: '#f9f9f9',
     lineHeight: 23,
-    fontSize: sm,
+    fontSize: xs,
   },
   textHeading: {
     color: white,
     fontSize: nm,
     fontFamily: bold,
   },
+  textSmallLight: {
+    fontSize: xs,
+    color: grayLight,
+  },
+  avatar: {
+    width: 0.1 * width,
+    height: 0.1 * width,
+    resizeMode: 'contain',
+    borderRadius: 0.75 * width,
+  },
+
   main: {
     flex: 1,
     backgroundColor: black,
@@ -45,9 +57,9 @@ const globalStyles = StyleSheet.create({
   flag: {
     borderTopRightRadius: px4,
     borderBottomLeftRadius: px4,
-    backgroundColor: green,
+    backgroundColor: white,
     borderWidth: 2,
-    borderColor: green,
+    borderColor: white,
     color: black,
     position: 'absolute',
     right: 0,

@@ -1,5 +1,6 @@
 import {PLAYLIST_MEDIA} from '../content/playlist';
 
+export type iLoading = 'loading';
 export interface state extends user, theme, event, authState {
   loading: boolean;
   setLoading: (loading: boolean) => void;

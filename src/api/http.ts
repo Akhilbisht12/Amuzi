@@ -3,7 +3,7 @@ import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {slack} from '../constants/secrets';
 import useStore from '../store/store';
 export const server = 'https://amuzi.backend.upgrate.in/v1';
-export const jw = 'https://cdn.jwplayer.com/v2/';
+export const jw = 'https://cdn.jwplayer.com/v2';
 
 enum StatusCode {
   Unauthorized = 401,

@@ -1,3 +1,5 @@
+import {iLoading} from '../store/store';
+
 export interface iEventPass {
   pass: boolean;
   passType: 'subscription-plan' | 'event-pass';
@@ -27,12 +29,12 @@ export interface iTransaction {
 }
 
 export interface iPricingStore {
-  eventPass: iEventPass | null;
+  eventPass: iEventPass | null | iLoading;
   setEventPass: (pass: iEventPass) => void;
   subscriptions: iSubscription[];
   setSubscriptions: (subscriptions: iSubscription[]) => void;
-  userSubscription: iUserSubscription | null;
-  setUserSubscription: (subscriptions: iUserSubscription) => void;
+  userSubscription: iUserSubscription | null | iLoading;
+  setUserSubscription: (subscriptions: iUserSubscription | iLoading) => void;
   transactions: iTransaction[];
   setTransactions: (transactions: iTransaction[]) => void;
 }

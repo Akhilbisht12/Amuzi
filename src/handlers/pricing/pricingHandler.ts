@@ -115,9 +115,7 @@ export const verifySubscriptionPaymentHandler = async (
 export const getUserSubscriptionPlanHandler = async () => {
   const {setUserSubscription} = usePricingStore.getState();
   const data = await getUserSubscriptionPlan();
-  if (data !== null) {
-    setUserSubscription(data);
-  }
+  setUserSubscription(data);
 };
 
 export const getUserTransactionsHandler = async (

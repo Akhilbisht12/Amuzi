@@ -65,6 +65,7 @@ const MediaList = ({route}: Props) => {
           data={feed?.playlist}
           renderItem={renderCard}
           keyExtractor={item => item.mediaid}
+          columnWrapperStyle={styles.cardColumn}
         />
       </View>
     </>
@@ -75,8 +76,8 @@ const MediaList = ({route}: Props) => {
 
 const styles = StyleSheet.create({
   main: {
-    // marginVertical: py1,
     padding: px2,
+    flex: 1,
   },
   title: {
     fontSize: nm,
@@ -84,12 +85,15 @@ const styles = StyleSheet.create({
     color: white,
     marginVertical: py2,
   },
+  cardColumn: {
+    justifyContent: 'space-evenly',
+  },
   card: {
     height: (0.45 * width * 9) / 16,
-    width: 0.45 * width,
     resizeMode: 'cover',
     borderRadius: 10,
     marginHorizontal: px1,
+    width: 0.45 * width,
   },
   cardTitle: {
     color: white,

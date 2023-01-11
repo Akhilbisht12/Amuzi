@@ -1,49 +1,24 @@
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-  Text,
-} from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet, Text} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {height, width} from '../../../constants/dimensions';
-import {logo} from '../../../constants/files';
-import {gray, grayLight, green, white} from '../../../constants/colors';
-import {px1, px2, px3, px4, px6, py2, pyh} from '../../../constants/spacing';
-import {sm, xs2} from '../../../constants/fonts';
+import {height, width} from '../../constants/dimensions';
+import {logo} from '../../constants/files';
+import {gray, grayLight, green, white} from '../../constants/colors';
+import {px1, px2, px4, px6, py2, pyh} from '../../constants/spacing';
+import {sm} from '../../constants/fonts';
 
-import useStore from '../../../store/store';
 import {useNavigation} from '@react-navigation/native';
-import usePricingStore from '../../../store/pricingStore';
-import SubscriptionSkel from '../skeleton/SubscriptionSkel';
+import useStore from '../../store/store';
+import globalStyles from '../../styles/globals';
 
-const SportsHeader = () => {
-  const {userProfile, setOpenSubscriptionPanel, openSubsriptionPanel} =
-    useStore();
-  const {userSubscription} = usePricingStore();
+const PageHeader = ({title}: {title: string}) => {
+  const {userProfile} = useStore();
   const navigation = useNavigation();
   return (
     <View style={styles.main}>
       <View style={styles.header}>
-        <View style={styles.logoView}>
-          <Image style={styles.logo} source={logo} />
-          {userSubscription === 'loading' && <SubscriptionSkel />}
-          {userSubscription === null && (
-            <Pressable
-              onPress={() => setOpenSubscriptionPanel(!openSubsriptionPanel)}
-              style={[styles.subscribe]}>
-              <Text style={[{color: green, fontSize: xs2}]}>Subscribe</Text>
-            </Pressable>
-          )}
-        </View>
+        <Text style={globalStyles.textHeading}>{title}</Text>
         <View style={styles.headerButtons}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('search')}
-            style={styles.searchButton}>
-            <Icon style={styles.searchIcon} name="search-outline" />
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('Profile')}
             style={styles.profileButton}>
@@ -132,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SportsHeader;
+export default PageHeader;

@@ -20,16 +20,20 @@ const LiveInfo = ({route}: Props) => {
         <View style={styles.eventTypeView}>
           <Text style={styles.eventTypeBadge}>{channel.eventType}</Text>
         </View>
-        <Text style={styles.description}>
-          {readMore
-            ? channel.description
-            : channel.description.substring(0, 120)}
-          {channel.description.length > 120 && (
-            <Text style={{color: white}} onPress={() => setReadMore(!readMore)}>
-              {readMore ? 'Read Less' : '... Read More'}
-            </Text>
-          )}
-        </Text>
+        {channel.description && (
+          <Text style={styles.description}>
+            {readMore
+              ? channel.description
+              : channel.description.substring(0, 120)}
+            {channel.description.length > 120 && (
+              <Text
+                style={{color: white}}
+                onPress={() => setReadMore(!readMore)}>
+                {readMore ? 'Read Less' : '... Read More'}
+              </Text>
+            )}
+          </Text>
+        )}
       </View>
     </ViewWrapper>
   );

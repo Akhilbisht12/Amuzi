@@ -151,13 +151,23 @@ const Overview = ({route, navigation}: Props) => {
           </Text>
           {!eventPass?.pass && (
             <>
-              <TouchableOpacity
-                onPress={handleEventPurchase}
-                style={globalStyles.button}>
-                <Text style={globalStyles.buttonText}>
-                  Watch With ₹{channel.price} Pass
-                </Text>
-              </TouchableOpacity>
+              {channel.price === 0 ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('sportsLive', {index: index})
+                  }
+                  style={globalStyles.button}>
+                  <Text style={globalStyles.buttonText}>Watch Now</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={handleEventPurchase}
+                  style={globalStyles.button}>
+                  <Text style={globalStyles.buttonText}>
+                    Watch With ₹{channel.price} Pass
+                  </Text>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 onPress={() => setOpenSubscriptionPanel(true)}
                 style={globalStyles.buttonLight}>

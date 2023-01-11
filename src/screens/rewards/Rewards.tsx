@@ -1,44 +1,37 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
-import React from 'react';
-import {black, white} from '../../constants/colors';
-import {xl} from '../../constants/fonts';
-import {px4} from '../../constants/spacing';
+import {View} from 'react-native';
+import React, {useEffect} from 'react';
 import globalStyles from '../../styles/globals';
-import {comingSoon} from '../../constants/files';
-import {width} from '../../constants/dimensions';
+import {getQuizNPollsHandler} from '../../api/rewards/rewardsHandler';
+import useRewardStore from '../../store/rewardStore';
+import Quiz from './widgets/Quiz';
+import Poll from './widgets/Poll';
+import ViewWrapper from '../../components/wrappers/ViewWrapper';
+import {px2} from '../../constants/spacing';
+import PageHeader from '../../components/Headers/PageHeader';
 
 const Rewards = () => {
+  const {quizRewards} = useRewardStore();
+  useEffect(() => {
+    (async function () {
+      await getQuizNPollsHandler(10, 1);
+    })();
+  }, []);
   return (
-    <View style={styles.main}>
-      <View>
-        <Text style={globalStyles.textHeading}>Rewards</Text>
-      </View>
-      <View style={styles.display}>
-        <Image source={comingSoon} style={styles.comingSoon} />
-      </View>
+    <View style={globalStyles.main}>
+      <PageHeader title="Rewards" />
+      <ViewWrapper refreshAction={() => getQuizNPollsHandler(10, 1)}>
+        <View style={{paddingHorizontal: px2}}>
+          {quizRewards.map(item =>
+            item.type === 'quiz' ? (
+              <Quiz key={item._id} quiz={item} />
+            ) : (
+              <Poll key={item._id} poll={item} />
+            ),
+          )}
+        </View>
+      </ViewWrapper>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    backgroundColor: black,
-    padding: px4,
-  },
-  display: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: white,
-    fontSize: xl,
-  },
-  comingSoon: {
-    width: 0.8 * width,
-    resizeMode: 'contain',
-  },
-});
 
 export default Rewards;
