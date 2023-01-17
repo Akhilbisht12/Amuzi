@@ -19,7 +19,7 @@ const JoinRoom = () => {
   const {joinModalSheet, setJoinModalSheet, onLiveIndex, events} =
     useLiveStore();
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['10%', '20%'], []);
+  const snapPoints = useMemo(() => ['10%', '25%'], []);
 
   const handleClose = () => {
     setJoinModalSheet(false);
@@ -29,6 +29,8 @@ const JoinRoom = () => {
   const joinRoom = async () => {
     if (onLiveIndex !== null) {
       await joinRoomHandler(roomId, events[onLiveIndex].id);
+      sheetRef.current?.close();
+      setRoomId('');
     }
   };
   useEffect(() => {

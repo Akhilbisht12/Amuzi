@@ -19,7 +19,7 @@ const CreateRoom = () => {
   const {createModalSheet, setCreateModalSheet, onLiveIndex, events} =
     useLiveStore();
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['10%', '20%'], []);
+  const snapPoints = useMemo(() => ['10%', '25%'], []);
 
   const handleClose = () => {
     setCreateModalSheet(false);
@@ -30,6 +30,7 @@ const CreateRoom = () => {
     try {
       if (onLiveIndex !== null) {
         await createRoomHandler(roomName, events[onLiveIndex].id);
+        sheetRef.current?.close();
         setRoomName('');
       }
     } finally {

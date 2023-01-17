@@ -13,10 +13,10 @@ export const getJoinedRoomsHandler = async (eventId: string) => {
 
 export const createRoomHandler = async (roomName: string, eventId: string) => {
   await createRoom(roomName, eventId);
-  await getJoinedRooms(eventId);
+  await getJoinedRoomsHandler(eventId);
 };
 
 export const joinRoomHandler = async (roomId: string, eventId: string) => {
   await joinRoom(roomId, eventId);
-  await getJoinedRooms(eventId);
+  await getJoinedRoomsHandler(eventId);
 };

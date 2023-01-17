@@ -15,22 +15,32 @@ const PreferenceSlider = ({category}: Props) => {
   const flatListRef = useRef(null);
 
   useEffect(() => {
-    if (!category) return setFilteredEvents(events);
+    if (!category) {
+      return setFilteredEvents(events);
+    }
     const result = events.filter(
       item => item.eventType.toUpperCase() === category?.toUpperCase(),
     );
     setFilteredEvents(result);
   }, [category, events]);
 
-  const renderCard = ({item, index}: {item: iLive; index: number}) => {
-    return <HeroCard live={item} index={index} />;
+  type iCard = {
+    index: number;
+    dataIndex: number;
+    item: iLive;
   };
-  if (filteredEvents.length === 0) return <View />;
+
+  const _renderCard = ({item, dataIndex}: iCard) => {
+    return <HeroCard live={item} index={dataIndex} />;
+  };
+  if (filteredEvents.length === 0) {
+    return <View />;
+  }
   return (
     <Carousel
       loop
       data={filteredEvents}
-      renderItem={renderCard}
+      renderItem={_renderCard}
       sliderWidth={width}
       itemWidth={0.85 * width}
       ref={flatListRef}

@@ -34,6 +34,10 @@ const globalStyles = StyleSheet.create({
     lineHeight: 23,
     fontSize: xs,
   },
+  lightLabel: {
+    color: grayLight,
+    fontSize: xs,
+  },
   textHeading: {
     color: white,
     fontSize: nm,

@@ -57,8 +57,13 @@ export const joinCommunity = async (community: string) => {
   return data;
 };
 
-export const getJoinedCommunities = async () => {
-  const {data} = await http.get(`${server}/joined-communities`);
+export const getJoinedCommunities = async (
+  pageLength: number,
+  page: number,
+) => {
+  const {data} = await http.get(
+    `${server}/joined-communities?pageLength=${pageLength}&page=${page}`,
+  );
   return data;
 };
 

@@ -23,6 +23,7 @@ import useStore from '../../../store/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getUserSubscriptionPlan} from '../../../api/pricing/pricing';
 import MediaList from '../../../screens/sports/widgets/MediaList';
+import Notification from '../../../screens/notification/Notification';
 
 export type iAuthenticated = {
   Home: undefined;
@@ -47,6 +48,7 @@ export type iAuthenticated = {
   mediaList: {
     playlistId: string;
   };
+  notification: undefined;
 };
 
 const Authenticated = () => {
@@ -92,6 +94,7 @@ const Authenticated = () => {
         <Stack.Screen name="xclusivePost" component={Post} />
         <Stack.Screen name="sportsLive" component={Live} />
         <Stack.Screen name="sportsOverview" component={Overview} />
+        <Stack.Screen name="notification" component={Notification} />
       </Stack.Navigator>
       <Loader />
       <Subscription />

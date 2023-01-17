@@ -7,6 +7,9 @@ import volleyball from '../assets/volleyball.png';
 import marathon from '../assets/marathon.png';
 import success from '../assets/images/congratulations.png';
 import comingSoon from '../assets/images/commingsoon.png';
+import watchParty from '../assets/images/watchParty.png';
+import coin from '../assets/images/coin.png';
+
 export {
   logo,
   football,
@@ -17,4 +20,6 @@ export {
   marathon,
   success,
   comingSoon,
+  watchParty,
+  coin,
 };

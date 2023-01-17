@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import React, {useEffect} from 'react';
 import {getJoinedRoomsHandler} from '../../../../handlers/watchParty/watchPartyHandler';
 import useLiveStore from '../../../../store/liveStore';
@@ -6,10 +6,13 @@ import ViewWrapper from '../../../../components/wrappers/ViewWrapper';
 import {FlatList} from 'react-native-gesture-handler';
 import {iChatRoom} from '../../../../types/store/live';
 import globalStyles from '../../../../styles/globals';
-import {px2, px4, py1, pyh} from '../../../../constants/spacing';
-import {blackLight} from '../../../../constants/colors';
+import {px1, px2, px4, py1, py2, pyh} from '../../../../constants/spacing';
+import {black, blackLight, gray, white} from '../../../../constants/colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {iChatRoomRoutes} from '../../../../containers/layout/WatchPartyRoutes';
+import {height, width} from '../../../../constants/dimensions';
+import {watchParty} from '../../../../constants/files';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = NativeStackScreenProps<iChatRoomRoutes, 'joinedRooms'>;
 
@@ -26,6 +29,7 @@ const EmptyRooms = ({index}: {index: number}) => {
   };
   return (
     <View style={styles.emptyRooms}>
+      <Image style={styles.emptyRoomImage} source={watchParty} />
       <TouchableOpacity onPress={openCreateSheet} style={[globalStyles.button]}>
         <Text style={[globalStyles.buttonText]}>Create Room</Text>
       </TouchableOpacity>
@@ -34,6 +38,44 @@ const EmptyRooms = ({index}: {index: number}) => {
         style={[globalStyles.buttonLight]}>
         <Text style={[globalStyles.buttonLightText]}>Join Room</Text>
       </TouchableOpacity>
+    </View>
+  );
+};
+
+const WatchPartyHeader = ({
+  showButtons,
+  index,
+}: {
+  showButtons: boolean;
+  index: number;
+}) => {
+  const {setCreateModalSheet, setJoinModalSheet, setOnLiveIndex} =
+    useLiveStore();
+  const openCreateSheet = () => {
+    setOnLiveIndex(index);
+    setCreateModalSheet(true);
+  };
+  const openJoinSheet = () => {
+    setOnLiveIndex(index);
+    setJoinModalSheet(true);
+  };
+  return (
+    <View style={styles.watchPartyHeader}>
+      <Text style={globalStyles.textHeading}>Watch Party</Text>
+      {showButtons && (
+        <View style={styles.watchPartyHeader}>
+          <TouchableOpacity
+            onPress={openCreateSheet}
+            style={[styles.roomIconButton, {backgroundColor: white}]}>
+            <Text style={globalStyles.buttonText}>Create Room</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={openJoinSheet}
+            style={[styles.roomIconButton, {backgroundColor: gray}]}>
+            <Text style={globalStyles.buttonLightText}>Join Room</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -50,9 +92,12 @@ const WatchParty = ({route, navigation}: Props) => {
         }
         style={styles.roomContainer}>
         <Text style={globalStyles.textLight}>{item.roomName}</Text>
-        <Text style={globalStyles.flag}>
-          Active Members : {item.memberCount}
-        </Text>
+        <View style={[styles.wpHeaderButtonView, globalStyles.flag]}>
+          <Icon name="people" color={black} size={20} />
+          <Text style={[globalStyles.buttonText, {marginLeft: px1}]}>
+            {item.memberCount}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -67,11 +112,12 @@ const WatchParty = ({route, navigation}: Props) => {
       <FlatList
         contentContainerStyle={styles.roomScroll}
         ListHeaderComponentStyle={{marginVertical: py1}}
-        ListHeaderComponent={() => (
-          <>
-            <Text style={globalStyles.textHeading}>Active Rooms</Text>
-          </>
-        )}
+        ListHeaderComponent={
+          <WatchPartyHeader
+            index={eventIndex}
+            showButtons={chatRooms.length === 0 ? false : true}
+          />
+        }
         ListEmptyComponent={<EmptyRooms index={eventIndex} />}
         keyExtractor={item => item._id}
         renderItem={renderRoom}
@@ -84,11 +130,10 @@ const WatchParty = ({route, navigation}: Props) => {
 const styles = StyleSheet.create({
   roomScroll: {
     flexGrow: 1,
-    paddingHorizontal: px2,
+    paddingHorizontal: px4,
   },
   emptyRooms: {
     flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: px2,
   },
   roomContainer: {
@@ -96,6 +141,32 @@ const styles = StyleSheet.create({
     padding: px4,
     borderRadius: px2,
     marginVertical: pyh,
+  },
+  emptyRoomImage: {
+    height: 0.3 * height,
+    width: 0.9 * width,
+    marginVertical: py2,
+    resizeMode: 'contain',
+  },
+  watchPartyHeader: {
+    paddingVertical: px2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  wpHeaderButtonView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  roomIconButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: px2,
+    paddingVertical: pyh,
+    borderRadius: px1,
+    elevation: 5,
+    marginLeft: px1,
   },
 });
 

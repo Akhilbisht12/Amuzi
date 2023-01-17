@@ -3,6 +3,7 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import React from 'react';
 import {px4, py1} from '../../../constants/spacing';
@@ -15,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 const HeroCard = ({live, index}: {live: iLive; index: number}) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity
+    <Pressable
       // style={index === 0 && {marginLeft: px4}}
       onPress={() => navigation.navigate('sportsOverview', {index: index})}>
       <ImageBackground
@@ -31,7 +32,7 @@ const HeroCard = ({live, index}: {live: iLive; index: number}) => {
           {live.state === 2 ? 'Live' : 'Upcoming'}
         </Text>
       </ImageBackground>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

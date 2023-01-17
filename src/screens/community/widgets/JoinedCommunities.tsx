@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  RefreshControl,
-} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {height} from '../../../constants/dimensions';
 import {black, blackLight, grayLight, white} from '../../../constants/colors';
@@ -21,6 +13,7 @@ import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 import {iCommunityTabs} from '../../../containers/routes/authenticated/community/CommunityTabs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
+import PaginatedList from '../../../components/paginatedList/PaginatedList';
 
 type JoinedNavigationProp = CompositeScreenProps<
   MaterialTopTabScreenProps<iCommunityTabs, 'Joined'>,
@@ -28,15 +21,19 @@ type JoinedNavigationProp = CompositeScreenProps<
 >;
 
 const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
-  const [refresh, setRefresh] = useState(false);
-  const [joinedCommunities, setJoinedCommunities] = useState<COMMUNITY[]>();
+  const [joinedCommunities, setJoinedCommunities] = useState<COMMUNITY[]>([]);
   const {setCommunity, setPosts} = useCommunityStore();
 
   const getJoinedCommunitiesHandler = async () => {
     try {
-      const communities = await getJoinedCommunities();
+      const communities = await getJoinedCommunities(4, 1);
       setJoinedCommunities(communities);
     } catch (error) {}
+  };
+
+  const handlePageChange = async (page: number) => {
+    const communities = await getJoinedCommunities(4, page);
+    setJoinedCommunities([...joinedCommunities, ...communities]);
   };
 
   useEffect(() => {
@@ -77,7 +74,14 @@ const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
   return (
     <>
       <View style={styles.main}>
-        <FlatList
+        <PaginatedList
+          refreshAction={getJoinedCommunitiesHandler}
+          data={joinedCommunities}
+          renderItem={renderCommunityView}
+          EmptyList={<EmptyList />}
+          onPageChange={handlePageChange}
+        />
+        {/* <FlatList
           refreshControl={
             <RefreshControl
               refreshing={refresh}
@@ -92,7 +96,7 @@ const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
           data={joinedCommunities}
           keyExtractor={item => item._id}
           renderItem={renderCommunityView}
-        />
+        /> */}
       </View>
       <View>
         <TouchableOpacity

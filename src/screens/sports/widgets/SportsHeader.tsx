@@ -44,6 +44,9 @@ const SportsHeader = () => {
             style={styles.searchButton}>
             <Icon style={styles.searchIcon} name="search-outline" />
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('notification')}>
+            <Icon name="notifications" style={styles.searchIcon} />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('Profile')}
             style={styles.profileButton}>
@@ -91,12 +94,13 @@ const styles = StyleSheet.create({
   searchIcon: {
     color: white,
     fontSize: 25,
+    marginHorizontal: px1,
   },
   profileButton: {},
   profilePhoto: {
     width: 0.1 * width,
     height: 0.1 * width,
-    marginLeft: px4,
+    marginLeft: px2,
     borderRadius: 0.5 * width,
     backgroundColor: gray,
     alignItems: 'center',

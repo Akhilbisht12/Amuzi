@@ -4,22 +4,24 @@ import {
   ToastAndroid,
   View,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {io} from 'socket.io-client';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {iChatRoomRoutes} from '../../../../containers/layout/WatchPartyRoutes';
-import BackTitleHeader from '../../../../components/Headers/BackTitleHeader';
 import useLiveStore from '../../../../store/liveStore';
 import useStore from '../../../../store/store';
 import {server} from '../../../../constants/secrets';
 import {FlatList, TextInput} from 'react-native-gesture-handler';
 import {black, blackLight, white} from '../../../../constants/colors';
 import globalStyles from '../../../../styles/globals';
-import {px2, px4, pyh} from '../../../../constants/spacing';
-import {height} from '../../../../constants/dimensions';
+import {px1, px2, px4, py1, pyh} from '../../../../constants/spacing';
+import {height, width} from '../../../../constants/dimensions';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {medium} from '../../../../constants/fonts';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<iChatRoomRoutes, 'chatRoom'>;
 
@@ -91,6 +93,8 @@ const ChatRoom = ({route}: Props) => {
     setText('');
     // scrollRef.current?.scrollToEnd();
   };
+
+  const navigation = useNavigation();
   const renderChat = ({
     item,
     index,
@@ -113,20 +117,32 @@ const ChatRoom = ({route}: Props) => {
             styles.chatMessage,
 
             item.sender === userProfile?.phoneNo
-              ? styles.chatViewRight
-              : styles.chatViewLeft,
+              ? styles.chatRight
+              : styles.chatLeft,
           ]}>
+          {item.sender !== userProfile?.phoneNo && (
+            <View style={styles.userInfo}>
+              {profiles.get(item.sender)!.image ? (
+                <Image
+                  source={{uri: profiles.get(item.sender)!.image}}
+                  style={styles.avatar}
+                />
+              ) : (
+                <View style={styles.avatar}>
+                  <Icon name="person-outline" color={white} size={20} />
+                </View>
+              )}
+              <Text style={[styles.username]}>
+                {profiles.get(item.sender)!.name}
+              </Text>
+            </View>
+          )}
           <Text
             style={[
               globalStyles.textLight,
-              item.sender === userProfile?.phoneNo && styles.textRight,
-            ]}>
-            {profiles.get(item.sender)!.name}
-          </Text>
-          <Text
-            style={[
-              globalStyles.textLight,
-              item.sender === userProfile?.phoneNo && styles.textRight,
+              item.sender === userProfile?.phoneNo
+                ? styles.textRight
+                : styles.textLeft,
             ]}>
             {item.text}
           </Text>
@@ -136,7 +152,22 @@ const ChatRoom = ({route}: Props) => {
   };
   return (
     <View style={styles.main}>
-      <BackTitleHeader title={chatRooms[roomIndex].roomName} />
+      <View style={styles.header}>
+        <View style={styles.userInfo}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back-outline" size={20} color={white} />
+          </TouchableOpacity>
+          <Text style={[globalStyles.textHeading, {marginLeft: px1}]}>
+            {chatRooms[roomIndex].roomName}
+          </Text>
+        </View>
+        <View>
+          <TouchableOpacity style={styles.inviteView} onPress={copyInviteCode}>
+            <Text style={globalStyles.textLight}>Invite Code </Text>
+            <Icon name="copy-outline" size={20} color={white} />
+          </TouchableOpacity>
+        </View>
+      </View>
       <FlatList
         ref={scrollRef}
         style={{paddingHorizontal: px2}}
@@ -145,10 +176,6 @@ const ChatRoom = ({route}: Props) => {
         keyExtractor={(_, index) => index.toString()}
       />
       <View style={{paddingHorizontal: px4}}>
-        <TouchableOpacity style={styles.inviteView} onPress={copyInviteCode}>
-          <Icon name="copy-outline" size={20} color={white} />
-          <Text style={globalStyles.textLight}>Copy Room Code</Text>
-        </TouchableOpacity>
         <TextInput
           returnKeyType="send"
           placeholder="Type message..."
@@ -176,8 +203,15 @@ const styles = StyleSheet.create({
     height: 0.05 * height,
     marginBottom: px2,
   },
-  chatArea: {
-    paddingHorizontal: px2,
+  chatArea: {},
+  chatRight: {
+    alignItems: 'flex-end',
+    backgroundColor: '#286cfc',
+    borderTopLeftRadius: px4,
+    borderBottomLeftRadius: px4,
+    borderTopRightRadius: px4,
+    paddingLeft: px4,
+    paddingRight: px2,
   },
   chatViewRight: {
     alignItems: 'flex-end',
@@ -185,23 +219,55 @@ const styles = StyleSheet.create({
   chatViewLeft: {
     alignItems: 'flex-start',
   },
+  chatLeft: {
+    alignItems: 'flex-start',
+    backgroundColor: '#343044',
+    borderTopLeftRadius: px4,
+    borderBottomRightRadius: px4,
+    borderTopRightRadius: px4,
+    paddingLeft: px1,
+    paddingRight: px4,
+  },
   textRight: {
     textAlign: 'right',
   },
-
+  textLeft: {
+    marginTop: pyh,
+  },
   chatBox: {
     justifyContent: 'flex-end',
+    paddingVertical: py1,
   },
   chatMessage: {
     backgroundColor: blackLight,
-    paddingHorizontal: px4,
-    marginVertical: pyh,
+
+    marginHorizontal: pyh,
     paddingVertical: pyh,
-    borderRadius: px4,
   },
   inviteView: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: pyh,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatar: {
+    height: 0.06 * width,
+    width: 0.06 * width,
+    borderRadius: 0.03 * width,
+  },
+  username: {
+    color: white,
+    fontFamily: medium,
+    marginLeft: px1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: py1,
+    paddingHorizontal: px2,
   },
 });
