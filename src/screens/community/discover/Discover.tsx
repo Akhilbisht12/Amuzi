@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  ToastAndroid,
-  RefreshControl,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ToastAndroid} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
@@ -20,7 +12,11 @@ import useCommunityStore from '../../../store/communityStore';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
-import {getDiscoverCommunitiesHandler} from '../../../handlers/community/discover';
+import {
+  discoverCommunitiesPageChange,
+  getDiscoverCommunitiesHandler,
+} from '../../../handlers/community/discover';
+import PaginatedList from '../../../components/paginatedList/PaginatedList';
 
 type Props = CompositeScreenProps<
   MaterialTopTabScreenProps<iCommunityTabs, 'Discover'>,
@@ -29,13 +25,12 @@ type Props = CompositeScreenProps<
 
 const Discover = ({navigation}: Props) => {
   const {setLoading} = useStore();
-  const [refresh, setRefresh] = useState(false);
   const {setCommunity, discoverCommunities, removeDiscoverCommunity} =
     useCommunityStore();
 
   useEffect(() => {
     (async function () {
-      await getDiscoverCommunitiesHandler();
+      await getDiscoverCommunitiesHandler(10, 1);
     })();
   }, []);
 
@@ -100,25 +95,18 @@ const Discover = ({navigation}: Props) => {
     };
     return <CommunityCard />;
   };
+
   return (
     <View style={styles.main}>
       <View style={styles.container}>
-        <FlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={refresh}
-              onRefresh={() => {
-                setRefresh(true);
-                getDiscoverCommunitiesHandler();
-                setRefresh(false);
-              }}
-            />
-          }
-          contentContainerStyle={styles.communityList}
-          ListEmptyComponent={() => <EmptyCommunity />}
+        <PaginatedList
           data={discoverCommunities}
-          keyExtractor={item => item._id}
           renderItem={renderItem}
+          refreshAction={() => getDiscoverCommunitiesHandler(10, 1)}
+          EmptyList={<EmptyCommunity />}
+          onPageChange={(page: number) =>
+            discoverCommunitiesPageChange(10, page)
+          }
         />
       </View>
     </View>

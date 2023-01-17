@@ -1,5 +1,6 @@
-import {FlatList, RefreshControl} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import React, {useState} from 'react';
+import {white} from '../../constants/colors';
 
 type Props = {
   renderItem: any;
@@ -17,11 +18,19 @@ const PaginatedList = ({
   onPageChange,
 }: Props) => {
   const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
   const handlePageChange = () => {
-    setPage(page + 1);
-    onPageChange(page + 1);
+    if (loading) return;
+    try {
+      setLoading(true);
+      setPage(page + 1);
+      onPageChange(page + 1);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,8 +47,12 @@ const PaginatedList = ({
       }
       data={data}
       renderItem={renderItem}
-      key={item => item._id}
+      keyExtractor={(item: any) => item._id}
       ListEmptyComponent={EmptyList && EmptyList}
+      onEndReachedThreshold={0}
+      ListFooterComponent={
+        loading ? <ActivityIndicator size={30} color={white} /> : <View />
+      }
       onEndReached={handlePageChange}
     />
   );

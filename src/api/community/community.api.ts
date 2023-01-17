@@ -42,13 +42,20 @@ export const castApprovalStatus = async (
   return data;
 };
 
-export const getCreatedCommunities = async () => {
-  const {data} = await http.get(`${server}/community/request`);
+export const getCreatedCommunities = async (
+  pageLength: number,
+  page: number,
+) => {
+  const {data} = await http.get(
+    `${server}/community/request?pageLength=${pageLength}&page=${page}`,
+  );
   return data;
 };
 
-export const discoverCommunities = async () => {
-  const {data} = await http.get(`${server}/discover-communities`);
+export const discoverCommunities = async (pageLength: number, page: number) => {
+  const {data} = await http.get(
+    `${server}/discover-communities?pageLength=${pageLength}&page=${page}`,
+  );
   return data;
 };
 

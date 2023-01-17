@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  RefreshControl,
-} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {height} from '../../../constants/dimensions';
 import {
@@ -25,7 +17,7 @@ import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 import {iCommunityTabs} from '../../../containers/routes/authenticated/community/CommunityTabs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CommunityStack} from '../../../containers/routes/authenticated/community/CommunityRoutes';
-import useCommunityStore from '../../../store/communityStore';
+import PaginatedList from '../../../components/paginatedList/PaginatedList';
 
 type communityBadge = {
   _id: string;
@@ -41,21 +33,23 @@ type ApprovalProp = CompositeScreenProps<
 >;
 
 const CreatedCommunities = ({}: ApprovalProp) => {
-  const [refresh, setRefresh] = useState(false);
-  const [createdCommunities, setCreatedCommunities] =
-    useState<communityBadge[]>();
+  const [createdCommunities, setCreatedCommunities] = useState<
+    communityBadge[]
+  >([]);
 
-  const {createdRefresh, setCreatedRefresh} = useCommunityStore();
-  const getJoinedCommunitiesHandler = async () => {
+  const getCreatedCommunitiesHandler = async (
+    pageLength: number,
+    page: number,
+  ) => {
     try {
-      const communities = await getCreatedCommunities();
+      const communities = await getCreatedCommunities(pageLength, page);
       setCreatedCommunities(communities);
     } catch (error) {}
   };
 
   useEffect(() => {
-    getJoinedCommunitiesHandler();
-  }, [createdRefresh]);
+    getCreatedCommunitiesHandler(10, 1);
+  }, []);
 
   const renderCommunityView = ({item}: {item: communityBadge}) => {
     const CommunityView = ({community}: {community: communityBadge}) => {
@@ -86,32 +80,38 @@ const CreatedCommunities = ({}: ApprovalProp) => {
           </View>
           <View style={styles.communityDetails}>
             <Text style={styles.communityViewText}>{community.name}</Text>
-            <Text style={styles.communityViewDesc}>
-              <Text style={{color: grayLight, fontFamily: bold}}>
-                Description:{' '}
-              </Text>
-              {readMoreDesc
-                ? community.description
-                : community.description.substring(0, 80)}
+            {community.description && (
+              <Text style={styles.communityViewDesc}>
+                <Text style={{color: grayLight, fontFamily: bold}}>
+                  Description:{' '}
+                </Text>
+                {readMoreDesc && community.description
+                  ? community.description
+                  : community.description.substring(0, 80)}
 
-              <Text
-                onPress={() => setReadMoreDesc(!readMoreDesc)}
-                style={styles.readMoreText}>
-                {readMoreDesc ? ' Read Less' : ' Read More'}
+                <Text
+                  onPress={() => setReadMoreDesc(!readMoreDesc)}
+                  style={styles.readMoreText}>
+                  {readMoreDesc ? ' Read Less' : ' Read More'}
+                </Text>
               </Text>
-            </Text>
-            <Text style={styles.communityViewDesc}>
-              <Text style={{color: grayLight, fontFamily: bold}}>Reason: </Text>
-              {readMoreReason
-                ? community.description
-                : community.description.substring(0, 80)}
+            )}
+            {community.description && (
+              <Text style={styles.communityViewDesc}>
+                <Text style={{color: grayLight, fontFamily: bold}}>
+                  Reason:{' '}
+                </Text>
+                {readMoreReason
+                  ? community.description
+                  : community.description.substring(0, 80)}
 
-              <Text
-                onPress={() => setReadMoreReason(!readMoreReason)}
-                style={styles.readMoreText}>
-                {readMoreReason ? ' Read Less' : ' Read More'}
+                <Text
+                  onPress={() => setReadMoreReason(!readMoreReason)}
+                  style={styles.readMoreText}>
+                  {readMoreReason ? ' Read Less' : ' Read More'}
+                </Text>
               </Text>
-            </Text>
+            )}
           </View>
         </TouchableOpacity>
       );
@@ -129,23 +129,20 @@ const CreatedCommunities = ({}: ApprovalProp) => {
       </View>
     );
   };
+
+  const handlePageChange = async (page: number) => {
+    const communities = await getCreatedCommunities(10, page);
+    setCreatedCommunities([...createdCommunities, ...communities]);
+  };
+
   return (
     <View style={styles.main}>
-      <FlatList
-        refreshControl={
-          <RefreshControl
-            refreshing={refresh}
-            onRefresh={() => {
-              setRefresh(true);
-              setCreatedRefresh();
-              setRefresh(false);
-            }}
-          />
-        }
-        ListEmptyComponent={() => <EmptyComponent />}
+      <PaginatedList
         data={createdCommunities}
-        keyExtractor={item => item._id}
+        EmptyList={<EmptyComponent />}
         renderItem={renderCommunityView}
+        refreshAction={() => getCreatedCommunitiesHandler(10, 1)}
+        onPageChange={handlePageChange}
       />
     </View>
   );

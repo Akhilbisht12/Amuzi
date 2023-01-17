@@ -26,13 +26,13 @@ const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
 
   const getJoinedCommunitiesHandler = async () => {
     try {
-      const communities = await getJoinedCommunities(4, 1);
+      const communities = await getJoinedCommunities(10, 1);
       setJoinedCommunities(communities);
     } catch (error) {}
   };
 
   const handlePageChange = async (page: number) => {
-    const communities = await getJoinedCommunities(4, page);
+    const communities = await getJoinedCommunities(10, page);
     setJoinedCommunities([...joinedCommunities, ...communities]);
   };
 
@@ -81,22 +81,6 @@ const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
           EmptyList={<EmptyList />}
           onPageChange={handlePageChange}
         />
-        {/* <FlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={refresh}
-              onRefresh={() => {
-                setRefresh(true);
-                getJoinedCommunitiesHandler();
-                setRefresh(false);
-              }}
-            />
-          }
-          ListEmptyComponent={() => <EmptyList />}
-          data={joinedCommunities}
-          keyExtractor={item => item._id}
-          renderItem={renderCommunityView}
-        /> */}
       </View>
       <View>
         <TouchableOpacity
