@@ -8,6 +8,7 @@ type Props = {
   refreshAction: () => void;
   onPageChange: (page: number) => void;
   EmptyList?: React.ReactElement;
+  Header?: React.ReactElement;
 };
 
 const PaginatedList = ({
@@ -16,6 +17,7 @@ const PaginatedList = ({
   refreshAction,
   EmptyList,
   onPageChange,
+  Header,
 }: Props) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,6 +37,7 @@ const PaginatedList = ({
 
   return (
     <FlatList
+      ListHeaderComponent={Header}
       refreshControl={
         <RefreshControl
           refreshing={refresh}

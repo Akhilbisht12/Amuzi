@@ -1,3 +1,4 @@
+import useCommunityStore from '../../store/communityStore';
 import http, {server} from '../http';
 
 export const createCommunity = async (community: any) => {
@@ -74,9 +75,27 @@ export const getJoinedCommunities = async (
   return data;
 };
 
-export const getCommunityPosts = async (community: string, skip: number) => {
-  const {data} = await http.get(`${server}/posts/${community}?skip=${skip}`);
+export const getCommunityPosts = async (
+  community: string,
+  pageLength: number,
+  page: number,
+) => {
+  const {data} = await http.get(
+    `${server}/posts/${community}?pageLength=${pageLength}&page=${page}`,
+  );
   return data;
+};
+
+export const communityPostsPageChange = async (
+  community: string,
+  pageLength: number,
+  page: number,
+) => {
+  const {posts, setPosts} = useCommunityStore.getState();
+  const {data} = await http.get(
+    `${server}/posts/${community}?pageLength=${pageLength}&page=${page}`,
+  );
+  setPosts([...posts, ...data]);
 };
 
 export const updateCommunityImage = async (
