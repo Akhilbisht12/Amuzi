@@ -6,6 +6,7 @@ const useThemeStore = create<iThemeStore>((set, get) => ({
     colorScheme: '#fff',
     icon: '',
     id: '',
+    searchTag: ''
   },
   setTheme: theme =>
     set({

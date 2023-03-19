@@ -6,7 +6,7 @@ type Props = {
   renderItem: any;
   data: any;
   refreshAction: () => void;
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number) => Promise<number>;
   EmptyList?: React.ReactElement;
   Header?: React.ReactElement;
 };
@@ -21,14 +21,17 @@ const PaginatedList = ({
 }: Props) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disablePageChange, setDisablePageChange] = useState(false);
   const [page, setPage] = useState(1);
-
-  const handlePageChange = () => {
-    if (loading) return;
+  const handlePageChange = async () => {
+    if (loading || disablePageChange) return;
     try {
       setLoading(true);
+      const length = await onPageChange(page + 1);
+      if (length < 10) {
+        setDisablePageChange(true);
+      }
       setPage(page + 1);
-      onPageChange(page + 1);
     } catch (error) {
     } finally {
       setLoading(false);

@@ -1,4 +1,11 @@
-import {Image, Linking, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import globalStyles from '../../../styles/globals';
 import {iQuiz} from '../../../types/rewards/rewards';
@@ -44,29 +51,23 @@ const Quiz = ({quiz}: Props) => {
 
       {quiz.options.map(option => {
         return (
-          <View
+          <TouchableOpacity
             key={option._id}
+            onPress={() =>
+              quiz.userSelection === null &&
+              answerQuizOptionHandler(quiz._id, option._id)
+            }
             style={[
               styles.listOption,
               styles.option,
-              option._id === quiz.correctChoice &&
-              option._id === quiz.userSelection
+
+              option._id === quiz.correctChoice
                 ? styles.correctOption
                 : option._id === quiz.userSelection
                 ? styles.incorrectUserOption
-                : option._id === quiz.correctChoice
-                ? styles.correctOption
-                : styles.option,
+                : {},
             ]}>
-            <Text
-              style={globalStyles.textLight}
-              onPress={() =>
-                quiz.userSelection === null &&
-                answerQuizOptionHandler(quiz._id, option._id)
-              }
-              key={option._id}>
-              {option.option}
-            </Text>
+            <Text style={globalStyles.textLight}>{option.option}</Text>
             {quiz.correctChoice === option._id && (
               <View style={styles.listOption}>
                 {option._id === quiz.userSelection && (
@@ -96,7 +97,7 @@ const Quiz = ({quiz}: Props) => {
                   <Icon name="close-circle" color="red" size={20} />
                 </View>
               )}
-          </View>
+          </TouchableOpacity>
         );
       })}
       {quiz.sponsor !== null && (

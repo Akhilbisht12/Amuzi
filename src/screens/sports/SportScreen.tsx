@@ -5,6 +5,7 @@ import MediaSlider from './widgets/MediaSlider';
 import PreferenceSlider from './preferred/widgets/PreferenceSlider';
 import ViewWrapper from '../../components/wrappers/ViewWrapper';
 import {GetEventHandler} from '../../handlers/events/eventsHandler';
+import AdBanner from '../../components/ad_banner/AdBanner';
 
 type Props = {
   sport: iScreen;
@@ -19,13 +20,16 @@ const SportScreen = ({sport}: Props) => {
     <ViewWrapper refreshAction={() => GetEventHandler()}>
       <FlatList
         ListHeaderComponent={
-          <PreferenceSlider
-            category={
-              sport.name.toLowerCase() === 'all'
-                ? undefined
-                : sport.name.toUpperCase()
-            }
-          />
+          <>
+            <AdBanner />
+            <PreferenceSlider
+              category={
+                sport.name.toLowerCase() === 'all'
+                  ? undefined
+                  : sport.name.toUpperCase()
+              }
+            />
+          </>
         }
         contentContainerStyle={styles.main}
         data={sport.playlists}

@@ -32,7 +32,8 @@ const Search = ({navigation}: Props) => {
       setLoading(true);
       const results = await searchMedia(
         query,
-        theme.name.toLowerCase() === 'all' ? '' : theme.name.toUpperCase(),
+        // theme.name.toLowerCase() === 'all' ? '' : theme.name.toUpperCase(),
+        theme.searchTag,
         1,
         10,
       );
@@ -77,7 +78,7 @@ const Search = ({navigation}: Props) => {
           <Icon name="arrow-back-outline" size={25} color={white} />
         </TouchableOpacity>
         <View style={styles.searchUnderline}>
-          <Text style={styles.chip}>{theme.name.toUpperCase()}</Text>
+          <Text style={styles.chip}>{theme.searchTag}</Text>
           <TextInput
             onBlur={searchMediaHandler}
             returnKeyType="search"

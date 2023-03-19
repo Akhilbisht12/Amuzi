@@ -11,4 +11,5 @@ export interface iScreen {
   playlists: string[];
   live: boolean;
   position: number;
+  searchTag: string;
 }

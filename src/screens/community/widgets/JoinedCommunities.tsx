@@ -31,9 +31,10 @@ const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
     } catch (error) {}
   };
 
-  const handlePageChange = async (page: number) => {
+  const handlePageChange = async (page: number): Promise<number> => {
     const communities = await getJoinedCommunities(10, page);
     setJoinedCommunities([...joinedCommunities, ...communities]);
+    return await communities.length;
   };
 
   useEffect(() => {
@@ -64,8 +65,7 @@ const JoinedCommunities = ({navigation}: JoinedNavigationProp) => {
         <View style={styles.communityDetails}>
           <Text style={styles.communityViewText}>{item.name}</Text>
           <Text style={[styles.communityCategory]}>
-            {item.category} · {item.postCount} Posts · {item.memberCount}{' '}
-            Members
+            {item.postCount} Posts · {item.memberCount} Members
           </Text>
         </View>
       </TouchableOpacity>

@@ -90,12 +90,13 @@ export const communityPostsPageChange = async (
   community: string,
   pageLength: number,
   page: number,
-) => {
+): Promise<number> => {
   const {posts, setPosts} = useCommunityStore.getState();
   const {data} = await http.get(
     `${server}/posts/${community}?pageLength=${pageLength}&page=${page}`,
   );
   setPosts([...posts, ...data]);
+  return data.length;
 };
 
 export const updateCommunityImage = async (

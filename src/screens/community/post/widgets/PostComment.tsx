@@ -13,25 +13,32 @@ import {sm} from '../../../../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {commentOnPost} from '../../../../api/community/community.api';
 import useStore from '../../../../store/store';
-import useCommunityStore from '../../../../store/communityStore';
-import {getCommunityPostHandler} from '../../../../handlers/community/joined';
+import {
+  getCommentRepliesHandler,
+  getPostCommentHandler,
+} from '../../../../handlers/community/joined';
 
 type Props = {
   parentId?: string;
+  community: string;
+  post: string;
 };
 
-const PostComment = ({parentId}: Props) => {
+const PostComment = ({parentId, community, post}: Props) => {
   const [content, setContent] = useState('');
   const {userProfile, setLoading} = useStore();
-  const {community, post} = useCommunityStore();
 
   const commentOnPostHandler = async () => {
     try {
       setLoading(true);
-      await commentOnPost(community!._id, post!._id, content, parentId);
+      await commentOnPost(community, post, content, parentId);
       setContent('');
-      await getCommunityPostHandler(post!._id, community!._id);
-    } catch (error) {
+      if (parentId) {
+        await getCommentRepliesHandler(community, post, parentId, 10, 1);
+      } else {
+        await getPostCommentHandler(post, community, 10, 1);
+      }
+    } catch (error: any) {
     } finally {
       setLoading(false);
     }

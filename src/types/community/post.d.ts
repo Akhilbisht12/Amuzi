@@ -14,7 +14,7 @@ export interface POST {
   approved: true;
   createdAt: Date;
   voteStatus: boolean | null;
-  comments: COMMENTS[];
+  comments: COMMENT[];
 }
 
 export interface COMMENT {
@@ -33,7 +33,7 @@ export interface COMMENT {
   downvoteCount: number;
   repliesCount: number;
   createdAt: Date;
-  replies: REPLY[];
+  replies?: COMMENT[];
 }
 
 export interface REPLY {

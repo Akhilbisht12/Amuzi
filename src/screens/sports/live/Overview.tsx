@@ -95,7 +95,7 @@ const Overview = ({route, navigation}: Props) => {
       <View style={styles.main}>
         <BackTitleHeader title="" />
         <View style={{paddingHorizontal: px4}}>
-          {channel.state === 2 && (
+          {/* {channel.state === 2 && (
             <Player
               config={{
                 playlist: [
@@ -109,35 +109,37 @@ const Overview = ({route, navigation}: Props) => {
                 pipEnabled: false,
               }}
             />
-          )}
-          {channel.state !== 2 && (
-            <View>
-              <Image
-                style={styles.thumbnail}
-                source={{uri: channel.thumbnailUrl}}
-              />
-              <Animated.Text
-                style={[
-                  styles.badge,
-                  {
-                    backgroundColor: channel.state === 2 ? red : blue,
-                    opacity: eventState,
-                  },
-                ]}>
-                Upcoming
-              </Animated.Text>
-              <Animated.Text
-                style={[
-                  styles.badge,
-                  {
-                    backgroundColor: channel.state === 2 ? red : blue,
-                    opacity: eventTime,
-                  },
-                ]}>
-                Live at {Dayjs(channel.startLiveAt).format('hh:mm a')}
-              </Animated.Text>
-            </View>
-          )}
+          )} */}
+          {/* {channel.state !== 2 && ( */}
+          <View>
+            <Image
+              style={styles.thumbnail}
+              source={{uri: channel.thumbnailUrl}}
+            />
+            <Animated.Text
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: channel.state === 2 ? red : blue,
+                  opacity: eventState,
+                },
+              ]}>
+              {channel.state === 2 ? 'Live' : 'Upcoming'}
+            </Animated.Text>
+            <Animated.Text
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: channel.state === 2 ? red : blue,
+                  opacity: eventTime,
+                },
+              ]}>
+              {channel.state === 2
+                ? 'Live'
+                : `Live at ${Dayjs(channel.startLiveAt).format('hh:mm a')}`}
+            </Animated.Text>
+          </View>
+          {/* )} */}
         </View>
         <View style={styles.mainArea}>
           <Text style={[globalStyles.textLight, {marginTop: py1}]}>

@@ -34,8 +34,8 @@ const ChatRoom = ({route}: Props) => {
   const {chatRooms} = useLiveStore();
   const {access, userProfile} = useStore();
   const [profiles, setProfiles] = useState(new Map());
+  const [socket, setSocket] = useState<any>();
   const scrollRef = useRef<FlatList>(null);
-  const socket = io(server);
 
   const copyInviteCode = () => {
     Clipboard.setString(chatRooms[roomIndex]._id);
@@ -43,21 +43,23 @@ const ChatRoom = ({route}: Props) => {
   };
 
   useEffect(() => {
-    socket.on('connect', () => {
-      socket.emit('join-room', {
+    const socketConnection = io(server);
+    setSocket(socketConnection);
+    socketConnection.on('connect', () => {
+      socketConnection.emit('join-room', {
         token: `Bearer ${access}`,
         roomId: chatRooms[roomIndex]._id,
         eventId: chatRooms[roomIndex].eventId,
       });
     });
 
-    socket.on('join-success', message => {
+    socketConnection.on('join-success', message => {
       console.log(message);
     });
-    socket.on('join-failure', message => {
+    socketConnection.on('join-failure', message => {
       console.log(message);
     });
-    socket.on('send-message-success', ({message, senderProfile}) => {
+    socketConnection.on('send-message-success', ({message, senderProfile}) => {
       if (!profiles.has(senderProfile.phoneNo)) {
         setProfiles(state => {
           state.set(senderProfile.phoneNo, {
@@ -73,11 +75,11 @@ const ChatRoom = ({route}: Props) => {
       ]);
       scrollRef.current?.scrollToEnd();
     });
-    socket.on('send-message-failure', message => {
+    socketConnection.on('send-message-failure', message => {
       console.log(message);
     });
     return () => {
-      socket.disconnect();
+      socketConnection.disconnect();
     };
   }, []);
 
@@ -179,6 +181,7 @@ const ChatRoom = ({route}: Props) => {
         <TextInput
           returnKeyType="send"
           placeholder="Type message..."
+          placeholderTextColor={blackLight}
           value={text}
           onBlur={handleSendMessage}
           style={styles.input}
@@ -202,6 +205,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: px4,
     height: 0.05 * height,
     marginBottom: px2,
+    color: black,
   },
   chatArea: {},
   chatRight: {

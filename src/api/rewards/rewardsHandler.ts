@@ -20,7 +20,7 @@ export const answerQuizOptionHandler = async (
     quizRewards.map(item => {
       if (item._id === quizId && item.type === 'quiz') {
         item.userSelection = optionId;
-        item.correctChoice = data._id;
+        item.correctChoice = data.correctOption._id;
       }
       return item;
     }),

@@ -133,6 +133,7 @@ const CreatedCommunities = ({}: ApprovalProp) => {
   const handlePageChange = async (page: number) => {
     const communities = await getCreatedCommunities(10, page);
     setCreatedCommunities([...createdCommunities, ...communities]);
+    return await communities.length;
   };
 
   return (

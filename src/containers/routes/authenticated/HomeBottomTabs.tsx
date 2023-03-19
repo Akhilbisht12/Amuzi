@@ -12,6 +12,7 @@ import Xclusive from '../../../screens/xclusive/Xclusive';
 import Rewards from '../../../screens/rewards/Rewards';
 import SportsHome from './sports/SportTabs';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Entertainment from '../../../screens/entertainment/Entertainment';
 
 const HomeBottomTabs = () => {
   const Tab = createBottomTabNavigator();
@@ -33,8 +34,14 @@ const HomeBottomTabs = () => {
                   color={color}
                 />
               );
-            } else if (route.name === 'TV shows') {
-              Icon = <XclusiveIcon focused={focused} color={color} />;
+            } else if (route.name === 'Movies') {
+              Icon = (
+                <Ionicon
+                  size={22}
+                  name={focused ? 'videocam' : 'videocam-outline'}
+                  color={color}
+                />
+              );
             } else if (route.name === 'Xclusive') {
               Icon = <XclusiveIcon focused={focused} color={color} />;
             } else if (route.name === 'Community') {
@@ -52,7 +59,7 @@ const HomeBottomTabs = () => {
           tabBarInactiveTintColor: white,
         })}>
         <Tab.Screen name="Sports" component={SportsHome} />
-        {/* <Tab.Screen name="TV shows" component={Home} /> */}
+        <Tab.Screen name="Movies" component={Entertainment} />
         <Tab.Screen name="Xclusive" component={Xclusive} />
         <Tab.Screen name="Community" component={Community} />
         <Tab.Screen name="Rewards" component={Rewards} />

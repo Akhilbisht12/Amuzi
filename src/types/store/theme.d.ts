@@ -3,6 +3,7 @@ export interface iTheme {
   name: string;
   colorScheme: string;
   icon: string;
+  searchTag: string;
 }
 
 export interface iThemeStore {

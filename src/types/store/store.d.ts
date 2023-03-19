@@ -18,6 +18,9 @@ export interface userProfile {
   gender: string;
   _id: string;
   onboarded: boolean;
+  data: {
+    notificationFlag: boolean;
+  };
 }
 
 export interface user {

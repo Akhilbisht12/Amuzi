@@ -6,6 +6,8 @@ import {width} from '../../../constants/dimensions';
 import React from 'react';
 import globalStyles from '../../../styles/globals';
 import {px1, px2, pyh} from '../../../constants/spacing';
+import {gray, grayLight} from '../../../constants/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = {
   notification: iCommentNotification;
@@ -19,6 +21,16 @@ const CommentNotification = ({notification}: Props) => {
           style={[styles.avatar]}
           source={{uri: notification.comment.author.image}}
         />
+        {notification.comment.author.image ? (
+          <Image
+            style={styles.headerImage}
+            source={{uri: notification.comment.author.image}}
+          />
+        ) : (
+          <View style={styles.headerImage}>
+            <Icon name="person" color={grayLight} size={40} />
+          </View>
+        )}
       </View>
       <View style={styles.notificationText}>
         <Text style={[globalStyles.textLight]}>
@@ -56,6 +68,16 @@ const styles = StyleSheet.create({
     marginVertical: pyh,
     justifyContent: 'space-between',
     flex: 1,
+  },
+  headerImage: {
+    width: 0.12 * width,
+    height: 0.12 * width,
+    marginRight: px2,
+    borderRadius: 0.15 * width,
+    resizeMode: 'contain',
+    backgroundColor: gray,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   postImage: {
     width: 0.11 * width,

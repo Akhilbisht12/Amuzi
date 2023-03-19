@@ -40,8 +40,8 @@ const Player = ({config}: Props) => {
         config={{
           license:
             Platform.OS === 'ios'
-              ? '4CgAXHzCyznDrVR7jAZOZ3JqeQ0qh49YmVFIuAPqZcp+7AcWjGrkBgAti9c='
-              : '6OVf7W54zrVXWkBwsxP/sOyFFhBtmfAIjPyWz0dN95PuCB3xR7PlPq1F2Xg=',
+              ? '3QEeXPVL1k9T2dim7l2Rp4WT5UkkqwUCtp8F4WMuI3aOplqW'
+              : 'z4hJx2vCkoOjHmNaaTOo+fuBnWDTCtVA13AIWk3RmT35rAer',
           ...config,
         }}
         style={styles.player}

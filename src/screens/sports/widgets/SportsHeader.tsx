@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {height, width} from '../../../constants/dimensions';
 import {logo} from '../../../constants/files';
 import {gray, grayLight, green, white} from '../../../constants/colors';
-import {px1, px2, px3, px4, px6, py2, pyh} from '../../../constants/spacing';
+import {px1, px2, px4, px6, py2, pyh} from '../../../constants/spacing';
 import {sm, xs2} from '../../../constants/fonts';
 
 import useStore from '../../../store/store';
@@ -45,6 +45,19 @@ const SportsHeader = () => {
             <Icon style={styles.searchIcon} name="search-outline" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('notification')}>
+            {userProfile?.data.notificationFlag && (
+              <View
+                style={{
+                  backgroundColor: 'red',
+                  padding: px1,
+                  borderRadius: px4,
+                  position: 'absolute',
+                  right: 6,
+                  zIndex: 10,
+                  top: 2,
+                }}
+              />
+            )}
             <Icon name="notifications" style={styles.searchIcon} />
           </TouchableOpacity>
           <TouchableOpacity

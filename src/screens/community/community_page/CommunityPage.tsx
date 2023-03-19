@@ -57,9 +57,9 @@ const CommunityPage = ({navigation}: Props) => {
     <View style={styles.main}>
       <BackTitleHeader title={community!.name} />
       <PaginatedList
-        onPageChange={(page: number) =>
-          communityPostsPageChange(community!._id, 10, page)
-        }
+        onPageChange={async (page: number) => {
+          return await communityPostsPageChange(community!._id, 10, page);
+        }}
         refreshAction={() => getCommunityPostsHandler(10, 1)}
         Header={
           <>

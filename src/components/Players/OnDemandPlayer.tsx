@@ -33,8 +33,8 @@ const OnDemandPlayer = forwardRef(
     const config: Config = {
       license:
         Platform.OS === 'ios'
-          ? '4CgAXHzCyznDrVR7jAZOZ3JqeQ0qh49YmVFIuAPqZcp+7AcWjGrkBgAti9c='
-          : '6OVf7W54zrVXWkBwsxP/sOyFFhBtmfAIjPyWz0dN95PuCB3xR7PlPq1F2Xg=',
+          ? '3QEeXPVL1k9T2dim7l2Rp4WT5UkkqwUCtp8F4WMuI3aOplqW'
+          : 'z4hJx2vCkoOjHmNaaTOo+fuBnWDTCtVA13AIWk3RmT35rAer',
       autostart: true,
       backgroundAudioEnabled: true,
       styling: {
@@ -47,18 +47,18 @@ const OnDemandPlayer = forwardRef(
       landscapeOnFullScreen: true,
       preload: 'auto',
       playlist: playlist,
-      advertising: {
-        adClient: 'vast',
-        // adVmap:
-        // 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpreonly&ciu_szs=300x250%2C728x90&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&correlator=',
-        // tag: 'https://waf.upgrate.in/ad',
-        adSchedule: {
-          tag: 'https://waf.upgrate.in/ad',
+      // advertising: {
+      //   adClient: 'vast',
+      //   // adVmap:
+      //   // 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpreonly&ciu_szs=300x250%2C728x90&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&correlator=',
+      //   // tag: 'https://waf.upgrate.in/ad',
+      //   adSchedule: {
+      //     tag: 'https://waf.upgrate.in/ad',
 
-          // tag: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpreonly&ciu_szs=300x250%2C728x90&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&correlator=',
-          offset: 'pre',
-        },
-      },
+      //     // tag: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpreonly&ciu_szs=300x250%2C728x90&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&correlator=',
+      //     offset: 'pre',
+      //   },
+      // },
     };
 
     useImperativeHandle(ref, () => ({
@@ -84,8 +84,8 @@ const OnDemandPlayer = forwardRef(
     return (
       <View>
         <JWPlayer
-          // onPlay={_ => setLoading(false)}
-          onBeforePlay={_ => setLoading(false)}
+          onPlay={_ => setLoading(false)}
+          // onBeforePlay={_ => setLoading(false)}
           ref={player}
           style={styles.player}
           config={config}

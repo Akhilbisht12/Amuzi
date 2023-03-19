@@ -11,12 +11,16 @@ import {px2, px4} from '../../constants/spacing';
 import PostApproval from './widget/PostApproval';
 import RewardNotification from './widget/Reward';
 import CommunityApproveNotification from './widget/Community';
+import useStore from '../../store/store';
 
 const Notification = () => {
   const {notifications} = useNotificationStore();
+  const {userProfile, setUser} = useStore();
   useEffect(() => {
     (async function () {
       await getNotificationHandler(10, 1);
+      userProfile!.data.notificationFlag = false;
+      setUser(userProfile!);
     })();
   }, []);
   console.log(notifications);

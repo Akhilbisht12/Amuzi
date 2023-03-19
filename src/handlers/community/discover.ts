@@ -17,4 +17,5 @@ export const discoverCommunitiesPageChange = async (
   const store = useCommunityStore.getState();
   const data = await discoverCommunities(pageLength, page);
   store.setDiscoverCommunities([...store.discoverCommunities, ...data]);
+  return data.length;
 };
